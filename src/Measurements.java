@@ -1,7 +1,19 @@
 import java.util.Map;
 
 /**
- * Created by serge on 25-9-2015.
+ * Created by Sergen Nurel
+ * Date of creation 25-9-2015, 14:21
+ *
+ * Authors: Sergen Nurel,
+ *
+ * Version: 1.0
+ * Package: default
+ * Class: Measurements
+ * Description:
+ * This server class will convert all incoming data and save it.
+ *
+ * Chaneglog:
+ * 1.0: this class will convert a given hashmap with 14 values into the right data types and save them.
  */
 public class Measurements {
 

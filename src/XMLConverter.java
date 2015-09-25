@@ -10,7 +10,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by serge on 25-9-2015.
+ * Created by Sergen Nurel
+ * Date of creation 25-9-2015, 14:12
+ *
+ * Authors: Unknown
+ *
+ * Version: 1.0
+ * Package: default
+ * Class: XMLConverter
+ * Description:
+ * This class will accept an XML string and convert it to a HashMap
+ *
+ * Chaneglog:
+ *  1.0: This class is taken from the internet and functions as Library for converting an XML string to a Hashmap.
  */
 public class XMLConverter {
     public static Map<String, String> convertNodesFromXml(String xml) throws Exception {
@@ -35,7 +47,8 @@ public class XMLConverter {
             }
             if (node.getFirstChild() != null && node.getFirstChild().getNodeType() == Node.ELEMENT_NODE) {
                 map.putAll(createMap(currentNode));
-            } else if (node.getFirstChild().getNodeType() == Node.TEXT_NODE) {
+            } else //noinspection ConstantConditions
+                if (node.getFirstChild().getNodeType() == Node.TEXT_NODE) {
                 map.put(node.getLocalName(), node.getTextContent());
             }
         }

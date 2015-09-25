@@ -14,7 +14,7 @@ import java.net.Socket;
  * Description:
  * This server class will wait on incoming client connections
  *
- * Chaneglog:
+ * Changelog:
  * 1.0: this class will wait on incoming client connections and then start a new thread for the client.
  */
 public class Server implements Runnable{

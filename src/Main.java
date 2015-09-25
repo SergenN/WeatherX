@@ -10,16 +10,15 @@
  * Description:
  * This class is the main class of the project
  *
- * Chaneglog:
+ * Changelog:
  * 1.0: class created and added thread calling
  */
 public class Main {
 
     /**
-     * Main method, this is the first method called
-     * @param args, arguments given to the main method
-     *
+     * Main
      * In this method the server thread is started.
+     * @param args, arguments given to the main method
      */
     public static void main(String[] args) {
         new Thread(new Server()).start();

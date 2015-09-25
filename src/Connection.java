@@ -16,7 +16,7 @@ import java.util.Map;
  * Description:
  * This class handles the connection thread of te client
  *
- * Chaneglog:
+ * Changelog:
  * 1.0: class created and added a reader, while reading this class will take all lines and combine them into one line.
  * Then send that line to an XML converter which will convert it to a HashMap.
  * Once the conversion is done the HashMap will be converted into an object and sent to the correction processor.
@@ -43,8 +43,8 @@ public class Connection implements Runnable{
      * Run
      * the thread will keep running and waiting on input
      * once input is given it will combine this to one xml string and output it to the xml convertor
-     * which will convert it to a hashmap
-     * then the hashmap will go to the measurements class and convert into an object
+     * which will convert it to a HashMap
+     * then the HashMap will go to the measurements class and convert into an object
      */
     public void run(){
         try {

@@ -12,8 +12,8 @@ import java.util.Map;
  * Description:
  * This server class will convert all incoming data and save it.
  *
- * Chaneglog:
- * 1.0: this class will convert a given hashmap with 14 values into the right data types and save them.
+ * Changelog:
+ * 1.0: this class will convert a given HashMap with 14 values into the right data types and save them.
  */
 public class Measurements {
 

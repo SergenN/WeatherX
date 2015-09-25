@@ -21,8 +21,8 @@ import java.util.Map;
  * Description:
  * This class will accept an XML string and convert it to a HashMap
  *
- * Chaneglog:
- *  1.0: This class is taken from the internet and functions as Library for converting an XML string to a Hashmap.
+ * Changelog:
+ *  1.0: This class is taken from the internet and functions as Library for converting an XML string to a HashMap.
  */
 public class XMLConverter {
     public static Map<String, String> convertNodesFromXml(String xml) throws Exception {

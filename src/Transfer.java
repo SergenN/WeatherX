@@ -60,7 +60,7 @@ public class Transfer {
             statement = conn.createStatement();
 
             // prepare statement for execution
-            String s = "INSERT INTO " + MEASUREMENT + "(STN, Date, Time, Temp, Dewp, STP, SLP, VISIB, WDSP, PRCP, SNDP, FRSHTT, CLDC, WNDDIR) " + "VALUES" + "( " + measurements.getStn() + "," + measurements.getDate() + "," + measurements.getTime() + "," + measurements.getTemp() + "," + measurements.getDewp() + "," + measurements.getStp() + "," + measurements.getSlp() + "," + measurements.getVisib() + "," + measurements.getWdsp() + "," + measurements.getPrcp() + "," + measurements.getSndp() + "," + measurements.getFrshtt() + "," + measurements.getCldc() + "," + measurements.getWnddir() + ")";
+            String s = "INSERT INTO " + MEASUREMENT + " (STN, Date, Time, Temp, Dewp, STP, SLP, VISIB, WDSP, PRCP, SNDP, FRSHTT, CLDC, WNDDIR) " + " VALUES" + "( " + measurements.getStn() + "," + measurements.getDate() + "," + measurements.getTime() + "," + measurements.getTemp() + "," + measurements.getDewp() + "," + measurements.getStp() + "," + measurements.getSlp() + "," + measurements.getVisib() + "," + measurements.getWdsp() + "," + measurements.getPrcp() + "," + measurements.getSndp() + "," + measurements.getFrshtt() + "," + measurements.getCldc() + "," + measurements.getWnddir() + ")";
 
             // send data to database
             statement.executeUpdate(s);

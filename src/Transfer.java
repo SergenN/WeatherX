@@ -59,8 +59,13 @@ public class Transfer {
      */
     public Connection connect() {
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            return DriverManager.getConnection("jdbc:mysql://localhost:3306/unwdmi", "root","");
+            String  url = "jdbc:mysql://localhost:3306/",
+                    dbName="unwdmi",
+                    driver="com.mysql.jdbc.Driver",
+                    userName="root",
+                    passWord="";
+            Class.forName(driver).newInstance();
+            return DriverManager.getConnection(url+dbName,userName,passWord);
         } catch (SQLException sqle) {
             System.out.println("Could not connect to database.");
             System.err.println(sqle);

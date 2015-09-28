@@ -75,4 +75,12 @@ public class History {
         }
     }
 
+    /**
+     * getSize
+     * @return int of history size
+     */
+    public int getSize(){
+        return history.size();
+    }
+
 }

@@ -3,17 +3,17 @@ import java.util.LinkedList;
 /**
  * Created by Sergen Nurel
  * Date of creation 28-9-2015, 16:44
- * |
+ *
  * Authors: Sergen Nurel,
- * |
+ *
  * Version: 1.0
- * Package: PACKAGE_NAME
- * Class:
+ * Package: default
+ * Class: History
  * Description:
- * |
- * |
+ * This class is to control and keep track of the measurement history of an antenna
+ *
  * Changelog:
- * 1.0:
+ * 1.0: class is created it will make a linkedlist and store up to HISTORY_SIZE measurements by using the push function
  */
 public class History {
     private static final int HISTORY_SIZE = 30;
@@ -63,6 +63,16 @@ public class History {
             return history.getFirst();
         }
         return null;
+    }
+
+    /**
+     * removeFirst
+     * remove the last added entry from the history list
+     */
+    public void removeFirst(){
+        if (!history.isEmpty()){
+            history.pop();
+        }
     }
 
 }

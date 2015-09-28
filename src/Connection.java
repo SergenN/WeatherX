@@ -33,6 +33,7 @@ public class Connection implements Runnable{
      * @param client the client that made connection
      */
     public Connection(Socket client){
+        System.out.println("Client connected");
         history = new History();
         try {
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -50,7 +51,10 @@ public class Connection implements Runnable{
      */
     public void run(){
         try {
+            System.out.println("Client thread started");
             String line = in.readLine();
+
+            System.out.println("Sent in data: " + line);
 
             if (line.startsWith("<?xml")){
                 xml = "";

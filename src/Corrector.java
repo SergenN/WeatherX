@@ -14,7 +14,7 @@ public class Corrector {
     public void Corrector(Measurements meas, History history){
         this.meas       = meas;
         this.history   = history;
-        amountMeas = hashMeas.size();
+        amountMeas = History.getSize();
 
         correctTemp();
         correctDewp();
@@ -34,10 +34,10 @@ public class Corrector {
         double[] previousTemp = new double[amountMeas];
 
         for(int i = 0; i<amountMeas;i++){
-            previousTemp[i] = (Measurements) history.getMeasurement(i).getTemp();
+            previousTemp[i] = history.getMeasurement(i).getTemp();
         }
         if(temp>9999.9 || temp<-9999.9||temp==0){
-            meas.setTemp(getAverageOneDecimal(previousTemp));
+            meas.setTemp(getCalculateExtrapolatie(previousTemp));
         }
         meas.setTemp(correcting(temp, getCalculateExtrapolatie(previousTemp)));
     }
@@ -48,7 +48,7 @@ public class Corrector {
 
         if(dewp>9999.9||dewp<-9999.9||dewp==0){
             for (int i = 0; i<amountMeas;i++){
-                previousDewp[i] = (Measurements) history.getMeasurement(i).getDewp();
+                previousDewp[i] = history.getMeasurement(i).getDewp();
             }
             meas.setDewp(getCalculateExtrapolatie(previousDewp));
         }
@@ -61,7 +61,7 @@ public class Corrector {
 
         if(stp>9999.9||stp<0||stp==0){
             for (int i = 0; i<amountMeas;i++){
-                previousStp[i] = (Measurements) history.getMeasurement(i).getStp();
+                previousStp[i] =  history.getMeasurement(i).getStp();
             }
             meas.setSlp(getCalculateExtrapolatie(previousStp));
         }
@@ -73,7 +73,7 @@ public class Corrector {
 
         if(slp>9999.9||slp<-9999.9||slp==0){
             for (int i = 0; i<amountMeas;i++){
-                previousSlp[i] = (Measurements) history.getMeasurement(i).getSlp();
+                previousSlp[i] = history.getMeasurement(i).getSlp();
             }
             meas.setSlp(getCalculateExtrapolatie(previousSlp));
         }
@@ -86,7 +86,7 @@ public class Corrector {
 
         if(visib>999.9||visib<0||visib==0){
             for (int i = 0; i<amountMeas;i++){
-                previousVisib[i] = (Measurements) history.getMeasurement(i).getVisib();
+                previousVisib[i] =  history.getMeasurement(i).getVisib();
             }
             meas.setVisib(getCalculateExtrapolatie(previousVisib));
         }
@@ -98,7 +98,7 @@ public class Corrector {
 
         if(wdsp>999.9||wdsp<0||wdsp==0){
             for (int i = 0; i<amountMeas;i++){
-                previousWdsp[i] = (Measurements) history.getMeasurement(i).getWdsp();
+                previousWdsp[i] =  history.getMeasurement(i).getWdsp();
             }
             meas.setWdsp(getCalculateExtrapolatie(previousWdsp));
         }
@@ -110,7 +110,7 @@ public class Corrector {
 
         if(prcp>999.99||prcp<0.00||prcp==0){
             for (int i = 0; i<amountMeas;i++){
-                previousPrcp[i] = (Measurements) history.getMeasurement(i).getPrcp();
+                previousPrcp[i] =  history.getMeasurement(i).getPrcp();
             }
             meas.setPrcp(getCalculateExtrapolatie(previousPrcp));
         }
@@ -122,10 +122,14 @@ public class Corrector {
 
         if(sndp>9999.9||sndp<-9999.9||sndp==0){
             for (int i = 0; i<amountMeas;i++){
-                previousSndp[i] = (Measurements) history.getMeasurement(i).getSndp();
+                previousSndp[i] = history.getMeasurement(i).getSndp();
             }
             meas.setSndp(getCalculateExtrapolatie(previousSndp));
         }
+    }
+
+    private void correctFrshtt(){
+
     }
 
     private void correctCldc(){
@@ -134,7 +138,7 @@ public class Corrector {
 
         if(cldc>99.9||cldc<0||cldc==0){
             for (int i = 0; i<amountMeas;i++){
-                previousCldc[i] = (Measurements) history.getMeasurement(i).getCldc();
+                previousCldc[i] =  history.getMeasurement(i).getCldc();
             }
             meas.setCldc(getCalculateExtrapolatie(previousCldc));
         }
@@ -147,7 +151,7 @@ public class Corrector {
 
         if(wnddir>9999.9&&wnddir<-9999.9){
             for (int i = 0; i<amountMeas;i++){
-                previousWnddir[i] = (Measurements) history.getMeasurement(i).getWnddir();
+                previousWnddir[i] = history.getMeasurement(i).getWnddir();
             }
             meas.setWnddir((int)Math.floor(getCalculateExtrapolatie(previousWnddir)));
         }
@@ -174,20 +178,4 @@ public class Corrector {
         return  measures;
     }
 
-    private double getAverageOneDecimal(double[] numbers){
-        int counted = numbers.length;
-        double total = 0;
-        for(int i=0;i<counted;i++){
-            total += numbers[i];
-        }
-        return (double) Math.round((total/counted)*10)/10;
-    }
-    private double getAverageTwoDecimal(double[] numbers){
-        int counted = numbers.length;
-        double total = 0;
-        for(int i=0;i<counted;i++){
-            total += numbers[i];
-        }
-        return (double) Math.round((total/counted)*100)/100;
-    }
 }

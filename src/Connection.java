@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -51,6 +52,7 @@ public class Connection implements Runnable{
      */
     public void run(){
         try {
+            HashMap<String, String> data = new HashMap<String,String>();
             System.out.println("Client thread started");//TODO debug
 
             String line;
@@ -58,22 +60,38 @@ public class Connection implements Runnable{
 
                 System.out.println("Sent in data: " + line);//TODO debug
 
-                if (line.startsWith("<?xml")) {
-                    System.out.println("line started with <?xml");//TODO debug
-                    xml = "";
+                if (line.contains("<MEASUREMENT>")) {
+                    //System.out.println("line started with <?xml");//TODO debug
+                    data.clear();
+                    continue;
                 }
 
-                xml += line;
+                if (line.contains("</MEASUREMENT>")) {
 
-                System.out.println("added data to xml: " + xml);//TODO debug
-
-                if (line.startsWith("</WEATHERDATA>")) {
-                    Map<String, String> data = XMLConverter.convertNodesFromXml(xml);
                     Measurements measure = new Measurements(data);
                     Corrector.correct(measure, history);
                     history.push(measure);
                     Transfer.store(measure);
+                    continue;
                 }
+
+                String test = line;
+                test = test.replaceAll("<[^>]+>", "");
+                if (test.equals("")){
+                    continue;
+                } else {
+
+                    String newline = line.substring(1, line.length() - 1);
+                    newline = newline.replace("<", ",");
+                    newline = newline.replace(">", ",");
+                    String[] words = newline.split(",");
+
+                    data.put(words[1], words[2]);
+                    System.out.println(words[1] + "," + words[2]);
+
+                }
+
+                //System.out.println("added data to xml: " + xml);//TODO debug
             }
         } catch(IOException e){
             e.printStackTrace();

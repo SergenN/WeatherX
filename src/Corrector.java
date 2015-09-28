@@ -131,7 +131,7 @@ public class Corrector {
 
     private static void correctFrshtt(Measurements meas, History history){
         if(meas.getFrshtt()!=null){
-            meas.setFrshtt(history.getMeasurement(history.getSize()).getFrshtt());
+            meas.setFrshtt(history.getMeasurement(history.getSize()-1).getFrshtt());
         }
     }
 
@@ -169,6 +169,7 @@ public class Corrector {
             }
             differences= differences/values.length-1;
             differences+=values[values.length-1];
+            System.out.println("Correcting....");
         }
         return differences;
     }
@@ -178,6 +179,7 @@ public class Corrector {
         if(measures>(avarage*1.20)||measures <(avarage*0.80)||measures==0){
             measures = avarage;
         }
+
         return  measures;
     }
 

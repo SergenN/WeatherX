@@ -57,8 +57,11 @@ public class Connection implements Runnable{
             System.out.println("Sent in data: " + line);//TODO debug
 
             if (line.startsWith("<?xml")){
+                System.out.println("line started with <?xml");
                 xml = "";
             }
+
+            System.out.println("added data to xml: " + xml );
 
             xml += line;
 

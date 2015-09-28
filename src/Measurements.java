@@ -24,27 +24,52 @@ public class Measurements {
 
     public Measurements(Map<String, String> data){
         try {
-            setStn(exists(data.get("STN")) ? Long.parseLong(data.get("STN")) : -100L);
-            setWnddir(exists(data.get("WNDDIR")) ? Integer.parseInt(data.get("WNDDIR")) : -100);
-            setTemp(exists(data.get("TEMP")) ? Double.parseDouble(data.get("TEMP")) : -100D);
-            setDewp(exists(data.get("DEWP")) ? Double.parseDouble(data.get("DEWP")) : -100D);
-            setStp(exists(data.get("STP")) ? Double.parseDouble(data.get("STP")) : -100D);
-            setSlp(exists(data.get("SLP")) ? Double.parseDouble(data.get("SLP")) : -100D);
-            setVisib(exists(data.get("VISIB")) ? Double.parseDouble(data.get("VISIB")) : -100D);
-            setWdsp(exists(data.get("WDSP")) ? Double.parseDouble(data.get("WDSP")) : -100D);
-            setPrcp(exists(data.get("PRCP")) ? Double.parseDouble(data.get("PRCP")) : -100D);
-            setSndp(exists(data.get("SNDP")) ? Double.parseDouble(data.get("SNDP")) : -100D);
-            setCldc(exists(data.get("CLDC")) ? Double.parseDouble(data.get("CLDC")) : -100D);
-            setDate(exists(data.get("DATE")) ? data.get("DATE") : null);
-            setTime(exists(data.get("TIME")) ? data.get("TIME") : null);
-            setFrshtt(exists(data.get("FRSHTT")) ? data.get("FRSHTT") : null);
+            setStn(convertLong(data.get("STN")));
+            setWnddir(convertInt(data.get("WNDDIR")));
+            setTemp(convertDouble(data.get("TEMP")));
+            setDewp(convertDouble(data.get("DEWP")));
+            setStp(convertDouble(data.get("STP")));
+            setSlp(convertDouble(data.get("SLP")));
+            setVisib(convertDouble(data.get("VISIB")));
+            setWdsp(convertDouble(data.get("WDSP")));
+            setPrcp(convertDouble(data.get("PRCP")));
+            setSndp(convertDouble(data.get("SNDP")));
+            setCldc(convertDouble(data.get("CLDC")));
+            setDate(data.get("DATE"));
+            setTime(data.get("TIME"));
+            setFrshtt(data.get("FRSHTT"));
         }catch(NumberFormatException e){
             e.printStackTrace();
         }
     }
 
-    private boolean exists(String data){
-        return data == null || data.equalsIgnoreCase("") || data.isEmpty();
+    private long convertLong(String number){
+        long num;
+        try{
+            num = Long.parseLong(number);
+        }catch(NumberFormatException n){
+            return -1000L;
+        }
+        return num;
+    }
+
+    private double convertDouble(String number){
+        Double num;
+        try{
+            num = Double.parseDouble(number);
+        }catch(NumberFormatException n){
+            return -1000.0D;
+        }
+        return num;
+    }
+    private int convertInt(String number){
+        int num;
+        try{
+            num = Integer.parseInt(number);
+        }catch(NumberFormatException n){
+            return -1000;
+        }
+        return num;
     }
 
     public void setStn(long stn) {

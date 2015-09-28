@@ -11,7 +11,7 @@ public class Corrector {
     //private static History history;
     private static int amountMeas;
 
-    public static void Corrector(Measurements meas, History history){
+    public static void correct(Measurements meas, History history){
         //this.meas       = meas;
         //this.history   = history;
         amountMeas = history.getSize();

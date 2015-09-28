@@ -49,6 +49,8 @@ public class Measurements {
             num = Long.parseLong(number);
         }catch(NumberFormatException n){
             return -1000L;
+        }catch(NullPointerException e){
+            return -1000L;
         }
         return num;
     }
@@ -59,14 +61,19 @@ public class Measurements {
             num = Double.parseDouble(number);
         }catch(NumberFormatException n){
             return -1000.0D;
+        }catch(NullPointerException e){
+            return -1000.0D;
         }
         return num;
     }
+
     private int convertInt(String number){
         int num;
         try{
             num = Integer.parseInt(number);
         }catch(NumberFormatException n){
+            return -1000;
+        }catch(NullPointerException e){
             return -1000;
         }
         return num;

@@ -47,7 +47,7 @@ public class History {
      * @return measurement from given index, null if index number is bigger than the linkedlist
      */
     public Measurements getMeasurement(int index){
-        if (history.size() <= index) {
+        if (history.size() >= index) {
             return history.get(index);
         }
         return null;

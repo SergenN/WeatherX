@@ -161,14 +161,14 @@ public class Corrector {
     }
 
     private static double getCalculateExtrapolatie(double[] values){
-        double differences = values[values.length];
+        double differences = values[values.length-1];
         if(values.length>1){
             differences = 0.00;
             for (int i=0; i<(values.length-1);i++){
                 differences += (values[(i+1)]- values[i]);
             }
             differences= differences/values.length-1;
-            differences+=values[values.length];
+            differences+=values[values.length-1];
         }
         return differences;
     }

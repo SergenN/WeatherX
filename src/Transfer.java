@@ -14,7 +14,7 @@ public class Transfer {
     private Connection conn = null;
 
     // table name
-    private static final String MEASUREMENT = "Measurement";
+    private static final String MEASUREMENT = "measurements";
 
     public Transfer(Measurements measurement) {
         this.measurement = measurement;
@@ -35,7 +35,7 @@ public class Transfer {
      */
     public void transfer() {
         if (conn == null){
-            System.out.println("SQL error!");
+            System.out.println("SQL error! on Transfer()");
             return;
         }
 
@@ -49,7 +49,8 @@ public class Transfer {
 
             statement.executeUpdate(query);
         } catch (SQLException sqle) {
-            System.out.println("SQL error!");
+            System.out.println("SQL error! on Query()");
+            sqle.printStackTrace();
         }
     }
 
@@ -58,10 +59,25 @@ public class Transfer {
      */
     public Connection connect() {
         try {
-            return DriverManager.getConnection("jdbc:mysql://localhost:3306/", "user","pass");
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            return DriverManager.getConnection("jdbc:mysql://localhost:3306/unwdmi", "root","");
         } catch (SQLException sqle) {
             System.out.println("Could not connect to database.");
+            System.err.println(sqle);
             return null;
         }
+        catch (ClassNotFoundException cnfe){
+            System.err.println(cnfe);
+            return null;
+        }
+        catch (InstantiationException ie){
+            System.err.println(ie);
+            return null;
+        }
+        catch (IllegalAccessException iae){
+            System.err.println(iae);
+            return null;
+        }
+
     }
 }

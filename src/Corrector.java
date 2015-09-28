@@ -15,18 +15,19 @@ public class Corrector {
         //this.meas       = meas;
         //this.history   = history;
         amountMeas = history.getSize();
-
-        correctTemp(meas,history);
-        correctDewp(meas,history);
-        correctStp(meas,history);
-        correctSlp(meas,history);
-        correctVisib(meas,history);
-        correctWdsp(meas,history);
-        correctPrcp(meas,history);
-        correctSndp(meas,history);
-        correctFrshtt(meas,history);
-        correctCldc(meas,history);
-        correctWnddir(meas,history);
+        if(history.getSize()!=0) {
+            correctTemp(meas, history);
+            correctDewp(meas, history);
+            correctStp(meas, history);
+            correctSlp(meas, history);
+            correctVisib(meas, history);
+            correctWdsp(meas, history);
+            correctPrcp(meas, history);
+            correctSndp(meas, history);
+            correctFrshtt(meas, history);
+            correctCldc(meas, history);
+            correctWnddir(meas, history);
+        }
     }
 
     private static void correctTemp(Measurements meas, History history){

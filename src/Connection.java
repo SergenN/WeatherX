@@ -61,7 +61,9 @@ public class Connection implements Runnable{
             if (line.startsWith("</WEATHERDATA>")){
                 Map<String, String> data = XMLConverter.convertNodesFromXml(xml);
                 Measurements measure = new Measurements(data);
+                Corrector.correct(measure, history);
                 history.push(measure);
+                Transfer.store(measure);
             }
         } catch(Exception e){
             e.printStackTrace();

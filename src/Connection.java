@@ -52,26 +52,31 @@ public class Connection implements Runnable{
     public void run(){
         try {
             System.out.println("Client thread started");//TODO debug
-            String line = in.readLine();
 
-            System.out.println("Sent in data: " + line);//TODO debug
+            String line;
+            while ((line = in.readLine()) != null) {
 
-            if (line.startsWith("<?xml")){
-                System.out.println("line started with <?xml");
-                xml = "";
+                System.out.println("Sent in data: " + line);//TODO debug
+
+                if (line.startsWith("<?xml")) {
+                    System.out.println("line started with <?xml");//TODO debug
+                    xml = "";
+                }
+
+                xml += line;
+
+                System.out.println("added data to xml: " + xml);//TODO debug
+
+                if (line.startsWith("</WEATHERDATA>")) {
+                    Map<String, String> data = XMLConverter.convertNodesFromXml(xml);
+                    Measurements measure = new Measurements(data);
+                    Corrector.correct(measure, history);
+                    history.push(measure);
+                    Transfer.store(measure);
+                }
             }
-
-            System.out.println("added data to xml: " + xml );
-
-            xml += line;
-
-            if (line.startsWith("</WEATHERDATA>")){
-                Map<String, String> data = XMLConverter.convertNodesFromXml(xml);
-                Measurements measure = new Measurements(data);
-                Corrector.correct(measure, history);
-                history.push(measure);
-                Transfer.store(measure);
-            }
+        } catch(IOException e){
+            e.printStackTrace();
         } catch(Exception e){
             e.printStackTrace();
         }

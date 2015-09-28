@@ -129,7 +129,9 @@ public class Corrector {
     }
 
     private static void correctFrshtt(Measurements meas, History history){
-
+        if(meas.getFrshtt()!=null){
+            meas.setFrshtt(history.getMeasurement(history.getSize()).getFrshtt());
+        }
     }
 
     private static void correctCldc(Measurements meas, History history){

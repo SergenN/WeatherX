@@ -7,29 +7,29 @@ import java.util.Stack;
  * @version 1.0.0
  */
 public class Corrector {
-    private  Measurements meas;
-    private History history;
-    int amountMeas;
+    //private static Measurements meas;
+    //private static History history;
+    private static int amountMeas;
 
-    public void Corrector(Measurements meas, History history){
-        this.meas       = meas;
-        this.history   = history;
-        amountMeas = History.getSize();
+    public static void Corrector(Measurements meas, History history){
+        //this.meas       = meas;
+        //this.history   = history;
+        amountMeas = history.getSize();
 
-        correctTemp();
-        correctDewp();
-        correctStp();
-        correctSlp();
-        correctVisib();
-        correctWdsp();
-        correctPrcp();
-        correctSndp();
-        correctFrshtt();
-        correctCldc();
-        correctWnddir();
+        correctTemp(meas,history);
+        correctDewp(meas,history);
+        correctStp(meas,history);
+        correctSlp(meas,history);
+        correctVisib(meas,history);
+        correctWdsp(meas,history);
+        correctPrcp(meas,history);
+        correctSndp(meas,history);
+        correctFrshtt(meas,history);
+        correctCldc(meas,history);
+        correctWnddir(meas,history);
     }
 
-    private void correctTemp(){
+    private static void correctTemp(Measurements meas, History history){
         double temp = meas.getTemp();
         double[] previousTemp = new double[amountMeas];
 
@@ -42,7 +42,7 @@ public class Corrector {
         meas.setTemp(correcting(temp, getCalculateExtrapolatie(previousTemp)));
     }
 
-    private void correctDewp(){
+    private static void correctDewp(Measurements meas, History history){
         double dewp = meas.getDewp();
         double[] previousDewp = new double[amountMeas];
 
@@ -54,7 +54,7 @@ public class Corrector {
         }
     }
 
-    private void correctStp(){
+    private static void correctStp(Measurements meas, History history){
         double stp = meas.getStp();
         double[] previousStp = new double[amountMeas];
 
@@ -63,11 +63,11 @@ public class Corrector {
             for (int i = 0; i<amountMeas;i++){
                 previousStp[i] =  history.getMeasurement(i).getStp();
             }
-            meas.setSlp(getCalculateExtrapolatie(previousStp));
+            meas.setStp(getCalculateExtrapolatie(previousStp));
         }
     }
 
-    private void correctSlp(){
+    private static void correctSlp(Measurements meas, History history){
         double slp = meas.getSlp();
         double[] previousSlp = new double[amountMeas];
 
@@ -79,7 +79,7 @@ public class Corrector {
         }
     }
 
-    private void correctVisib(){
+    private static void correctVisib(Measurements meas, History history){
         double visib = meas.getVisib();
         double[] previousVisib = new double[amountMeas];
 
@@ -92,7 +92,7 @@ public class Corrector {
         }
     }
 
-    private void correctWdsp(){
+    private static void correctWdsp(Measurements meas, History history){
         double wdsp = meas.getWdsp();
         double[] previousWdsp = new double[amountMeas];
 
@@ -104,7 +104,7 @@ public class Corrector {
         }
     }
 
-    private void correctPrcp(){
+    private static void correctPrcp(Measurements meas, History history){
         double prcp = meas.getPrcp();
         double[] previousPrcp = new double[amountMeas];
 
@@ -116,7 +116,7 @@ public class Corrector {
         }
     }
 
-    private void correctSndp(){
+    private static void correctSndp(Measurements meas, History history){
         double sndp = meas.getSndp();
         double[] previousSndp= new double[amountMeas];
 
@@ -128,11 +128,11 @@ public class Corrector {
         }
     }
 
-    private void correctFrshtt(){
+    private static void correctFrshtt(Measurements meas, History history){
 
     }
 
-    private void correctCldc(){
+    private static void correctCldc(Measurements meas, History history){
         double cldc = meas.getCldc();
         double[] previousCldc = new double[amountMeas];
 
@@ -145,7 +145,7 @@ public class Corrector {
     }
 
 
-    private void correctWnddir(){
+    private static void correctWnddir(Measurements meas, History history){
         double wnddir = meas.getWnddir();
         double[] previousWnddir = new double[amountMeas];
 
@@ -157,7 +157,7 @@ public class Corrector {
         }
     }
 
-    private double getCalculateExtrapolatie(double[] values){
+    private static double getCalculateExtrapolatie(double[] values){
         double differences = values[values.length];
         if(values.length>1){
             differences = 0.00;
@@ -171,7 +171,7 @@ public class Corrector {
     }
 
 
-    private double correcting(double measures,double avarage){
+    private static double correcting(double measures,double avarage){
         if(measures>(avarage*1.20)||measures <(avarage*0.80)||measures==0){
             measures = avarage;
         }

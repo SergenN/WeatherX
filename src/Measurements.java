@@ -23,20 +23,28 @@ public class Measurements {
     private String date, time, frshtt;
 
     public Measurements(Map<String, String> data){
-        setStn(Long.parseLong(data.get("STN")));
-        setWnddir(Integer.parseInt(data.get("WNDDIR")));
-        setTemp(Double.parseDouble(data.get("TEMP")));
-        setDewp(Double.parseDouble(data.get("DEWP")));
-        setStp(Double.parseDouble(data.get("STP")));
-        setSlp(Double.parseDouble(data.get("SLP")));
-        setVisib(Double.parseDouble(data.get("VISIB")));
-        setWdsp(Double.parseDouble(data.get("WDSP")));
-        setPrcp(Double.parseDouble(data.get("PRCP")));
-        setSndp(Double.parseDouble(data.get("SNDP")));
-        setCldc(Double.parseDouble(data.get("CLDC")));
-        setDate(data.get("DATE"));
-        setTime(data.get("TIME"));
-        setFrshtt(data.get("FRSHTT"));
+        try {
+            setStn(exists(data.get("STN")) ? Long.parseLong(data.get("STN")) : -100L);
+            setWnddir(exists(data.get("WNDDIR")) ? Integer.parseInt(data.get("WNDDIR")) : -100);
+            setTemp(exists(data.get("TEMP")) ? Double.parseDouble(data.get("TEMP")) : -100D);
+            setDewp(exists(data.get("DEWP")) ? Double.parseDouble(data.get("DEWP")) : -100D);
+            setStp(exists(data.get("STP")) ? Double.parseDouble(data.get("STP")) : -100D);
+            setSlp(exists(data.get("SLP")) ? Double.parseDouble(data.get("SLP")) : -100D);
+            setVisib(exists(data.get("VISIB")) ? Double.parseDouble(data.get("VISIB")) : -100D);
+            setWdsp(exists(data.get("WDSP")) ? Double.parseDouble(data.get("WDSP")) : -100D);
+            setPrcp(exists(data.get("PRCP")) ? Double.parseDouble(data.get("PRCP")) : -100D);
+            setSndp(exists(data.get("SNDP")) ? Double.parseDouble(data.get("SNDP")) : -100D);
+            setCldc(exists(data.get("CLDC")) ? Double.parseDouble(data.get("CLDC")) : -100D);
+            setDate(exists(data.get("DATE")) ? data.get("DATE") : null);
+            setTime(exists(data.get("TIME")) ? data.get("TIME") : null);
+            setFrshtt(exists(data.get("FRSHTT")) ? data.get("FRSHTT") : null);
+        }catch(NumberFormatException e){
+            e.printStackTrace();
+        }
+    }
+
+    private boolean exists(String data){
+        return data == null || data.equalsIgnoreCase("") || data.isEmpty();
     }
 
     public void setStn(long stn) {

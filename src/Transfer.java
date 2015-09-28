@@ -10,13 +10,13 @@ import java.sql.Statement;
 public class Transfer {
 
     // Measurement object
-    private Measurement measurement;
+    private Measurements measurement;
     private static Connection conn = null;
 
     // table name
     private static final String MEASUREMENT = "Measurement";
 
-    public Transfer(Measurement measurement) {
+    public Transfer(Measurements measurement) {
         this.measurement = measurement;
     }
 
@@ -71,8 +71,13 @@ public class Transfer {
             // create a Statement from the connection
             Statement statement = conn.createStatement();
 
+            String query = "INSERT INTO " + MEASUREMENT + " VALUES ("
+                            + measurement.getStn() + "," + measurement.getDate() + "," + measurement.getTime() + "," + measurement.getTemp() + ","
+                            + measurement.getDewp() + "," + measurement.getStp() + "," + measurement.getSlp() + "," + measurement.getVisib() + "," + measurement.getWdsp() + ","
+                            + measurement.getPrcp() + "," + measurement.getSndp() + "," + measurement.getFrshtt() + "," + measurement.getCldc() + "," + measurement.getWnddir() + ")";
+
             // send data to database
-            statement.executeUpdate("INSERT INTO " + MEASUREMENT + " VALUES (" + measurement.getSTN(), measurement.getDate(), measurement.getTime(), measurement.getTemp(), measurement.getDewp(), measurement.getSTP(), measurement.getSLP(), measurement.getVISIB(), measurement.WDSP(), measurement.getPRCP(), measurement.getSNDP(), measurement.getFRSHTT(), measurement.getCLDC(), measurement.getWNDDIR()) + ")";
+            statement.executeUpdate(query);
         } catch (SQLException sqle) {
             System.out.println("SQL error!");
         }

@@ -25,6 +25,7 @@ public class Connection implements Runnable{
 
     private BufferedReader in;
     private String xml;
+    private History history;
 
     /**
      * Connection constructor
@@ -32,6 +33,7 @@ public class Connection implements Runnable{
      * @param client the client that made connection
      */
     public Connection(Socket client){
+        history = new History();
         try {
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
         }catch(IOException e){
@@ -59,6 +61,7 @@ public class Connection implements Runnable{
             if (line.startsWith("</WEATHERDATA>")){
                 Map<String, String> data = XMLConverter.convertNodesFromXml(xml);
                 Measurements measure = new Measurements(data);
+                history.push(measure);
             }
         } catch(Exception e){
             e.printStackTrace();

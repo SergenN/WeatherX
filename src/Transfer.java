@@ -62,8 +62,9 @@ public class Transfer {
     */
 
     /**
+     * transfer
      * Method to transfer the data from the Measurement object into the database
-     * @param conn
+     * @param conn open SQL connection
      */
     public void transfer(Connection conn) {
         // itereer over de hashmap

@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.Stack;
 
 /**
  * Created by Michaël on 25-9-2015.
@@ -8,6 +9,7 @@ import java.util.HashMap;
 public class Corrector {
     private  Measurements meas;
     private HashMap hashMeas;
+    private Stack stackMeas;
     int amountMeas;
 
     public void main(Measurements meas, HashMap hashMeas){
@@ -33,7 +35,8 @@ public class Corrector {
         double[] previousTemp = new double[amountMeas];
 
         for(int i = 0; i<amountMeas;i++){
-            previousTemp[i] = (Measurements) hashMeas.get(i).getTemp();
+            //previousTemp[i] = (Measurements) hashMeas.get(i).getTemp();
+            previousTemp[i] = (Measurements) stackMeas.get(i).getTemp();
         }
         if(temp>9999.9 || temp<-9999.9||temp==0){
             meas.setTemp(getAverageOneDecimal(previousTemp));

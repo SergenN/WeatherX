@@ -1,3 +1,4 @@
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -10,10 +11,14 @@ public class Corrector {
     //private static Measurements meas;
     //private static History history;
     private static int amountMeas;
+    private static DecimalFormat oneDecimal,twoDecimal;
 
     public static void correct(Measurements meas, History history){
         //this.meas       = meas;
         //this.history   = history;
+        oneDecimal = new DecimalFormat("#.0");
+        twoDecimal = new DecimalFormat("#.00");
+
         amountMeas = history.getSize();
         if(history.getSize()!=0) {
             correctTemp(meas, history);
@@ -38,9 +43,11 @@ public class Corrector {
             previousTemp[i] = history.getMeasurement(i).getTemp();
         }
         if(temp>9999.9 || temp<-9999.9||temp==0){
-            meas.setTemp(getCalculateExtrapolatie(previousTemp));
+            //meas.setTemp(getCalculateExtrapolatie(previousTemp));
+            double value = Math.round(correcting(temp, getCalculateExtrapolatie(previousTemp)) * 10);
+            meas.setTemp(value/10);
         }
-        meas.setTemp(correcting(temp, getCalculateExtrapolatie(previousTemp)));
+
     }
 
     private static void correctDewp(Measurements meas, History history){
@@ -51,7 +58,8 @@ public class Corrector {
             for (int i = 0; i<amountMeas;i++){
                 previousDewp[i] = history.getMeasurement(i).getDewp();
             }
-            meas.setDewp(getCalculateExtrapolatie(previousDewp));
+            double value = Math.round(correcting(dewp, getCalculateExtrapolatie(previousDewp)) * 10);
+            meas.setDewp(value / 10);
         }
     }
 
@@ -64,7 +72,8 @@ public class Corrector {
             for (int i = 0; i<amountMeas;i++){
                 previousStp[i] =  history.getMeasurement(i).getStp();
             }
-            meas.setStp(getCalculateExtrapolatie(previousStp));
+            double value = Math.round(correcting(stp, getCalculateExtrapolatie(previousStp)) * 10);
+            meas.setStp(value / 10);
         }
     }
 
@@ -76,7 +85,8 @@ public class Corrector {
             for (int i = 0; i<amountMeas;i++){
                 previousSlp[i] = history.getMeasurement(i).getSlp();
             }
-            meas.setSlp(getCalculateExtrapolatie(previousSlp));
+            double value = Math.round(correcting(slp, getCalculateExtrapolatie(previousSlp)) * 10);
+            meas.setSlp(value / 10);
         }
     }
 
@@ -89,7 +99,8 @@ public class Corrector {
             for (int i = 0; i<amountMeas;i++){
                 previousVisib[i] =  history.getMeasurement(i).getVisib();
             }
-            meas.setVisib(getCalculateExtrapolatie(previousVisib));
+            double value = Math.round(correcting(visib, getCalculateExtrapolatie(previousVisib)) * 10);
+            meas.setVisib(value / 10);
         }
     }
 
@@ -101,7 +112,8 @@ public class Corrector {
             for (int i = 0; i<amountMeas;i++){
                 previousWdsp[i] =  history.getMeasurement(i).getWdsp();
             }
-            meas.setWdsp(getCalculateExtrapolatie(previousWdsp));
+            double value = Math.round(correcting(wdsp, getCalculateExtrapolatie(previousWdsp)) * 10);
+            meas.setWdsp(value / 10);
         }
     }
 
@@ -113,7 +125,8 @@ public class Corrector {
             for (int i = 0; i<amountMeas;i++){
                 previousPrcp[i] =  history.getMeasurement(i).getPrcp();
             }
-            meas.setPrcp(getCalculateExtrapolatie(previousPrcp));
+            double value = Math.round(correcting(prcp, getCalculateExtrapolatie(previousPrcp)) * 100);
+            meas.setPrcp(value / 100);
         }
     }
 
@@ -125,13 +138,15 @@ public class Corrector {
             for (int i = 0; i<amountMeas;i++){
                 previousSndp[i] = history.getMeasurement(i).getSndp();
             }
-            meas.setSndp(getCalculateExtrapolatie(previousSndp));
+            double value = Math.round(correcting(sndp, getCalculateExtrapolatie(previousSndp)) * 10);
+            meas.setSndp(value / 10);
         }
     }
 
     private static void correctFrshtt(Measurements meas, History history){
-        if(meas.getFrshtt()!=null){
-            meas.setFrshtt(history.getMeasurement(history.getSize()-1).getFrshtt());
+        if(meas.getFrshtt()==null){
+
+            meas.setFrshtt(history.getMeasurement(history.getSize() - 1).getFrshtt());
         }
     }
 
@@ -143,7 +158,9 @@ public class Corrector {
             for (int i = 0; i<amountMeas;i++){
                 previousCldc[i] =  history.getMeasurement(i).getCldc();
             }
-            meas.setCldc(getCalculateExtrapolatie(previousCldc));
+            //meas.setCldc(getCalculateExtrapolatie(previousCldc));
+            double value = Math.round(correcting(cldc, getCalculateExtrapolatie(previousCldc)) * 10);
+            meas.setCldc(value / 10);
         }
     }
 
@@ -171,7 +188,7 @@ public class Corrector {
             differences+=values[values.length-1];
             System.out.println("Correcting....");
         }
-        return differences;
+        return (double) differences;
     }
 
 

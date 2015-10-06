@@ -1,10 +1,8 @@
-import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.client.MongoDatabase;
 
 import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 /**
@@ -49,7 +47,6 @@ public class Main {
         builder.connectionsPerHost(1000);
         MongoClientOptions options = builder.build();
         MongoClient mongoClient = new MongoClient("localhost", options);
-        //MongoClient mongoClient = new MongoClient();
         return mongoClient.getDatabase("WeatherX");
     }
 }

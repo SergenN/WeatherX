@@ -4,6 +4,23 @@ import org.bson.Document;
  * Created by Leon on 25-9-2015.
  * Class for transferring data from the Hashmap to the database
  */
+
+/**
+ * Created by Leon Wetzel
+ * Date of creation 25-9-2015, 12:05
+ *
+ * Authors: Sergen Nurel, Leon Wetzel
+ *
+ * Version: 1.0
+ * Package: default
+ * Class: Transfer
+ * Description:
+ * This class is dedicated to tranfering processed or unprocessed data into the database
+ *
+ * Changelog:
+ * 1.0: SQL outfit
+ * 2.0: Deprecated SQL transfer() method, implementig MongoDB support
+ */
 public class Transfer {
 
     // Measurement object
@@ -48,6 +65,10 @@ public class Transfer {
      * Method for inserting data in a Mongo database
      */
     public void transferMongo() {
+        if (Main.conn == null){
+            System.out.println("Could not establish database connection.");
+            return;
+        }
 
         Document bsonDoc = new Document();
         bsonDoc.append("stn", measurement.getStn());

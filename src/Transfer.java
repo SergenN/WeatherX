@@ -1,11 +1,25 @@
 import org.bson.Document;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 /**
  * Created by Leon on 25-9-2015.
  * Class for transferring data from the Hashmap to the database
+ */
+
+/**
+ * Created by Leon Wetzel
+ * Date of creation 25-9-2015, 12:05
+ *
+ * Authors: Sergen Nurel, Leon Wetzel
+ *
+ * Version: 1.0
+ * Package: default
+ * Class: Transfer
+ * Description:
+ * This class is dedicated to tranfering processed or unprocessed data into the database
+ *
+ * Changelog:
+ * 1.0: SQL outfit
+ * 2.0: Deprecated SQL transfer() method, implementig MongoDB support
  */
 public class Transfer {
 
@@ -24,14 +38,15 @@ public class Transfer {
      * @param measurement measurement to push into the database
      */
     public static void store(Measurements measurement) {
-        new Transfer(measurement).transfer();
+        new Transfer(measurement).transferMongo();
     }
 
     /**
      * transfer
      * Method to transfer the data from the Measurement object into the database
      */
-   /* public void transfer() {
+    @Deprecated @SuppressWarnings("unused")
+    public void transferSQL() {
         if (Main.conn == null){
             System.out.println("SQL error! on Transfer()");
             return;
@@ -44,13 +59,16 @@ public class Transfer {
                             + measurement.getPrcp() + "," + measurement.getSndp() + ",'" + measurement.getFrshtt() + "'," + measurement.getCldc() + "," + measurement.getWnddir() + ")";
             System.out.println(query);
             //statement.executeUpdate(query);
-    }*/
+    }
 
     /**
      * Method for inserting data in a Mongo database
      */
-    public void transfer() {
-        DateFormat format = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss'Z'", Locale.ENGLISH);
+    public void transferMongo() {
+        if (Main.conn == null){
+            System.out.println("Could not establish database connection.");
+            return;
+        }
 
         Document bsonDoc = new Document();
         bsonDoc.append("stn", measurement.getStn());

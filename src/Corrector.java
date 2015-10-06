@@ -8,18 +8,14 @@ import java.util.Stack;
  * @version 1.0.0
  */
 public class Corrector {
-    //private static Measurements meas;
-    //private static History history;
+
     private static int amountMeas;
     private static DecimalFormat oneDecimal,twoDecimal;
 
     public static void correct(Measurements meas, History history){
-        //this.meas       = meas;
-        //this.history   = history;
-        oneDecimal = new DecimalFormat("#.0");
-        twoDecimal = new DecimalFormat("#.00");
-
+        // get the size of the History object (stack)
         amountMeas = history.getSize();
+        //if it isn't the first time then use the correct
         if(history.getSize()!=0) {
             correctTemp(meas, history);
             correctDewp(meas, history);
@@ -34,7 +30,11 @@ public class Corrector {
             correctWnddir(meas, history);
         }
     }
-
+    /**
+     *  Correcting the temperature
+     *  @param meas
+     *  @param history
+     */
     private static void correctTemp(Measurements meas, History history){
         double temp = meas.getTemp();
         double[] previousTemp = new double[amountMeas];
@@ -43,7 +43,6 @@ public class Corrector {
             previousTemp[i] = history.getMeasurement(i).getTemp();
         }
         if(temp>9999.9 || temp<-9999.9||temp==0){
-            //meas.setTemp(getCalculateExtrapolatie(previousTemp));
             double value = Math.round(correcting(temp, getCalculateExtrapolatie(previousTemp)) * 10);
             meas.setTemp(value/10);
         }
@@ -188,7 +187,7 @@ public class Corrector {
             differences+=values[values.length-1];
             System.out.println("Correcting....");
         }
-        return (double) differences;
+        return differences;
     }
 
 

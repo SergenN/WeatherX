@@ -93,6 +93,9 @@ public class Connection implements Runnable{
 
                 //System.out.println("added data to xml: " + xml);//TODO debug
             }
+                in.close();
+                Thread.currentThread().interrupt();
+
         } catch(IOException e){
             e.printStackTrace();
         } catch(Exception e){

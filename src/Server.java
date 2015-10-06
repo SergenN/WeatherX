@@ -44,9 +44,13 @@ public class Server implements Runnable{
     public void run(){
         try{
             System.out.println("Server running");//TODO debug
-            Socket client = socket.accept();
-            System.out.println("Client connected");//TODO debug
-            new Thread(new Connection(client)).start();
+
+            while (true){
+                Socket client = socket.accept();
+                System.out.println("Client connected");//TODO debug
+                new Thread(new Connection(client)).start();
+            }
+
         }catch (IOException e){
             e.printStackTrace();
         }

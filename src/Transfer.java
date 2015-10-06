@@ -3,6 +3,11 @@ import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.Statement;
 
+
+// new imports
+
+
+
 /**
  * Created by Leon on 25-9-2015.
  * Class for transferring data from the Hashmap to the database
@@ -46,5 +51,29 @@ public class Transfer {
             //statement.executeUpdate(query);
     }
 
+    /**
+     * Method for inserting data in a Mongo database
+     */
+    public void mongoTransfer() {
+        DateFormat format = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss'Z'", Locale.ENGLISH);
+        db.getCollection("measurements").insertOne(
+                new Document(
+                    .append("stn", measurement.getStn())
+                    .append("date", measurement.getDate())
+                    .append("time", measurement.getTime())
+                    .append("temp", measurement.getTemp())
+                    .append("dewp", measurement.getDewp())
+                    .append("stp", measurement.getStp())
+                    .append("slp", measurement.getSlp())
+                    .append("visib", measurement.getVisib())
+                    .append("wdsp", measurement.getWdsp())
+                    .append("prcp", measurement.getPrcp())
+                    .append("sndp", measurement.getPrcp())
+                    .append("frshtt", measurement.getFrshtt())
+                    .append("cldc", measurement.getCldc())
+                    .append("wnddir", measurement.getWnddir())
+                )
+        )
+    }
 
 }

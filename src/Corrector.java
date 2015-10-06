@@ -1,7 +1,19 @@
 /**
- * Created by Michaël on 25-9-2015.
- * @author Michaël
- * @version 1.0.0
+ * Created by Michaël van der Veen
+ * Date of creation 25-9-2015, 12:54
+ *
+ * Authors: Michaël van der Veen,
+ *
+ * Version: 1.0.2
+ * Package: default
+ * Class: Corrector
+ * Description:
+ * This class is to correct and check the values given by the measurements.
+ * On a false or null value, the corrector would edit the value to a better value
+ *
+ * Changelog:
+ * 1.0.1: class is created
+ * 1.0.2: Added documentary
  */
 public class Corrector {
 
@@ -9,7 +21,7 @@ public class Corrector {
 
     public static void correct(Measurements meas, History history){
         // get the size of the History object (stack)
-        amountMeas = history.getSize();
+        amountMeas = history.getSize()-1;
         //if it isn't the first time then use the correct
         if(history.getSize()!=0) {
             correctTemp(meas, history);

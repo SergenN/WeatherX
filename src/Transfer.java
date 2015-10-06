@@ -21,14 +21,15 @@ public class Transfer {
      * @param measurement measurement to push into the database
      */
     public static void store(Measurements measurement) {
-        new Transfer(measurement).transfer();
+        new Transfer(measurement).transferMongo();
     }
 
     /**
      * transfer
      * Method to transfer the data from the Measurement object into the database
      */
-   /* public void transfer() {
+    @Deprecated
+    public void transferSQL() {
         if (Main.conn == null){
             System.out.println("SQL error! on Transfer()");
             return;
@@ -41,12 +42,12 @@ public class Transfer {
                             + measurement.getPrcp() + "," + measurement.getSndp() + ",'" + measurement.getFrshtt() + "'," + measurement.getCldc() + "," + measurement.getWnddir() + ")";
             System.out.println(query);
             //statement.executeUpdate(query);
-    }*/
+    }
 
     /**
      * Method for inserting data in a Mongo database
      */
-    public void transfer() {
+    public void transferMongo() {
 
         Document bsonDoc = new Document();
         bsonDoc.append("stn", measurement.getStn());

@@ -3,6 +3,10 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.client.MongoDatabase;
 
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+
 /**
  * Created by Sergen Nurel
  * Date of creation 25-9-2015, 12:05
@@ -29,6 +33,10 @@ public class Main {
      * @param args, arguments given to the main method
      */
     public static void main(String[] args) {
+
+        Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
+        mongoLogger.setLevel(Level.SEVERE);
+
         Main.conn = connect();
         new Thread(new Server()).start();
     }

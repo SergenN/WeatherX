@@ -50,7 +50,6 @@ public class Connection implements Runnable{
     public void run(){
         try {
             HashMap<String, String> data = new HashMap<>();
-            System.out.println("Client thread started");//TODO debug
 
             String line;
             while ((line = in.readLine()) != null) {
@@ -79,7 +78,6 @@ public class Connection implements Runnable{
                     String[] words = newline.split(",");
 
                     data.put(words[1], words[2]);
-                    System.out.println(words[1] + "," + words[2]);
                 }
             }
                 in.close();

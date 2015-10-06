@@ -180,7 +180,6 @@ public class Corrector {
             }
             differences= differences/values.length-1;
             differences+=values[values.length-1];
-            System.out.println("Correcting....");
         }
         return differences;
     }

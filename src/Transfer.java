@@ -28,7 +28,7 @@ public class Transfer {
      * transfer
      * Method to transfer the data from the Measurement object into the database
      */
-    @Deprecated
+    @Deprecated @SuppressWarnings("unused")
     public void transferSQL() {
         if (Main.conn == null){
             System.out.println("SQL error! on Transfer()");

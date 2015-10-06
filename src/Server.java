@@ -20,17 +20,14 @@ import java.net.Socket;
 public class Server implements Runnable{
 
     ServerSocket socket;
-    private boolean running = true;
 
     /**
      * Constructor Server
      * the constructor will open a socket on port 25566
      */
     public Server(){
-        System.out.println("starting server");//TODO debug
         try {
             socket = new ServerSocket(25566);
-            System.out.println("Server started");//TODO debug
         } catch(IOException e){
             e.printStackTrace();
         }
@@ -47,7 +44,6 @@ public class Server implements Runnable{
 
             while (true){
                 Socket client = socket.accept();
-                System.out.println("Client connected");//TODO debug
                 new Thread(new Connection(client)).start();
             }
 

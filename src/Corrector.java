@@ -1,7 +1,3 @@
-import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.Stack;
-
 /**
  * Created by Michaël on 25-9-2015.
  * @author Michaël
@@ -10,7 +6,6 @@ import java.util.Stack;
 public class Corrector {
 
     private static int amountMeas;
-    private static DecimalFormat oneDecimal,twoDecimal;
 
     public static void correct(Measurements meas, History history){
         // get the size of the History object (stack)

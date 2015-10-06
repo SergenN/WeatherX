@@ -33,7 +33,6 @@ public class Connection implements Runnable{
      * @param client the client that made connection
      */
     public Connection(Socket client){
-        System.out.println("Client connected");//TODO debug
         history = new History();
         try {
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -57,10 +56,7 @@ public class Connection implements Runnable{
             String line;
             while ((line = in.readLine()) != null) {
 
-                System.out.println("Sent in data: " + line);//TODO debug
-
                 if (line.contains("<MEASUREMENT>")) {
-                    //System.out.println("line started with <?xml");//TODO debug
                     data.clear();
                     continue;
                 }
@@ -86,7 +82,6 @@ public class Connection implements Runnable{
                     data.put(words[1], words[2]);
                     System.out.println(words[1] + "," + words[2]);
                 }
-                //System.out.println("added data to xml: " + xml);//TODO debug
             }
                 in.close();
                 Thread.currentThread().interrupt();

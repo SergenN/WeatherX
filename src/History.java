@@ -58,6 +58,7 @@ public class History {
      * return the first measurement from the linkedlist, null if empty
      * @return first measurement or null if empty
      */
+    @SuppressWarnings("unused")
     public Measurements getMeasurement(){
         if (!history.isEmpty()) {
             return history.getFirst();
@@ -69,6 +70,7 @@ public class History {
      * removeFirst
      * remove the last added entry from the history list
      */
+    @SuppressWarnings("unused")
     public void removeFirst(){
         if (!history.isEmpty()){
             history.pop();

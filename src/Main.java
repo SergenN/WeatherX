@@ -1,4 +1,6 @@
+import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
 import com.mongodb.client.MongoDatabase;
 
 /**
@@ -35,7 +37,11 @@ public class Main {
      * Method to connect to MongoDB database
      */
     public static MongoDatabase connect() {
-        MongoClient mongoClient = new MongoClient();
+        MongoClientOptions.Builder builder = new MongoClientOptions.Builder();
+        builder.connectionsPerHost(1000);
+        MongoClientOptions options = builder.build();
+        MongoClient mongoClient = new MongoClient("localhost", options);
+        //MongoClient mongoClient = new MongoClient();
         return mongoClient.getDatabase("WeatherX");
     }
 }

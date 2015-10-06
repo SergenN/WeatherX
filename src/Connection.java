@@ -25,7 +25,6 @@ import java.util.Map;
 public class Connection implements Runnable{
 
     private BufferedReader in;
-    private String xml;
     private History history;
 
     /**
@@ -52,7 +51,7 @@ public class Connection implements Runnable{
      */
     public void run(){
         try {
-            HashMap<String, String> data = new HashMap<String,String>();
+            HashMap<String, String> data = new HashMap<>();
             System.out.println("Client thread started");//TODO debug
 
             String line;
@@ -77,10 +76,8 @@ public class Connection implements Runnable{
 
                 String test = line;
                 test = test.replaceAll("<[^>]+>", "");
-                if (test.equals("")){
-                    continue;
-                } else {
 
+                if (!test.equals("")){
                     String newline = line.substring(1, line.length() - 1);
                     newline = newline.replace("<", ",");
                     newline = newline.replace(">", ",");
@@ -88,17 +85,13 @@ public class Connection implements Runnable{
 
                     data.put(words[1], words[2]);
                     System.out.println(words[1] + "," + words[2]);
-
                 }
-
                 //System.out.println("added data to xml: " + xml);//TODO debug
             }
                 in.close();
                 Thread.currentThread().interrupt();
 
         } catch(IOException e){
-            e.printStackTrace();
-        } catch(Exception e){
             e.printStackTrace();
         }
     }

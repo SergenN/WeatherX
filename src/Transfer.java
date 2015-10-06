@@ -1,13 +1,8 @@
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Connection;
-import java.sql.Statement;
+import org.bson.Document;
 
-
-// new imports
-
-
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 /**
  * Created by Leon on 25-9-2015.
  * Class for transferring data from the Hashmap to the database
@@ -36,7 +31,7 @@ public class Transfer {
      * transfer
      * Method to transfer the data from the Measurement object into the database
      */
-    public void transfer() {
+   /* public void transfer() {
         if (Main.conn == null){
             System.out.println("SQL error! on Transfer()");
             return;
@@ -49,31 +44,31 @@ public class Transfer {
                             + measurement.getPrcp() + "," + measurement.getSndp() + ",'" + measurement.getFrshtt() + "'," + measurement.getCldc() + "," + measurement.getWnddir() + ")";
             System.out.println(query);
             //statement.executeUpdate(query);
-    }
+    }*/
 
     /**
      * Method for inserting data in a Mongo database
      */
-    public void mongoTransfer() {
+    public void transfer() {
         DateFormat format = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss'Z'", Locale.ENGLISH);
-        db.getCollection("measurements").insertOne(
-                new Document(
-                    .append("stn", measurement.getStn())
-                    .append("date", measurement.getDate())
-                    .append("time", measurement.getTime())
-                    .append("temp", measurement.getTemp())
-                    .append("dewp", measurement.getDewp())
-                    .append("stp", measurement.getStp())
-                    .append("slp", measurement.getSlp())
-                    .append("visib", measurement.getVisib())
-                    .append("wdsp", measurement.getWdsp())
-                    .append("prcp", measurement.getPrcp())
-                    .append("sndp", measurement.getPrcp())
-                    .append("frshtt", measurement.getFrshtt())
-                    .append("cldc", measurement.getCldc())
-                    .append("wnddir", measurement.getWnddir())
-                )
-        )
+
+        Document bsonDoc = new Document();
+        bsonDoc.append("stn", measurement.getStn());
+        bsonDoc.append("date", measurement.getDate());
+        bsonDoc.append("time", measurement.getTime());
+        bsonDoc.append("temp", measurement.getTemp());
+        bsonDoc.append("dewp", measurement.getDewp());
+        bsonDoc.append("stp", measurement.getStp());
+        bsonDoc.append("slp", measurement.getSlp());
+        bsonDoc.append("visib", measurement.getVisib());
+        bsonDoc.append("wdsp", measurement.getWdsp());
+        bsonDoc.append("prcp", measurement.getPrcp());
+        bsonDoc.append("sndp", measurement.getPrcp());
+        bsonDoc.append("frshtt", measurement.getFrshtt());
+        bsonDoc.append("cldc", measurement.getCldc());
+        bsonDoc.append("wnddir", measurement.getWnddir());
+
+        Main.conn.getCollection("measurements").insertOne(bsonDoc);
     }
 
 }

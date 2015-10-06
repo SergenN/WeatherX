@@ -31,10 +31,8 @@ public class Main {
         new Thread(new Server()).start();
     }
 
-
-
     /**
-     * Method to connect to database
+     * Method to connect to MongoDB database
      */
     public static MongoDatabase connect() {
         MongoClient mongoClient = new MongoClient();

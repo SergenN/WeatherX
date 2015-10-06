@@ -36,20 +36,14 @@ public class Transfer {
             System.out.println("SQL error! on Transfer()");
             return;
         }
-
-        try {
-            Statement statement = Main.conn.createStatement();
+            //Statement statement = Main.conn.createStatement();
 
             String query = "INSERT INTO " + MEASUREMENT + " VALUES ("
                             + "'"+ measurement.getStn() + "'"+ ",'" + measurement.getDate() + "','" + measurement.getTime() + "'," + measurement.getTemp() + ","
                             + measurement.getDewp() + "," + measurement.getStp() + "," + measurement.getSlp() + "," + measurement.getVisib() + "," + measurement.getWdsp() + ","
                             + measurement.getPrcp() + "," + measurement.getSndp() + ",'" + measurement.getFrshtt() + "'," + measurement.getCldc() + "," + measurement.getWnddir() + ")";
             System.out.println(query);
-            statement.executeUpdate(query);
-        } catch (SQLException sqle) {
-            System.out.println("SQL error! on Query()");
-            sqle.printStackTrace();
-        }
+            //statement.executeUpdate(query);
     }
 
 

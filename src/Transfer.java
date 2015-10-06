@@ -1,8 +1,5 @@
 import org.bson.Document;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 /**
  * Created by Leon on 25-9-2015.
  * Class for transferring data from the Hashmap to the database
@@ -50,7 +47,6 @@ public class Transfer {
      * Method for inserting data in a Mongo database
      */
     public void transfer() {
-        DateFormat format = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss'Z'", Locale.ENGLISH);
 
         Document bsonDoc = new Document();
         bsonDoc.append("stn", measurement.getStn());

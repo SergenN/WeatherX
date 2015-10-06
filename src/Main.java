@@ -36,6 +36,6 @@ public class Main {
      */
     public static MongoDatabase connect() {
         MongoClient mongoClient = new MongoClient();
-        return mongoClient.getDatabase("unwdmi");
+        return mongoClient.getDatabase("WeatherX");
     }
 }

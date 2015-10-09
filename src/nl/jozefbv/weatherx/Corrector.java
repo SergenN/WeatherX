@@ -1,3 +1,5 @@
+package nl.jozefbv.weatherx;
+
 import java.util.ArrayList;
 
 /**
@@ -8,7 +10,7 @@ import java.util.ArrayList;
  *
  * Version: 1.0.2
  * Package: default
- * Class: Corrector
+ * Class: nl.jozefbv.weatherx.Corrector
  * Description:
  * This class is to correct and check the values given by the measurements.
  * On a false or null value, the corrector would edit the value to a better value
@@ -22,7 +24,7 @@ public class Corrector {
     private static int amountMeas;
 
     public static void correct(Measurements meas, History history){
-        // get the size of the History object (stack)
+        // get the size of the nl.jozefbv.weatherx.History object (stack)
         amountMeas = history.getSize()-1;
         //if it isn't the first time then use the correct
         if(history.getSize() >= 29) {
@@ -41,8 +43,8 @@ public class Corrector {
     }
     /**
      *  Correcting the temperature
-     *  @param meas
-     *  @param history
+     *  @param meas measurement
+     *  @param history history
      */
     private static void correctTemp(Measurements meas, History history){
         double temp = meas.getTemp();

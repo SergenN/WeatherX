@@ -1,3 +1,5 @@
+package nl.jozefbv.weatherx;
+
 import java.util.LinkedList;
 
 /**
@@ -8,7 +10,7 @@ import java.util.LinkedList;
  *
  * Version: 1.0
  * Package: default
- * Class: History
+ * Class: nl.jozefbv.weatherx.History
  * Description:
  * This class is to control and keep track of the measurement history of an antenna
  *

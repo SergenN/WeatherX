@@ -1,3 +1,5 @@
+package nl.jozefbv.weatherx;
+
 import java.util.Map;
 
 /**
@@ -8,7 +10,7 @@ import java.util.Map;
  *
  * Version: 1.0
  * Package: default
- * Class: Measurements
+ * Class: nl.jozefbv.weatherx.Measurements
  * Description:
  * This server class will convert all incoming data and save it.
  *

@@ -1,3 +1,5 @@
+package nl.jozefbv.weatherx;
+
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.client.MongoDatabase;
@@ -13,20 +15,20 @@ import java.util.logging.Logger;
  *
  * Version: 1.0
  * Package: default
- * Class: Main
+ * Class: nl.jozefbv.weatherx.Main
  * Description:
  * This class is the main class of the project
  *
  * Changelog:
  * 1.0: class created and added thread calling
- * 2.0: changed MySQL connection with MongoDB Connection
+ * 2.0: changed MySQL connection with MongoDB nl.jozefbv.weatherx.Connection
  */
 public class Main {
 
     public static MongoDatabase conn;
 
     /**
-     * Main
+     * nl.jozefbv.weatherx.Main
      * In this method the server thread is started.
      * @param args, arguments given to the main method
      */

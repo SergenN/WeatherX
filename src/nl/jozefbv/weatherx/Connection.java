@@ -1,3 +1,5 @@
+package nl.jozefbv.weatherx;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,7 +14,7 @@ import java.util.HashMap;
  *
  * Version: 1.0
  * Package: default
- * Class: Connection
+ * Class: nl.jozefbv.weatherx.Connection
  * Description:
  * This class handles the connection thread of te client
  *
@@ -27,7 +29,7 @@ public class Connection implements Runnable{
     private History history;
 
     /**
-     * Connection constructor
+     * nl.jozefbv.weatherx.Connection constructor
      * This constructor will create a buffered reader.
      * @param client the client that made connection
      */

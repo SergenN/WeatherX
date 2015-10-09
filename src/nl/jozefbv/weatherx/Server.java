@@ -1,3 +1,5 @@
+package nl.jozefbv.weatherx;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -10,7 +12,7 @@ import java.net.Socket;
  *
  * Version: 1.0
  * Package: default
- * Class: Server
+ * Class: nl.jozefbv.weatherx.Server
  * Description:
  * This server class will wait on incoming client connections
  *
@@ -22,7 +24,7 @@ public class Server implements Runnable{
     ServerSocket socket;
 
     /**
-     * Constructor Server
+     * Constructor nl.jozefbv.weatherx.Server
      * the constructor will open a socket on port 25566
      */
     public Server(){
@@ -40,7 +42,7 @@ public class Server implements Runnable{
      */
     public void run(){
         try{
-            System.out.println("Server running");//TODO debug
+            System.out.println("nl.jozefbv.weatherx.Server running");//DEBUG print to show its running
 
             while (true){
                 Socket client = socket.accept();

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>nl.jozefbv.weatherx</OriginalElement>
+  <nodes>
+    <node x="-29.5" y="-14.5">nl.jozefbv.weatherx.Main</node>
+    <node x="113.0" y="105.5">nl.jozefbv.weatherx.Connection</node>
+    <node x="105.0" y="225.5">nl.jozefbv.weatherx.Measurements</node>
+    <node x="123.0" y="345.5">nl.jozefbv.weatherx.Transfer</node>
+    <node x="-32.0" y="105.5">nl.jozefbv.weatherx.Server</node>
+    <node x="285.0" y="105.5">nl.jozefbv.weatherx.History</node>
+    <node x="-1.0" y="465.5">nl.jozefbv.weatherx.Corrector</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="nl.jozefbv.weatherx.Connection" target="nl.jozefbv.weatherx.Measurements">
+      <point x="0.0" y="14.5" />
+      <point x="0.0" y="-14.5" />
+    </edge>
+    <edge source="nl.jozefbv.weatherx.History" target="nl.jozefbv.weatherx.Measurements">
+      <point x="0.0" y="14.5" />
+      <point x="320.0" y="240.0" />
+      <point x="55.0" y="-0.0" />
+    </edge>
+    <edge source="nl.jozefbv.weatherx.Server" target="nl.jozefbv.weatherx.Connection">
+      <point x="32.0" y="-0.0" />
+      <point x="-47.0" y="-0.0" />
+    </edge>
+    <edge source="nl.jozefbv.weatherx.Connection" target="nl.jozefbv.weatherx.History">
+      <point x="47.0" y="-0.0" />
+      <point x="-35.0" y="-0.0" />
+    </edge>
+    <edge source="nl.jozefbv.weatherx.Transfer" target="nl.jozefbv.weatherx.Measurements">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="nl.jozefbv.weatherx.Main" target="nl.jozefbv.weatherx.Server">
+      <point x="0.0" y="14.5" />
+      <point x="0.0" y="-14.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="161.5" y="240.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

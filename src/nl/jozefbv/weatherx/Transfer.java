@@ -1,3 +1,5 @@
+package nl.jozefbv.weatherx;
+
 import org.bson.Document;
 
 /**
@@ -13,7 +15,7 @@ import org.bson.Document;
  *
  * Version: 1.0
  * Package: default
- * Class: Transfer
+ * Class: nl.jozefbv.weatherx.Transfer
  * Description:
  * This class is dedicated to tranfering processed or unprocessed data into the database
  *
@@ -22,7 +24,6 @@ import org.bson.Document;
  * 2.0: Deprecated SQL transfer() method, implementig MongoDB support
  */
 public class Transfer {
-
     // Measurement object
     private Measurements measurement;
 
@@ -48,10 +49,10 @@ public class Transfer {
     @Deprecated @SuppressWarnings("unused")
     public void transferSQL() {
         if (Main.conn == null){
-            System.out.println("SQL error! on Transfer()");
+            System.out.println("SQL error! on nl.jozefbv.weatherx.Transfer()");
             return;
         }
-            //Statement statement = Main.conn.createStatement();
+            //Statement statement = nl.jozefbv.weatherx.Main.conn.createStatement();
 
             String query = "INSERT INTO " + MEASUREMENT + " VALUES ("
                             + "'"+ measurement.getStn() + "'"+ ",'" + measurement.getDate() + "','" + measurement.getTime() + "'," + measurement.getTemp() + ","

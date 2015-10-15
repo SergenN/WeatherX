@@ -1,6 +1,6 @@
 package nl.jozefbv.weatherx;
 
-//import org.bson.Document;
+import org.bson.Document;
 
 import java.sql.Statement;
 
@@ -48,14 +48,13 @@ public class Transfer {
      * transfer
      * Method to transfer the data from the Measurement object into the database
      */
-    @Deprecated @SuppressWarnings("unused")
     public void transferSQL() {
-        if (Main.conn == null){
+        if (Main.SQLConn == null){
             System.out.println("SQL error! on nl.jozefbv.weatherx.Transfer()");
             return;
         }
         try {
-            Statement statement = nl.jozefbv.weatherx.Main.conn.createStatement();
+            Statement statement = Main.SQLConn.createStatement();
 
             String query = "INSERT INTO " + MEASUREMENT + " VALUES ("
                     + "'" + measurement.getStn() + "'" + ",'" + measurement.getDate() + "','" + measurement.getTime() + "'," + measurement.getTemp() + ","
@@ -70,9 +69,9 @@ public class Transfer {
 
     /**
      * Method for inserting data in a Mongo database
-     *//*
+     */
     public void transferMongo() {
-        if (Main.conn == null){
+        if (Main.MDBConn == null){
             System.out.println("Could not establish database connection.");
             return;
         }
@@ -93,7 +92,7 @@ public class Transfer {
         bsonDoc.append("cldc", measurement.getCldc());
         bsonDoc.append("wnddir", measurement.getWnddir());
 
-        Main.conn.getCollection("measurements").insertOne(bsonDoc);
-    }*/
+        Main.MDBConn.getCollection("measurements").insertOne(bsonDoc);
+    }
 
 }

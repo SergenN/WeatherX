@@ -5,6 +5,7 @@ import com.mongodb.MongoClientOptions;
 import com.mongodb.client.MongoDatabase;
 
 import java.sql.*;
+import java.sql.Connection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,8 +27,8 @@ import java.util.logging.Logger;
  */
 public class Main {
 
-    public static Connection conn;
-
+    public static Connection SQLConn;
+    public static MongoDatabase MDBConn;
     /**
      * nl.jozefbv.weatherx.Main
      * In this method the server thread is started.
@@ -37,7 +38,8 @@ public class Main {
 
         Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
         mongoLogger.setLevel(Level.SEVERE);
-        Main.conn = connectSQL();
+        Main.SQLConn = connectSQL();
+        Main.MDBConn = connectMongoDB();
         new Thread(new Server()).start();
     }
 
@@ -56,7 +58,7 @@ public class Main {
     /**
      * Method to connect to MongoDB database
      */
-    public static MongoDatabase connect() {
+    public static MongoDatabase connectMongoDB() {
         MongoClientOptions.Builder builder = new MongoClientOptions.Builder();
         builder.connectionsPerHost(1000);
         MongoClientOptions options = builder.build();

@@ -14,7 +14,7 @@ import java.util.HashMap;
  *
  * Version: 1.0
  * Package: default
- * Class: nl.jozefbv.weatherx.Connection
+ * Class: nl.jozefbv.weatherx.ClientConnection
  * Description:
  * This class handles the connection thread of te client
  *
@@ -23,18 +23,18 @@ import java.util.HashMap;
  * Then send that line to an XML converter which will convert it to a HashMap.
  * Once the conversion is done the HashMap will be converted into an object and sent to the correction processor.
  */
-public class Connection implements Runnable{
+public class ClientConnection implements Runnable{
 
     private BufferedReader in;
-    private History history;
+    private HashMap<Long, History> clusterHistory;
 
     /**
-     * nl.jozefbv.weatherx.Connection constructor
+     * nl.jozefbv.weatherx.ClientConnection constructor
      * This constructor will create a buffered reader.
      * @param client the client that made connection
      */
-    public Connection(Socket client){
-        history = new History();
+    public ClientConnection(Socket client){
+        clusterHistory = new HashMap<>();
         try {
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
         }catch(IOException e){
@@ -64,8 +64,18 @@ public class Connection implements Runnable{
                 if (line.contains("</MEASUREMENT>")) {
 
                     Measurements measure = new Measurements(data);
-                    Corrector.correct(measure, history);
-                    history.push(measure);
+
+                    if (measure.getStn() == -1){
+                        continue;
+                    }
+
+                    if (!clusterHistory.containsKey(measure.getStn())){
+                        clusterHistory.put(measure.getStn(), new History());
+                    }
+
+                    Corrector.correct(measure, clusterHistory.get(measure.getStn()));
+                    clusterHistory.get(measure.getStn()).push(measure);
+
                     Transfer.store(measure);
                     continue;
                 }

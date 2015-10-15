@@ -42,11 +42,11 @@ public class Server implements Runnable{
      */
     public void run(){
         try{
-            System.out.println("nl.jozefbv.weatherx.Server running");//DEBUG print to show its running
+            System.out.println("Server running");//DEBUG print to show its running
 
             while (true){
                 Socket client = socket.accept();
-                new Thread(new Connection(client)).start();
+                new Thread(new ClientConnection(client)).start();
             }
 
         }catch (IOException e){

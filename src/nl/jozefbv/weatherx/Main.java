@@ -4,6 +4,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.client.MongoDatabase;
 
+import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,11 +22,11 @@ import java.util.logging.Logger;
  *
  * Changelog:
  * 1.0: class created and added thread calling
- * 2.0: changed MySQL connection with MongoDB nl.jozefbv.weatherx.Connection
+ * 2.0: changed MySQL connection with MongoDB nl.jozefbv.weatherx.ClientConnection
  */
 public class Main {
 
-    public static MongoDatabase conn;
+    public static Connection conn;
 
     /**
      * nl.jozefbv.weatherx.Main
@@ -34,11 +35,22 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
+        Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
         mongoLogger.setLevel(Level.SEVERE);
-
-        Main.conn = connect();
+        Main.conn = connectSQL();
         new Thread(new Server()).start();
+    }
+
+    /**
+     * Method to connect to database
+     */
+    public static Connection connectSQL() {
+        try {
+            return DriverManager.getConnection("jdbc:mysql://localhost/weatherx?user=root&password=");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**

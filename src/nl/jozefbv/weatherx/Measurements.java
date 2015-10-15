@@ -20,7 +20,7 @@ import java.util.Map;
 public class Measurements {
 
     private int wnddir;
-    private long stn;
+    private long stn = -1;
     private double temp, dewp, stp, slp, visib, wdsp, prcp, sndp, cldc;
     private String date, time, frshtt;
 

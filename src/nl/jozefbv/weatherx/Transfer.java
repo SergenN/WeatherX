@@ -41,7 +41,7 @@ public class Transfer {
      * @param measurement measurement to push into the database
      */
     public static void store(Measurements measurement) {
-        new Transfer(measurement).transferSQL();
+        new Transfer(measurement).transferMongo();
     }
 
     /**

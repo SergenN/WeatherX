@@ -29,6 +29,11 @@ public class Main {
 
     public static Connection SQLConn;
     public static MongoDatabase MDBConn;
+    public static Filter filter;
+    public static WebClientServer webServer;
+    public static Double centralLatitude = 37.00,centralLongitude = 127.00,centralRange = 20.00;
+
+
     /**
      * nl.jozefbv.weatherx.Main
      * In this method the server thread is started.
@@ -40,7 +45,15 @@ public class Main {
         mongoLogger.setLevel(Level.SEVERE);
         Main.SQLConn = connectSQL();
         Main.MDBConn = connectMongoDB();
-        new Thread(new Server()).start();
+        filter = new Filter();
+        new Thread(new WSServer()).start();
+        try {
+            WebClientServer.main();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     /**
@@ -48,7 +61,7 @@ public class Main {
      */
     public static Connection connectSQL() {
         try {
-            return DriverManager.getConnection("jdbc:mysql://localhost/weatherx?user=root&password=");
+            return DriverManager.getConnection("jdbc:mysql://localhost/weatherxweb?user=root&password=");
         } catch (SQLException e) {
             e.printStackTrace();
             return null;

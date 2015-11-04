@@ -12,22 +12,22 @@ import java.net.Socket;
  *
  * Version: 1.0
  * Package: default
- * Class: nl.jozefbv.weatherx.Server
+ * Class: nl.jozefbv.weatherx.WSServer
  * Description:
  * This server class will wait on incoming client connections
  *
  * Changelog:
  * 1.0: this class will wait on incoming client connections and then start a new thread for the client.
  */
-public class Server implements Runnable{
+public class WSServer implements Runnable{
 
     ServerSocket socket;
 
     /**
-     * Constructor nl.jozefbv.weatherx.Server
+     * Constructor nl.jozefbv.weatherx.WSServer
      * the constructor will open a socket on port 25566
      */
-    public Server(){
+    public WSServer(){
         try {
             socket = new ServerSocket(25566);
         } catch(IOException e){
@@ -42,7 +42,7 @@ public class Server implements Runnable{
      */
     public void run(){
         try{
-            System.out.println("Server running");//DEBUG print to show its running
+            System.out.println("WSServer running");//DEBUG print to show its running
 
             while (true){
                 Socket client = socket.accept();

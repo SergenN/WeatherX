@@ -69,7 +69,7 @@ public class Initial {
         Properties properties = new Properties();
         OutputStream outputStream = null;
         outputStream = new FileOutputStream("databaseRain.properties");
-        properties.setProperty("Latidude","36.0000");
+        properties.setProperty("Latitude","36.0000");
         properties.setProperty("Longitude","128.0000");
         properties.setProperty("Range","5000");
         properties.setProperty("Statement","-10.00");
@@ -90,7 +90,16 @@ public class Initial {
         properties.store(outputStream,null);
     }
 
-    private static void initTemp(String location){
+    private static void initTemp(String location)throws FileNotFoundException{
+        Properties properties = new Properties();
+        InputStream inputStream = new FileInputStream(location);
+        Double longitude = Double.parseDouble((String) properties.get("Longitude"));
+        Double latidude = Double.parseDouble((String) properties.get("Latitude"));
 
+
+        String query = "Select STN" +
+                "       acos(sin("+latidude+")*sin(radians(Lat)) + cos(:lat)*cos(radians(Lat))*cos(radians(Lon)-:lon)) * :R As D\n" +
+                "From MyTable \n" +
+                "Where acos(sin(:lat)*sin(radians(Lat)) + cos(:lat)*cos(radians(Lat))*cos(radians(Lon)-:lon)) * :R < :rad";
     }
 }

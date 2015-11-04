@@ -170,9 +170,6 @@ public class Filter {
                 case "SNDP":
                     line += ",\"SNDP\":\"" + measure.getSndp() + "\"";
                     break;
-                case "FRSHT":
-                    line += ",\"FRSHT\":\"" + measure.getFrshtt() + "\"";
-                    break;
                 case "CLDC":
                     line += ",\"CLDC\":\"" + measure.getCldc() + "\"";
                     break;

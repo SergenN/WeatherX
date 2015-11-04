@@ -19,11 +19,7 @@ public class WebClientConn {
 
     @OnWebSocketConnect
     public void onConnect(Session session){
-        try {
-            session.getRemote().sendString("Welcome to the WeatherX application");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     @OnWebSocketMessage

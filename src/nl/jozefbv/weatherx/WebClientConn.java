@@ -27,16 +27,16 @@ public class WebClientConn {
         String[] args = command.split(" ");
 
             switch (args[0]) {
-                case "get":
+                case "GET":
                     Filter.sendData(session, args);
                     break;
-                case "stop":
+                case "STOP":
                     System.out.println("Stop command");
                     Filter.stopData(session);
                     break;
                 default:
                     try {
-                        session.getRemote().sendString("invallid command.");
+                        session.getRemote().sendString("invalid command.");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

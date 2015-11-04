@@ -50,7 +50,6 @@ public class Filter {
                             arg[10]="CLDC";
                             arg[11]="FRSHTT";
                         }
-                        session.getRemote().sendString("connecting to: " + args[1]);
                         FilterObject filterObject = (FilterObject) filtered.get(stnId);
                         filterObject.setSession(session, arg);
                         if (sessionList.containsKey(session)) {

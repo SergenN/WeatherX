@@ -98,8 +98,8 @@ public class Initial {
 
 
         String query = "Select STN" +
-                "       acos(sin("+latidude+")*sin(radians("+latidude+")) + cos("+latidude+")*cos(radians("+latidude+"))*cos(radians(Lon)-:lon)) * :R As D\n" +
-                "From MyTable \n" +
+                "       acos(sin("+latidude+")*sin(radians("+latidude+")) + cos("+latidude+")*cos(radians("+latidude+"))*cos(radians("+longitude+")-"+longitude+")) * :R As D\n" +
+                "From " +
                 "Where acos(sin(:lat)*sin(radians(Lat)) + cos(:lat)*cos(radians(Lat))*cos(radians(Lon)-:lon)) * :R < :rad";
     }
 }

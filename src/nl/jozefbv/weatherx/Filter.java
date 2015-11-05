@@ -4,10 +4,9 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketException;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by pjvan on 29-10-2015.
@@ -105,13 +104,12 @@ public class Filter {
             filterObject.setMeasure(measure);
             HashMap<Session,String[]> sessionHashMap = filterObject.getSessionHashMap();
             sendData(sessionHashMap,measure);
+            filterObject.counter++;
         }else{
             System.out.println("New Station " + measure.getStn());
             FilterObject filterObject = new FilterObject(measure.getStn());
-
             filtered.put(measure.getStn(),filterObject);
         }
-
     }
 
     private static void sendData(HashMap<Session,String[]> sessionHashMap,Measurements measure){
@@ -123,8 +121,6 @@ public class Filter {
                         "\"TIME\":\""+measure.getTime()+"\"";
                 String[] args = sessionHashMap.get(session);
                 line = getData(measure,args,line);
-                //line=        measure.getStn()+","+measure.getTime();
-                //checkArguments(line,measure);
                 line += "}";
                 try {
                     session.getRemote().sendString(line);
@@ -184,5 +180,19 @@ public class Filter {
             }
         }
         return line;
+    }
+
+    public static void setTempFilter(int stn) {
+        System.out.println("Initializing " + stn);
+        FilterObject filterObject = new FilterObject(Long.valueOf(stn));
+        filterObject.setDatabase("TEMP",1);
+        filtered.put(Long.valueOf(stn),filterObject);
+    }
+
+    public static FilterObject checkDatabase(Long stn) {
+        FilterObject filterObject;
+        filterObject = (FilterObject) filtered.get(stn);
+        return filterObject;
+
     }
 }

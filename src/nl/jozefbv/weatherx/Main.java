@@ -46,6 +46,7 @@ public class Main {
         Main.SQLConn = connectSQL();
         Main.MDBConn = connectMongoDB();
         filter = new Filter();
+        Initial.Initial();
         new Thread(new WSServer()).start();
         try {
             WebClientServer.main();

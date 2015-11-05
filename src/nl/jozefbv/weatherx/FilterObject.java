@@ -11,12 +11,13 @@ import java.util.HashMap;
  */
 public class FilterObject {
     private boolean database;                           // boolean for getting into the database
-    private HashMap<String[], Integer> databaseHashMap; //HashMap for STN with delay to database
+    private HashMap<String, Integer> databaseHashMap; //HashMap for measures with delay to database
     private HashMap<Session, String[]> sessionHashMap;  //HashMap for Session getting value.
 
     private Double longi, lati;
     private String country;
     private Measurements measure;
+    public int counter = 0;
 
     public FilterObject(Long stn) {
         databaseHashMap = new HashMap<>();
@@ -51,14 +52,14 @@ public class FilterObject {
         sessionHashMap.put(session,args);
     }
 
-    public void setDatabase(String[] stn,Integer delay){
+    public void setDatabase(String key,Integer delay){
         if(databaseHashMap==null){
             databaseHashMap = new HashMap<>();
         }
-        databaseHashMap.put(stn,delay);
+        databaseHashMap.put(key,delay);
     }
 
-    public HashMap<String[], Integer> getDatabaseHashMap(){
+    public HashMap<String, Integer> getDatabaseHashMap(){
         return databaseHashMap;
     }
 

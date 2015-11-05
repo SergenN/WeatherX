@@ -4,6 +4,7 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketException;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -103,6 +104,7 @@ public class Filter {
             filterObject.setMeasure(measure);
             HashMap<Session,String[]> sessionHashMap = filterObject.getSessionHashMap();
             sendData(sessionHashMap,measure);
+            filterObject.counter++;
         }else{
             System.out.println("New Station " + measure.getStn());
             FilterObject filterObject = new FilterObject(measure.getStn());
@@ -183,7 +185,14 @@ public class Filter {
     public static void setTempFilter(int stn) {
         System.out.println("Initializing " + stn);
         FilterObject filterObject = new FilterObject(Long.valueOf(stn));
-        filterObject.setDatabase("TEMP",0);
+        filterObject.setDatabase("TEMP",1);
         filtered.put(Long.valueOf(stn),filterObject);
+    }
+
+    public static FilterObject checkDatabase(Long stn) {
+        FilterObject filterObject;
+        filterObject = (FilterObject) filtered.get(stn);
+        return filterObject;
+
     }
 }

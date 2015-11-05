@@ -17,6 +17,7 @@ public class FilterObject {
     private Double longi, lati;
     private String country;
     private Measurements measure;
+    public int counter = 0;
 
     public FilterObject(Long stn) {
         databaseHashMap = new HashMap<>();

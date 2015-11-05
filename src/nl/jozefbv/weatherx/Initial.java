@@ -12,7 +12,7 @@ import java.util.Properties;
 public class Initial {
 
 
-    public static void main(String[] args){
+    public static void Initial(){
         Properties properties = new Properties();
         InputStream inputStream = null;
         try{
@@ -21,17 +21,21 @@ public class Initial {
             String  databaseTempLocation = properties.getProperty("DefaultDatabaseTemp"),
                     databaseRainLocation = properties.getProperty("DefaultDatabaseRain"),
                     databaseWindLocation = properties.getProperty("DefaultDatabaseWind");
-            if(properties.get("databaseTemp")!=""){databaseTempLocation=properties.getProperty("databaseTemp");}
-            if(properties.get("databaseRain")!=""){databaseRainLocation=properties.getProperty("databaseRain");}
-            if(properties.get("databaseWind")!=""){databaseWindLocation=properties.getProperty("databaseWind");}
+            //if(properties.get("databaseTemp")!=null){databaseTempLocation=properties.getProperty("databaseTemp");System.out.println("Costume DatabaseTemp found.");}
+            //if(properties.get("databaseRain")!=null){databaseRainLocation=properties.getProperty("databaseRain");System.out.println("Costume DatabaseRain found.");}
+            //if(properties.get("databaseWind")!=null){databaseWindLocation=properties.getProperty("databaseWind");System.out.println("Costume DatabaseWind found.");}
+            System.out.println(databaseTempLocation);
             initTemp(databaseTempLocation);
         }
         catch (FileNotFoundException e) {
             try{
+                System.err.println(e);
+                System.out.println("Creating new init files.");
                 createNewDefault();
                 setDefaultDatabaseTemp();
                 setDefaultDatabaseRain();
                 setDefaultDatabaseWind();
+                initTemp("databaseTemp.properties");
             }
             catch (IOException ioe){
                 System.err.println(ioe);
@@ -93,29 +97,36 @@ public class Initial {
         properties.store(outputStream,null);
     }
 
-    private static void initTemp(String location)throws FileNotFoundException{
-        Properties properties = new Properties();
-        InputStream inputStream = new FileInputStream(location);
-        Double longitude = Double.parseDouble((String) properties.get("Longitude"));
-        Double latidude = Double.parseDouble((String) properties.get("Latitude"));
-
-
-        String query =  "SELECT stn, " +
-                "           country, " +
-                "           ( 6371 * acos ( cos ( radians("+latidude+") ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians("+longitude+") ) " +
-                "           + sin ( radians("+latidude+") ) * sin( radians( latitude ) ) ) ) " +
-                "           AS distance " +
-                "        FROM stations  " +
-                        "HAVING distance < 5000";
+    private static void initTemp(String location){
         try {
-            Statement statement = Main.SQLConn.createStatement();
-            ResultSet result = statement.executeQuery(query);
-            while (result.next()) {
-                Filter.setTempFilter(result.getInt("stn"));
+            Properties properties = new Properties();
+            InputStream inputStream = new FileInputStream(location);
+            properties.load(inputStream);
+            Double longitude = Double.parseDouble((String) properties.get("Longitude"));
+            Double latidude  = Double.parseDouble((String) properties.get("Latidude"));
+
+
+            String query = "SELECT stn, " +
+                    "           country, " +
+                    "           ( 6371 * acos ( cos ( radians(" + latidude + ") ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(" + longitude + ") ) " +
+                    "           + sin ( radians(" + latidude + ") ) * sin( radians( latitude ) ) ) ) " +
+                    "           AS distance " +
+                    "        FROM stations  " +
+                    "        WHERE country = 'JAPAN'OR country = 'CHINA'"+
+                    "HAVING distance < 5000";
+            try {
+                Statement statement = Main.SQLConn.createStatement();
+                ResultSet result = statement.executeQuery(query);
+                System.out.println("query has executed");
+                while (result.next()) {
+                    Filter.setTempFilter(result.getInt("stn"));
+                }
+            } catch (SQLException sqle) {
+                System.err.println(sqle);
             }
         }
-        catch (SQLException sqle){
-            System.err.println(sqle);
+        catch(IOException e){
+            System.err.println(e);
         }
     }
 }

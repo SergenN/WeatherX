@@ -1,6 +1,9 @@
 package nl.jozefbv.weatherx;
 
 import java.io.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 /**
@@ -56,8 +59,8 @@ public class Initial {
         Properties properties = new Properties();
         OutputStream outputStream = null;
         outputStream = new FileOutputStream("databaseTemp.properties");
-        properties.setProperty("Latidude","36.0000");
-        properties.setProperty("Longitude","128.0000");
+        properties.setProperty("Latidude","36.59");
+        properties.setProperty("Longitude","127.96");
         properties.setProperty("Range","5000");
         properties.setProperty("Condition","-10.00");
         properties.setProperty("Interval","0");
@@ -97,9 +100,22 @@ public class Initial {
         Double latidude = Double.parseDouble((String) properties.get("Latitude"));
 
 
-        String query = "Select STN" +
-                "       acos(sin("+latidude+")*sin(radians("+latidude+")) + cos("+latidude+")*cos(radians("+latidude+"))*cos(radians("+longitude+")-"+longitude+")) * :R As D\n" +
-                "From " +
-                "Where acos(sin(:lat)*sin(radians(Lat)) + cos(:lat)*cos(radians(Lat))*cos(radians(Lon)-:lon)) * :R < :rad";
+        String query =  "SELECT stn, " +
+                "           country, " +
+                "           ( 6371 * acos ( cos ( radians("+latidude+") ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians("+longitude+") ) " +
+                "           + sin ( radians("+latidude+") ) * sin( radians( latitude ) ) ) ) " +
+                "           AS distance " +
+                "        FROM stations  " +
+                        "HAVING distance < 5000";
+        try {
+            Statement statement = Main.SQLConn.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
+                Filter.setTempFilter(result.getInt("stn"));
+            }
+        }
+        catch (SQLException sqle){
+            System.err.println(sqle);
+        }
     }
 }

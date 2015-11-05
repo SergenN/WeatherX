@@ -25,7 +25,7 @@ public class Corrector {
 
     public static void correct(Measurements meas, History history){
         // get the size of the nl.jozefbv.weatherx.History object (stack)
-        amountMeas = history.getSize()-1;
+        amountMeas = history.getSize()-2;
         //if it isn't the first time then use the correct
         if(history.getSize() >= 29) {
             correctTemp(meas, history);
@@ -55,10 +55,10 @@ public class Corrector {
             previousTemp.add(history.getMeasurement(i).getTemp());
         }
 
-        if(temp>9999.9 || temp<-9999.9||temp==0){
+      //  if(temp<9999.9 || temp>-9999.9||temp==0){
             double value = Math.round(correcting(temp, getCalculateExtrapolatie(previousTemp)) * 10);
             meas.setTemp(value/10);
-        }
+      //  }
 
     }
 
@@ -67,13 +67,13 @@ public class Corrector {
         ArrayList<Double> previousTemp = new ArrayList<>();
         //double[] previousDewp = new double[amountMeas];
 
-        if(dewp>9999.9||dewp<-9999.9||dewp==0){
+      //  if(dewp<9999.9||dewp>-9999.9||dewp==0){
             for (int i = 0; i<amountMeas;i++){
                 previousTemp.add(history.getMeasurement(i).getDewp());
             }
             double value = Math.round(correcting(dewp, getCalculateExtrapolatie(previousTemp)) * 10);
             meas.setDewp(value / 10);
-        }
+      //  }
     }
 
     private static void correctStp(Measurements meas, History history){
@@ -82,13 +82,13 @@ public class Corrector {
         //double[] previousStp = new double[amountMeas];
 
 
-        if(stp>9999.9||stp<0||stp==0){
+     //   if(stp>9999.9||stp<0||stp==0){
             for (int i = 0; i<amountMeas;i++){
                 previousTemp.add(history.getMeasurement(i).getStp());
             }
             double value = Math.round(correcting(stp, getCalculateExtrapolatie(previousTemp)) * 10);
             meas.setStp(value / 10);
-        }
+      //  }
     }
 
     private static void correctSlp(Measurements meas, History history){
@@ -96,13 +96,13 @@ public class Corrector {
         ArrayList<Double> previousTemp = new ArrayList<>();
         //double[] previousSlp = new double[amountMeas];
 
-        if(slp>9999.9||slp<-9999.9||slp==0){
+      //  if(slp>9999.9||slp<-9999.9||slp==0){
             for (int i = 0; i<amountMeas;i++){
                 previousTemp.add(history.getMeasurement(i).getSlp());
             }
             double value = Math.round(correcting(slp, getCalculateExtrapolatie(previousTemp)) * 10);
             meas.setSlp(value / 10);
-        }
+       // }
     }
 
     private static void correctVisib(Measurements meas, History history){
@@ -111,13 +111,13 @@ public class Corrector {
         //double[] previousVisib = new double[amountMeas];
 
 
-        if(visib>999.9||visib<0||visib==0){
+      //  if(visib>999.9||visib<0||visib==0){
             for (int i = 0; i<amountMeas;i++){
                 previousTemp.add(history.getMeasurement(i).getVisib());
             }
             double value = Math.round(correcting(visib, getCalculateExtrapolatie(previousTemp)) * 10);
             meas.setVisib(value / 10);
-        }
+      //  }
     }
 
     private static void correctWdsp(Measurements meas, History history){
@@ -125,13 +125,13 @@ public class Corrector {
         ArrayList<Double> previousTemp = new ArrayList<>();
         //double[] previousWdsp = new double[amountMeas];
 
-        if(wdsp>999.9||wdsp<0||wdsp==0){
+      //  if(wdsp>999.9||wdsp<0||wdsp==0){
             for (int i = 0; i<amountMeas;i++){
                 previousTemp.add(history.getMeasurement(i).getWdsp());
             }
             double value = Math.round(correcting(wdsp, getCalculateExtrapolatie(previousTemp)) * 10);
             meas.setWdsp(value / 10);
-        }
+      //  }
     }
 
     private static void correctPrcp(Measurements meas, History history){
@@ -139,13 +139,13 @@ public class Corrector {
         ArrayList<Double> previousTemp = new ArrayList<>();
         //double[] previousPrcp = new double[amountMeas];
 
-        if(prcp>999.99||prcp<0.00||prcp==0){
+      //  if(prcp>999.99||prcp<0.00||prcp==0){
             for (int i = 0; i<amountMeas;i++){
                 previousTemp.add(history.getMeasurement(i).getPrcp());
             }
             double value = Math.round(correcting(prcp, getCalculateExtrapolatie(previousTemp)) * 100);
             meas.setPrcp(value / 100);
-        }
+      //  }
     }
 
     private static void correctSndp(Measurements meas, History history){
@@ -153,13 +153,13 @@ public class Corrector {
         ArrayList<Double> previousTemp = new ArrayList<>();
         //double[] previousSndp = new double[];
 
-        if(sndp>9999.9||sndp<-9999.9||sndp==0){
+      //  if(sndp>9999.9||sndp<-9999.9||sndp==0){
             for (int i = 0; i<amountMeas;i++){
                 previousTemp.add(history.getMeasurement(i).getSndp());
             }
             double value = Math.round(correcting(sndp, getCalculateExtrapolatie(previousTemp)) * 10);
             meas.setSndp(value / 10);
-        }
+      //  }
     }
 
     private static void correctFrshtt(Measurements meas, History history){
@@ -174,14 +174,14 @@ public class Corrector {
         ArrayList<Double> previousTemp = new ArrayList<>();
         //double[] previousCldc = new double[amountMeas];
 
-        if(cldc>99.9||cldc<0||cldc==0){
+      //  if(cldc>99.9||cldc<0||cldc==0){
             for (int i = 0; i<amountMeas;i++){
                 previousTemp.add(history.getMeasurement(i).getCldc());
             }
             //meas.setCldc(getCalculateExtrapolatie(previousCldc));
             double value = Math.round(correcting(cldc, getCalculateExtrapolatie(previousTemp)) * 10);
             meas.setCldc(value / 10);
-        }
+     //   }
     }
 
 
@@ -190,17 +190,23 @@ public class Corrector {
         ArrayList<Double> previousTemp = new ArrayList<>();
         //double[] previousWnddir = new double[amountMeas];
 
-        if(wnddir>9999.9&&wnddir<-9999.9){
+     //   if(wnddir>9999.9&&wnddir<-9999.9){
             for (int i = 0; i<amountMeas;i++){
-                previousTemp.get(history.getMeasurement(i).getWnddir());
+               //previousTemp.add((history.getMeasurement(i).getWnddir());
             }
-            meas.setWnddir((int)Math.floor(getCalculateExtrapolatie(previousTemp)));
-        }
+            //meas.setWnddir((int)Math.floor(getCalculateExtrapolatie(previousTemp)));
+     //   }
     }
 
     private static double getCalculateExtrapolatie(ArrayList<Double> values){
+        double total=0;
+        int counted = values.size();
 
-        if (values.size() <= 0){
+        for(int i=0;i<counted;i++){
+            total += values.get(i);
+        }
+        return (double)Math.round((total/counted)*10)/ 10;
+        /*if (values.size() <= 0){
             return 0;
         }
 
@@ -210,10 +216,10 @@ public class Corrector {
             for (int i=0; i<(values.size()-2);i++){
                 differences += (values.get(i+1)- values.get(i));
             }
-            differences= differences/values.size()-1;
+            differences= differences/values.size();
             differences+=values.get(values.size()-1);
         }
-        return differences;
+        return differences;*/
     }
 
 

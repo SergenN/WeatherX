@@ -2,6 +2,8 @@ package nl.jozefbv.weatherx;
 
 import org.bson.Document;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
@@ -60,7 +62,7 @@ public class Transfer {
                     + "'" + measurement.getStn() + "'" + ",'" + measurement.getDate() + "','" + measurement.getTime() + "'," + measurement.getTemp() + ","
                     + measurement.getDewp() + "," + measurement.getStp() + "," + measurement.getSlp() + "," + measurement.getVisib() + "," + measurement.getWdsp() + ","
                     + measurement.getPrcp() + "," + measurement.getSndp() + ",'" + measurement.getFrshtt() + "'," + measurement.getCldc() + "," + measurement.getWnddir() + ")";
-            System.out.println(query);
+            //System.out.println(query);
             statement.executeUpdate(query);
         }catch (java.sql.SQLException e){
             e.printStackTrace();
@@ -93,6 +95,30 @@ public class Transfer {
         bsonDoc.append("wnddir", measurement.getWnddir());
 
         Main.MDBConn.getCollection("measurements").insertOne(bsonDoc);
+
     }
+
+    /**
+     * SQL query which displays the average windspeed in the Netherlands
+     */
+    public static void getAverageWindspeed() {
+        if (Main.SQLConn == null){
+            System.out.println("SQL error! on nl.jozefbv.weatherx.Transfer() getAverageWindspeed()!");
+            return;
+        }
+
+        try {
+            Statement stmt = Main.SQLConn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT AVG('wdsp') FROM measurements JOIN stations ON measurements.stn = stations.stn WHERE country = 'NETHERLANDS';");
+
+            while (rs.next()) {
+                double avgWindspeed = rs.getDouble("wdsp");
+                System.out.println(avgWindspeed + "\n");
+            }
+        } catch (SQLException sqle) {
+            System.out.println("SQL error ");
+        }
+    }
+
 
 }

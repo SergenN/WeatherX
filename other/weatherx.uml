@@ -3,33 +3,16 @@
   <ID>JAVA</ID>
   <OriginalElement>nl.jozefbv.weatherx</OriginalElement>
   <nodes>
-    <node x="-25.0" y="-8.0">nl.jozefbv.weatherx.Main</node>
-    <node x="256.5" y="180.5">nl.jozefbv.weatherx.Connection</node>
+    <node x="71.12640449438203" y="80.24719101123596">nl.jozefbv.weatherx.Main</node>
     <node x="65.0" y="386.5">nl.jozefbv.weatherx.Measurements</node>
-    <node x="206.5" y="918.5">nl.jozefbv.weatherx.Transfer</node>
-    <node x="-18.5" y="191.5">nl.jozefbv.weatherx.Server</node>
-    <node x="738.0" y="136.0">nl.jozefbv.weatherx.History</node>
-    <node x="1150.0" y="-20.0">nl.jozefbv.weatherx.Corrector</node>
+    <node x="208.07584269662925" y="879.1039325842696">nl.jozefbv.weatherx.Transfer</node>
+    <node x="98.11235955056179" y="262.4129213483146">nl.jozefbv.weatherx.Server</node>
+    <node x="345.61516853932585" y="126.54494382022472">nl.jozefbv.weatherx.History</node>
+    <node x="681.9747191011236" y="416.5084269662921">nl.jozefbv.weatherx.Corrector</node>
   </nodes>
   <notes />
   <edges>
-    <edge source="nl.jozefbv.weatherx.Connection" target="nl.jozefbv.weatherx.Measurements">
-      <point x="0.0" y="0.0" />
-      <point x="0.0" y="0.0" />
-    </edge>
     <edge source="nl.jozefbv.weatherx.History" target="nl.jozefbv.weatherx.Measurements">
-      <point x="0.0" y="0.0" />
-      <point x="0.0" y="0.0" />
-    </edge>
-    <edge source="nl.jozefbv.weatherx.Server" target="nl.jozefbv.weatherx.Connection">
-      <point x="0.0" y="0.0" />
-      <point x="0.0" y="0.0" />
-    </edge>
-    <edge source="nl.jozefbv.weatherx.Connection" target="nl.jozefbv.weatherx.History">
-      <point x="0.0" y="0.0" />
-      <point x="0.0" y="0.0" />
-    </edge>
-    <edge source="nl.jozefbv.weatherx.Transfer" target="nl.jozefbv.weatherx.Measurements">
       <point x="0.0" y="0.0" />
       <point x="0.0" y="0.0" />
     </edge>
@@ -37,8 +20,12 @@
       <point x="0.0" y="0.0" />
       <point x="0.0" y="0.0" />
     </edge>
+    <edge source="nl.jozefbv.weatherx.Transfer" target="nl.jozefbv.weatherx.Measurements">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
   </edges>
-  <settings layout="Hierarchic Group" zoom="0.6345811051693404" x="773.0" y="531.0" />
+  <settings layout="Hierarchic Group" zoom="0.6345811051693404" x="772.7991573033709" y="630.5084269662922" />
   <SelectedNodes />
   <Categories>
     <Category>Fields</Category>

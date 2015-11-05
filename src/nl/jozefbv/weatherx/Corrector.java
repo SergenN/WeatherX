@@ -1,12 +1,14 @@
 package nl.jozefbv.weatherx;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
  * Created by Michaël van der Veen
+ * Fixed by Leon Wetzel - Man man man!
  * Date of creation 25-9-2015, 12:54
  *
- * Authors: Michaël van der Veen,
+ * Authors: Michaël van der Veen, Leon Wetzel
  *
  * Version: 1.0.2
  * Package: default
@@ -20,209 +22,224 @@ import java.util.ArrayList;
  * 1.0.2: Added documentary
  */
 public class Corrector {
+    
+    public Corrector(Measurements measurements, History history){
+        correctTemperature(measurements, history);
+        correctDewpoint(measurements, history);
+        correctSTP(measurements, history);
 
-    private static int amountMeas;
+        correctSLP(measurements, history);
+        correctVisibility(measurements, history);
+        correctWDSP(measurements, history);
+        correctPRCP(measurements, history);
+        correctSNDP(measurements, history);
+        correctFRSHTT(measurements, history);
+        correctCLDC(measurements, history);
+        correctWNDDIR(measurements, history);
+    }
 
-    public static void correct(Measurements meas, History history){
-        // get the size of the nl.jozefbv.weatherx.History object (stack)
-        amountMeas = history.getSize()-1;
+    public static void correct(Measurements measurements, History history){
         //if it isn't the first time then use the correct
         if(history.getSize() >= 29) {
-            correctTemp(meas, history);
-            correctDewp(meas, history);
-            correctStp(meas, history);
-            correctSlp(meas, history);
-            correctVisib(meas, history);
-            correctWdsp(meas, history);
-            correctPrcp(meas, history);
-            correctSndp(meas, history);
-            correctFrshtt(meas, history);
-            correctCldc(meas, history);
-            correctWnddir(meas, history);
+            new Corrector(measurements, history);
         }
     }
-    /**
-     *  Correcting the temperature
-     *  @param meas measurement
-     *  @param history history
-     */
-    private static void correctTemp(Measurements meas, History history){
-        double temp = meas.getTemp();
-        ArrayList<Double> previousTemp = new ArrayList<>();
-        //double[] previousTemp = new double[amountMeas];
 
-        for(int i = 0; i<amountMeas;i++){
-            previousTemp.add(history.getMeasurement(i).getTemp());
+    private void correctTemperature(Measurements measurement, History history){
+        double temperature = measurement.getTemp();
+        ArrayList<Double> previousTemperatures = new ArrayList<>();
+
+        for(int i = 0; i<history.getSize()-1;i++){
+            previousTemperatures.add(history.getMeasurement(i).getTemp());
         }
 
-        if(temp>9999.9 || temp<-9999.9||temp==0){
-            double value = Math.round(correcting(temp, getCalculateExtrapolatie(previousTemp)) * 10);
-            meas.setTemp(value/10);
-        }
+        double extrapolation = extrapolate(previousTemperatures);
+        double average = calculateMargin(extrapolation);
 
-    }
+        double low = extrapolation-average;
+        double high = extrapolation+average;
 
-    private static void correctDewp(Measurements meas, History history){
-        double dewp = meas.getDewp();
-        ArrayList<Double> previousTemp = new ArrayList<>();
-        //double[] previousDewp = new double[amountMeas];
-
-        if(dewp>9999.9||dewp<-9999.9||dewp==0){
-            for (int i = 0; i<amountMeas;i++){
-                previousTemp.add(history.getMeasurement(i).getDewp());
+        if(average < 0) {
+            if(temperature < high || temperature > low){
+                measurement.setTemp(extrapolation);
             }
-            double value = Math.round(correcting(dewp, getCalculateExtrapolatie(previousTemp)) * 10);
-            meas.setDewp(value / 10);
-        }
-    }
-
-    private static void correctStp(Measurements meas, History history){
-        double stp = meas.getStp();
-        ArrayList<Double> previousTemp = new ArrayList<>();
-        //double[] previousStp = new double[amountMeas];
-
-
-        if(stp>9999.9||stp<0||stp==0){
-            for (int i = 0; i<amountMeas;i++){
-                previousTemp.add(history.getMeasurement(i).getStp());
+        } else {
+            if(temperature > high || temperature < low){
+                measurement.setTemp(extrapolation);
             }
-            double value = Math.round(correcting(stp, getCalculateExtrapolatie(previousTemp)) * 10);
-            meas.setStp(value / 10);
+        }
+
+
+    }
+
+    private void correctDewpoint(Measurements measurement, History history){
+        double dewpoint = measurement.getDewp();
+        ArrayList<Double> previousDewpoints = new ArrayList<>();
+
+        for(int i = 0; i<history.getSize()-1;i++){
+            previousDewpoints.add(history.getMeasurement(i).getDewp());
+        }
+
+        double extrapolation = extrapolate(previousDewpoints);
+        double average = calculateMargin(extrapolation);
+
+        if(dewpoint>extrapolation+average || dewpoint<extrapolation-average){
+            measurement.setDewp(extrapolation);
         }
     }
 
-    private static void correctSlp(Measurements meas, History history){
-        double slp = meas.getSlp();
-        ArrayList<Double> previousTemp = new ArrayList<>();
-        //double[] previousSlp = new double[amountMeas];
+    private void correctSTP(Measurements measurement, History history){
+        double STP = measurement.getStp();
+        ArrayList<Double> previousSTP = new ArrayList<>();
 
-        if(slp>9999.9||slp<-9999.9||slp==0){
-            for (int i = 0; i<amountMeas;i++){
-                previousTemp.add(history.getMeasurement(i).getSlp());
-            }
-            double value = Math.round(correcting(slp, getCalculateExtrapolatie(previousTemp)) * 10);
-            meas.setSlp(value / 10);
+        for(int i = 0; i<history.getSize()-1;i++){
+            previousSTP.add(history.getMeasurement(i).getStp());
+        }
+
+        double extrapolation = extrapolate(previousSTP);
+        double average = calculateMargin(extrapolation);
+
+        if(STP>extrapolation+average || STP<extrapolation-average){
+            measurement.setStp(extrapolation);
         }
     }
 
-    private static void correctVisib(Measurements meas, History history){
-        double visib = meas.getVisib();
-        ArrayList<Double> previousTemp = new ArrayList<>();
-        //double[] previousVisib = new double[amountMeas];
+    private void correctSLP(Measurements measurement, History history){
+        double SLP = measurement.getSlp();
+        ArrayList<Double> previousSLP = new ArrayList<>();
 
+        for(int i = 0; i<history.getSize()-1;i++){
+            previousSLP.add(history.getMeasurement(i).getSlp());
+        }
 
-        if(visib>999.9||visib<0||visib==0){
-            for (int i = 0; i<amountMeas;i++){
-                previousTemp.add(history.getMeasurement(i).getVisib());
-            }
-            double value = Math.round(correcting(visib, getCalculateExtrapolatie(previousTemp)) * 10);
-            meas.setVisib(value / 10);
+        double extrapolation = extrapolate(previousSLP);
+        double average = calculateMargin(extrapolation);
+
+        if(SLP>extrapolation+average || SLP<extrapolation-average){
+            measurement.setSlp(extrapolation);
         }
     }
 
-    private static void correctWdsp(Measurements meas, History history){
-        double wdsp = meas.getWdsp();
-        ArrayList<Double> previousTemp = new ArrayList<>();
-        //double[] previousWdsp = new double[amountMeas];
+    private void correctVisibility(Measurements measurement, History history){
+        double visibility = measurement.getVisib();
+        ArrayList<Double> previousVisibility = new ArrayList<>();
 
-        if(wdsp>999.9||wdsp<0||wdsp==0){
-            for (int i = 0; i<amountMeas;i++){
-                previousTemp.add(history.getMeasurement(i).getWdsp());
-            }
-            double value = Math.round(correcting(wdsp, getCalculateExtrapolatie(previousTemp)) * 10);
-            meas.setWdsp(value / 10);
+        for(int i = 0; i<history.getSize()-1;i++){
+            previousVisibility.add(history.getMeasurement(i).getVisib());
+        }
+
+        double extrapolation = extrapolate(previousVisibility);
+        double average = calculateMargin(extrapolation);
+
+        if(visibility>extrapolation+average || visibility<extrapolation-average){
+            measurement.setVisib(extrapolation);
         }
     }
 
-    private static void correctPrcp(Measurements meas, History history){
-        double prcp = meas.getPrcp();
-        ArrayList<Double> previousTemp = new ArrayList<>();
-        //double[] previousPrcp = new double[amountMeas];
+    private void correctWDSP(Measurements measurement, History history){
+        double WDSP = measurement.getWdsp();
+        ArrayList<Double> previousWDSP = new ArrayList<>();
 
-        if(prcp>999.99||prcp<0.00||prcp==0){
-            for (int i = 0; i<amountMeas;i++){
-                previousTemp.add(history.getMeasurement(i).getPrcp());
-            }
-            double value = Math.round(correcting(prcp, getCalculateExtrapolatie(previousTemp)) * 100);
-            meas.setPrcp(value / 100);
+        for(int i = 0; i<history.getSize()-1;i++){
+            previousWDSP.add(history.getMeasurement(i).getWdsp());
+        }
+
+        double extrapolation = extrapolate(previousWDSP);
+        double average = calculateMargin(extrapolation);
+
+        if(WDSP>extrapolation+average || WDSP<extrapolation-average){
+            measurement.setWdsp(extrapolation);
         }
     }
 
-    private static void correctSndp(Measurements meas, History history){
-        double sndp = meas.getSndp();
-        ArrayList<Double> previousTemp = new ArrayList<>();
-        //double[] previousSndp = new double[];
+    private void correctPRCP(Measurements measurement, History history){
+        double PRCP = measurement.getPrcp();
+        ArrayList<Double> previousPRCP = new ArrayList<>();
 
-        if(sndp>9999.9||sndp<-9999.9||sndp==0){
-            for (int i = 0; i<amountMeas;i++){
-                previousTemp.add(history.getMeasurement(i).getSndp());
-            }
-            double value = Math.round(correcting(sndp, getCalculateExtrapolatie(previousTemp)) * 10);
-            meas.setSndp(value / 10);
+        for(int i = 0; i<history.getSize()-1;i++){
+            previousPRCP.add(history.getMeasurement(i).getPrcp());
+        }
+
+        double extrapolation = extrapolate(previousPRCP);
+        double average = calculateMargin(extrapolation);
+
+        if(PRCP>extrapolation+average || PRCP<extrapolation-average){
+            measurement.setPrcp(extrapolation);
         }
     }
 
-    private static void correctFrshtt(Measurements meas, History history){
-        if(meas.getFrshtt()==null){
+    private void correctSNDP(Measurements measurement, History history){
+        double SNDP = measurement.getSndp();
+        ArrayList<Double> previousSNDP = new ArrayList<>();
 
-            meas.setFrshtt(history.getMeasurement(history.getSize() - 1).getFrshtt());
+        for(int i = 0; i<history.getSize()-1;i++){
+            previousSNDP.add(history.getMeasurement(i).getSndp());
+        }
+
+        double extrapolation = extrapolate(previousSNDP);
+        double average = calculateMargin(extrapolation);
+
+        if(SNDP>extrapolation+average || SNDP<extrapolation-average){
+            measurement.setSndp(extrapolation);
         }
     }
 
-    private static void correctCldc(Measurements meas, History history){
-        double cldc = meas.getCldc();
-        ArrayList<Double> previousTemp = new ArrayList<>();
-        //double[] previousCldc = new double[amountMeas];
-
-        if(cldc>99.9||cldc<0||cldc==0){
-            for (int i = 0; i<amountMeas;i++){
-                previousTemp.add(history.getMeasurement(i).getCldc());
-            }
-            //meas.setCldc(getCalculateExtrapolatie(previousCldc));
-            double value = Math.round(correcting(cldc, getCalculateExtrapolatie(previousTemp)) * 10);
-            meas.setCldc(value / 10);
+    private void correctFRSHTT(Measurements measurements, History history){
+        if(measurements.getFrshtt() == null || measurements.getFrshtt() == ""){
+            measurements.setFrshtt(history.getMeasurement(history.getSize() - 1).getFrshtt());
         }
     }
 
+    private void correctCLDC(Measurements measurement, History history){
+        double CLDC = measurement.getCldc();
+        ArrayList<Double> previousCLDC = new ArrayList<>();
 
-    private static void correctWnddir(Measurements meas, History history){
-        double wnddir = meas.getWnddir();
-        ArrayList<Double> previousTemp = new ArrayList<>();
-        //double[] previousWnddir = new double[amountMeas];
+        for(int i = 0; i<history.getSize()-1;i++){
+            previousCLDC.add(history.getMeasurement(i).getCldc());
+        }
 
-        if(wnddir>9999.9&&wnddir<-9999.9){
-            for (int i = 0; i<amountMeas;i++){
-                previousTemp.get(history.getMeasurement(i).getWnddir());
-            }
-            meas.setWnddir((int)Math.floor(getCalculateExtrapolatie(previousTemp)));
+        double extrapolation = extrapolate(previousCLDC);
+        double average = calculateMargin(extrapolation);
+
+        if(CLDC>extrapolation+average || CLDC<extrapolation-average){
+            measurement.setCldc(Math.round(extrapolation));
         }
     }
 
-    private static double getCalculateExtrapolatie(ArrayList<Double> values){
+    private void correctWNDDIR(Measurements measurement, History history){
+        double WNDDIR = measurement.getWnddir();
+        ArrayList<Double> previousWNDDIR = new ArrayList<>();
 
+        for(int i = 0; i<history.getSize()-1;i++){
+            previousWNDDIR.add((double)history.getMeasurement(i).getWnddir());
+        }
+
+        double extrapolation = extrapolate(previousWNDDIR);
+        double average = calculateMargin(extrapolation);
+
+        if(WNDDIR>extrapolation+average || WNDDIR<extrapolation-average){
+            measurement.setWnddir((int)Math.round(extrapolation));
+        }
+    }
+
+    private double extrapolate(ArrayList<Double> values){
         if (values.size() <= 0){
             return 0;
         }
-
-        double differences = values.get(values.size()-1);
-        if(values.size()>2){
-            differences = 0.00;
-            for (int i=0; i<(values.size()-2);i++){
-                differences += (values.get(i+1)- values.get(i));
-            }
-            differences= differences/values.size()-1;
-            differences+=values.get(values.size()-1);
+        if (values.size() == 1){
+            return values.get(0);
         }
-        return differences;
+
+        double sum = 0;
+        for (double d : values) sum += d;
+        sum = sum / values.size();
+
+        DecimalFormat f = new DecimalFormat("#.##");
+        return Double.parseDouble(f.format(sum).replace(",","."));
     }
 
-
-    private static double correcting(double measures,double avarage){
-        if(measures>(avarage*1.20)||measures <(avarage*0.80)||measures==0){
-            measures = avarage;
-        }
-
-        return  measures;
+    private double calculateMargin(double value) {
+        return (value/100) * 40;
     }
 
 }

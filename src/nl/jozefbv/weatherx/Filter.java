@@ -164,7 +164,7 @@ public class Filter {
                     line += ",\"WDSP\":\"" + measure.getWdsp() + "\"";
                     break;
                 case "PRCP":
-                    line += ",\"PRCP\":\"" + measure.getStp() + "\"";
+                    line += ",\"PRCP\":\"" + measure.getPrcp() + "\"";
                     break;
                 case "SNDP":
                     line += ",\"SNDP\":\"" + measure.getSndp() + "\"";

@@ -83,9 +83,19 @@ public class Corrector {
         double extrapolation = extrapolate(previousDewpoints);
         double average = calculateMargin(extrapolation);
 
-        if(dewpoint>extrapolation+average || dewpoint<extrapolation-average){
-            measurement.setDewp(extrapolation);
+        double low = extrapolation-average;
+        double high = extrapolation+average;
+
+        if(average < 0) {
+            if(dewpoint < high || dewpoint > low){
+                measurement.setTemp(extrapolation);
+            }
+        } else {
+            if(dewpoint > high || dewpoint < low){
+                measurement.setTemp(extrapolation);
+            }
         }
+
     }
 
     private void correctSTP(Measurements measurement, History history){

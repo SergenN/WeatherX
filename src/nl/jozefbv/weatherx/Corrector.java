@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Michaël van der Veen
- * Fixed by Leon Wetzel - Man man man!
+ * Fixed by Leon Wetzel and Sergen Nurel - Man man man!
  * Date of creation 25-9-2015, 12:54
  *
  * Authors: Michaël van der Veen, Leon Wetzel
@@ -20,6 +20,8 @@ import java.util.ArrayList;
  * Changelog:
  * 1.0.1: class is created
  * 1.0.2: Added documentary
+ * 1.1.0  Fixed logical issues for correcting data
+ * 1.1.1  Added proper documentation
  */
 public class Corrector {
     
@@ -38,6 +40,11 @@ public class Corrector {
         correctWNDDIR(measurements, history);
     }
 
+    /**
+     * Correct the data from a measurement
+     * @param measurements
+     * @param history
+     */
     public static void correct(Measurements measurements, History history){
         //if it isn't the first time then use the correct
         if(history.getSize() >= 29) {
@@ -45,6 +52,11 @@ public class Corrector {
         }
     }
 
+    /**
+     * Correct the temperature
+     * @param measurement
+     * @param history
+     */
     private void correctTemperature(Measurements measurement, History history){
         double temperature = measurement.getTemp();
         ArrayList<Double> previousTemperatures = new ArrayList<>();
@@ -68,10 +80,13 @@ public class Corrector {
                 measurement.setTemp(extrapolation);
             }
         }
-
-
     }
 
+    /**
+     * Correct the dew point
+     * @param measurement
+     * @param history
+     */
     private void correctDewpoint(Measurements measurement, History history){
         double dewpoint = measurement.getDewp();
         ArrayList<Double> previousDewpoints = new ArrayList<>();
@@ -88,16 +103,21 @@ public class Corrector {
 
         if(average < 0) {
             if(dewpoint < high || dewpoint > low){
-                measurement.setTemp(extrapolation);
+                measurement.setDewp(extrapolation);
             }
         } else {
             if(dewpoint > high || dewpoint < low){
-                measurement.setTemp(extrapolation);
+                measurement.setDewp(extrapolation);
             }
         }
 
     }
 
+    /**
+     * Correct the air pressure at station level
+     * @param measurement
+     * @param history
+     */
     private void correctSTP(Measurements measurement, History history){
         double STP = measurement.getStp();
         ArrayList<Double> previousSTP = new ArrayList<>();
@@ -114,6 +134,11 @@ public class Corrector {
         }
     }
 
+    /**
+     * Correct the air pressure at sea level
+     * @param measurement
+     * @param history
+     */
     private void correctSLP(Measurements measurement, History history){
         double SLP = measurement.getSlp();
         ArrayList<Double> previousSLP = new ArrayList<>();
@@ -130,6 +155,11 @@ public class Corrector {
         }
     }
 
+    /**
+     * Correct the visibility
+     * @param measurement
+     * @param history
+     */
     private void correctVisibility(Measurements measurement, History history){
         double visibility = measurement.getVisib();
         ArrayList<Double> previousVisibility = new ArrayList<>();
@@ -146,6 +176,11 @@ public class Corrector {
         }
     }
 
+    /**
+     * Corect the wind speed
+     * @param measurement
+     * @param history
+     */
     private void correctWDSP(Measurements measurement, History history){
         double WDSP = measurement.getWdsp();
         ArrayList<Double> previousWDSP = new ArrayList<>();
@@ -162,6 +197,11 @@ public class Corrector {
         }
     }
 
+    /**
+     * Correct the precipitation
+     * @param measurement
+     * @param history
+     */
     private void correctPRCP(Measurements measurement, History history){
         double PRCP = measurement.getPrcp();
         ArrayList<Double> previousPRCP = new ArrayList<>();
@@ -178,6 +218,11 @@ public class Corrector {
         }
     }
 
+    /**
+     * Correct the amount of snow
+     * @param measurement
+     * @param history
+     */
     private void correctSNDP(Measurements measurement, History history){
         double SNDP = measurement.getSndp();
         ArrayList<Double> previousSNDP = new ArrayList<>();
@@ -194,12 +239,22 @@ public class Corrector {
         }
     }
 
+    /**
+     * Correct the information for freezing, raining, snowing, hailing, thunder and/or tornado
+     * @param measurements
+     * @param history
+     */
     private void correctFRSHTT(Measurements measurements, History history){
         if(measurements.getFrshtt() == null || measurements.getFrshtt() == ""){
             measurements.setFrshtt(history.getMeasurement(history.getSize() - 1).getFrshtt());
         }
     }
 
+    /**
+     * Correct the cloudiness
+     * @param measurement
+     * @param history
+     */
     private void correctCLDC(Measurements measurement, History history){
         double CLDC = measurement.getCldc();
         ArrayList<Double> previousCLDC = new ArrayList<>();
@@ -216,6 +271,11 @@ public class Corrector {
         }
     }
 
+    /**
+     * Correct the wind direction
+     * @param measurement
+     * @param history
+     */
     private void correctWNDDIR(Measurements measurement, History history){
         double WNDDIR = measurement.getWnddir();
         ArrayList<Double> previousWNDDIR = new ArrayList<>();
@@ -232,6 +292,11 @@ public class Corrector {
         }
     }
 
+    /**
+     * Extrapolate values to return a legit value for a measurement
+     * @param values
+     * @return new value for missing value
+     */
     private double extrapolate(ArrayList<Double> values){
         if (values.size() <= 0){
             return 0;
@@ -248,6 +313,11 @@ public class Corrector {
         return Double.parseDouble(f.format(sum).replace(",","."));
     }
 
+    /**
+     * Calculate the margin for a specific value
+     * @param value
+     * @return margin
+     */
     private double calculateMargin(double value) {
         return (value/100) * 40;
     }

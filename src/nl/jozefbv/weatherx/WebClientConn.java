@@ -15,6 +15,7 @@ public class WebClientConn {
     public void onClose(Session session,int statusCode, String reason){
         System.out.println("Session closed id:"+session.getLocalAddress());
         Filter.stopData(session);
+
     }
 
     @OnWebSocketConnect
@@ -25,12 +26,28 @@ public class WebClientConn {
     @OnWebSocketMessage
     public void onMessage(Session session, String command){
         String[] args = command.split(" ");
-
+        String line="";
             switch (args[0]) {
                 case "GET":
+
+                    for(String a: args){
+                        line+=a+ "|";
+                    }
+                    System.out.println(line);
                     Filter.sendData(session, args);
                     break;
+                case "GET_COUNTRY":
+                    for(String a: args){
+                        line+=a+ "|";
+                    }
+                    System.out.println(line);
+                    Filter.sendCountry(session,args);
+                    break;
                 case "STOP":
+                    for(String a: args){
+                        line+=a+ "|";
+                    }
+                    System.out.print(line);
                     System.out.println("Stop command");
                     Filter.stopData(session);
                     break;
@@ -41,20 +58,6 @@ public class WebClientConn {
                         e.printStackTrace();
                     }
             }
-
-        /*
-        if (args[0].equalsIgnoreCase("get")) {
-            System.out.println("getting");
-            try {
-                session.getRemote().sendString("Fetching data from : "+args[1]);
-                Filter.sendData(session,args);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        if(args[0].equalsIgnoreCase("get")){
-            String station = args[1];
-        }*/
     }
 
     @OnWebSocketError

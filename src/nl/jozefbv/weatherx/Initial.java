@@ -104,8 +104,6 @@ public class Initial {
             properties.load(inputStream);
             Double longitude = Double.parseDouble((String) properties.get("Longitude"));
             Double latidude  = Double.parseDouble((String) properties.get("Latidude"));
-
-
             String query = "SELECT stn, " +
                     "           country, " +
                     "           ( 6371 * acos ( cos ( radians(" + latidude + ") ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(" + longitude + ") ) " +

@@ -26,7 +26,6 @@ import java.util.logging.Logger;
  * 2.0: changed MySQL connection with MongoDB nl.jozefbv.weatherx.ClientConnection
  */
 public class Main {
-
     public static Connection SQLConn;
     public static MongoDatabase MDBConn;
     public static Filter filter;

@@ -158,7 +158,7 @@ public class Transfer {
                 }
                 if (toDatabase) {
                     Main.MDBConn.getCollection("measurements").insertOne(bsonDoc);
-                    System.out.println("Sended to Mongo");
+                    //System.out.println("mongo.");
                 }
             }
         }

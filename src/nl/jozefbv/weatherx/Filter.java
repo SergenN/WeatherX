@@ -211,88 +211,107 @@ public class Filter {
 
     public static void sendCountry(Session session, String[] args) {
         try {
-            UUID uuid = UUID.randomUUID();
-            String[] country = args[1].split(",");
-            String countryArray = "('"+country[0]+"'";
-            if(country.length>1){
-                for (int i = 1; i < country.length; i++) {
-                    countryArray += ",'"+country[i]+"'";
-                }
-            }
-            FilterCountry filterCountry = new FilterCountry(session,uuid);
-            ArrayList<Long> stns = new ArrayList<Long>();
-            String query = "SELECT `stn` FROM `stations` WHERE `country` IN "+countryArray+")";
-            System.out.println(query);
-            Statement statement = Main.SQLConn.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
-            while(resultSet.next()){
-                stns.add(resultSet.getLong("stn"));
-            }
-            if(args[2].equalsIgnoreCase("RAW")){
-                String[] arg = new String[2];
-                arg[0]="GET";
-                boolean first = true;
-                String stnids="";
-                int k =0;
-                while (stns.size()>k) {
-                    if(first) {
-                        stnids = ""+stns.get(k);
-                        first=false;
-                    }else{
-                        stnids += ","+stns.get(k);
+            String[] countries = args[1].split(",");
+            for(int a = 0;a<countries.length;a++) {
+                UUID uuid = UUID.randomUUID();
+                String[] country = countries[a].split("&");
+                String countryArray = "'"+country[0]+"'";
+                if(country.length>1){
+                    for (int i = 1; i < country.length; i++) {
+                        countryArray += ",'"+country[i]+"'";
                     }
-                    k++;
                 }
-                arg[1]=stnids;
-                sendData(session, arg);
-            }else {
-                String[] values = args[2].split(",");
-                if (args[3].equalsIgnoreCase("RAW")) {
-                    int l = 0;
-                    String stnids = "";
-                    int k = 0;
-                    boolean first = true;
-                    while (stns.size() > k) {
-                        if (first) {
-                            stnids = "" + stns.get(k);
-                            first = false;
-                        } else {
-                            stnids += "," + stns.get(k);
-                        }
-                        k++;
-                    }
-                    args[1] = stnids;
-                    sendData(session, args);
+                String countryArraySQL="("+countryArray;
+                FilterCountry filterCountry = new FilterCountry(session, uuid);
+                ArrayList<Long> stns = new ArrayList<Long>();
+                String query = "SELECT `stn` FROM `stations` WHERE `country` IN " + countryArraySQL + ")";
+                filterCountry.setCountry(countryArray);
+                System.out.println(query);
+                Statement statement = Main.SQLConn.createStatement();
+                ResultSet resultSet = statement.executeQuery(query);
+                while (resultSet.next()) {
+                    stns.add(resultSet.getLong("stn"));
+                }
+                if (args[2].equalsIgnoreCase("RAW")) {
+                    // for GET_COUNTRY <COUNTRYNAME> RAW
+                    sendCountryRAWOnly(stns, session);
                 } else {
-                    //for(String countryOne:country) {
-                        filterCountry.setFilter(values, args[3]);
-                        filterCountry.setCountry("Landje");
-                        int k = 0;
-                        while (stns.size() > k) {
-                            if (filteredStation.containsKey(stns.get(k))) {
-                                filterCountry.addWeatherstation(stns.get(k));
-                                FilterObject filterObject = (FilterObject) filteredStation.get(stns.get(k));
-                                filterObject.setCountryDatabase(uuid);
-                                k++;
-                            }
-                        }
-                        ArrayList<UUID> arrayUUID;
-                        if (!sessionCountryList.containsKey(session)) {
-                            arrayUUID = new ArrayList<UUID>();
-                            arrayUUID.add(uuid);
-                            sessionCountryList.put(session, arrayUUID);
-                        } else {
-                            arrayUUID = (ArrayList) sessionCountryList.get(session);
-                        }
-                        arrayUUID.add(uuid);
-                        filteredCountries.put(uuid, filterCountry);
-                        System.out.println("No RAW ");
+                    String[] values = args[2].split(",");
+                    if (args[3].equalsIgnoreCase("RAW")) {
+                        // for GET_COUNTRY <COUNTRYNAME> <ARGUMENTS> RAW
+                        sendCountryRAW(stns, session, args);
+                    } else {
+                        // For GET_COUNTRY <COUNTRYNAME> <ARGUMENTS> AVG
+                        sendCountryAVG(filterCountry, args, values, stns, uuid, session);
                     }
-               // }
+                }
             }
         }
         catch (SQLException e){
             System.err.println();
         }
+    }
+
+    private static void sendCountryRAWOnly(ArrayList<Long>stns,Session session){
+        String[] arg = new String[2];
+        arg[0]="GET";
+        boolean first = true;
+        String stnids="";
+        int k =0;
+        while (stns.size()>k) {
+            if(first) {
+                stnids = ""+stns.get(k);
+                first=false;
+            }else{
+                stnids += ","+stns.get(k);
+            }
+            k++;
+        }
+        arg[1]=stnids;
+        sendData(session, arg);
+    }
+    private static void sendCountryRAW(ArrayList<Long>stns,Session session,String[] args){
+        int l = 0;
+        String stnids = "";
+        int k = 0;
+        boolean first = true;
+        while (stns.size() > k) {
+            if (first) {
+                stnids = "" + stns.get(k);
+                first = false;
+            } else {
+                stnids += "," + stns.get(k);
+            }
+            k++;
+        }
+        args[1] = stnids;
+        sendData(session, args);
+    }
+    private static void sendCountryAVG(FilterCountry filterCountry,
+                                       String[] args,
+                                       String[] values,
+                                       ArrayList<Long>stns,
+                                       UUID uuid,
+                                       Session session){
+        filterCountry.setFilter(values, args[3]);
+        int k = 0;
+        while (stns.size() > k) {
+            if (filteredStation.containsKey(stns.get(k))) {
+                filterCountry.addWeatherstation(stns.get(k));
+                FilterObject filterObject = (FilterObject) filteredStation.get(stns.get(k));
+                filterObject.setCountryDatabase(uuid);
+                k++;
+            }
+        }
+        ArrayList<UUID> arrayUUID;
+        if (!sessionCountryList.containsKey(session)) {
+            arrayUUID = new ArrayList<UUID>();
+            arrayUUID.add(uuid);
+            sessionCountryList.put(session, arrayUUID);
+        } else {
+            arrayUUID = (ArrayList) sessionCountryList.get(session);
+        }
+        arrayUUID.add(uuid);
+        filteredCountries.put(uuid, filterCountry);
     }
 }

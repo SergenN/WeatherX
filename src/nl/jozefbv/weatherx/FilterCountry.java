@@ -2,23 +2,21 @@ package nl.jozefbv.weatherx;
 
 import org.eclipse.jetty.websocket.api.Session;
 
+import javax.lang.model.type.ArrayType;
 import java.io.IOException;
 import java.security.PrivateKey;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by pjvan on 6-11-2015.
  */
 public class FilterCountry {
-    private Session sessionHashMap;   //HashMap for Session getting value.
-    private ArrayList<String> dataHashMap;         //Hashmap for Measures + method.
+    private Session sessionHashMap;                             //HashMap for Session getting value.
+    private ArrayList<String> dataHashMap;                      //Hashmap for Measures + method.
     private String methods;
-    private ArrayList<Long> weatherStationHashMap;//HashMap for Weatherstations
-    private HashMap<String,ArrayList<Object>> measures;     //ArrayList with Measures.
-    private int count;                                  //Counted values;
+    private ArrayList<Long> weatherStationHashMap;              //HashMap for Weatherstations
+    private HashMap<String,LinkedList<Double>> measures;        //ArrayList with Measures.
+    private int count;                                          //Counted values;
     private String country;
     public UUID uuid;
 
@@ -47,70 +45,93 @@ public class FilterCountry {
         if(arg.length>0){
             for (int i = 0; i < arg.length; i++) {
                 dataHashMap.add(arg[i]);
-                measures.put(arg[i],new ArrayList<>());
+                measures.put(arg[i],new LinkedList<>());
             }
             this.methods=method;
         }
     }
 
 
-    public void addMeasure(Measurements measure){
-        count++;
+    public synchronized void addMeasure(Measurements measure){
         for(int i = 0;i<dataHashMap.size();i++){
             switch (dataHashMap.get(i)) {
                 case "TEMP":
                     measures.get("TEMP").add(measure.getTemp());
-                    //System.out.println("AddMeasure");
+                    /*if (measures.get("TEMP").size() > weatherStationHashMap.size()){
+                        measures.get("TEMP").removeLast();
+                    }*/
                     break;
                 case "DEWP":
                     measures.get("DEWP").add(measure.getDewp());
-                    //System.out.println("AddMeasure");
+                    /*if (measures.get("DEWP").size() > weatherStationHashMap.size()){
+                        measures.get("DEWP").removeLast();
+                    }*/
                     break;
                 case "STP":
                     measures.get("STP").add(measure.getStp());
-                    //System.out.println("AddMeasure");
+                    /*if (measures.get("STP").size() > weatherStationHashMap.size()){
+                        measures.get("STP").removeLast();
+                    }*/
                     break;
                 case "SLP":
                     measures.get("SLP").add(measure.getSlp());
-                    //System.out.println("AddMeasure");
+                    /*if (measures.get("SLP").size() > weatherStationHashMap.size()){
+                        measures.get("SLP").removeLast();
+                    }*/
                     break;
                 case "VISIB":
                     measures.get("VISIB").add(measure.getVisib());
-                    //System.out.println("AddMeasure");
+                    /*if (measures.get("VISIB").size() > weatherStationHashMap.size()){
+                        measures.get("VISIB").removeLast();
+                    }*/
                     break;
                 case "WDSP":
                     measures.get("WDSP").add(measure.getWdsp());
-                    //System.out.println("AddMeasure");
+                    /*if (measures.get("WDSP").size() > weatherStationHashMap.size()){
+                        measures.get("WDSP").removeLast();
+                    }*/
                     break;
                 case "PRCP":
                     measures.get("PRCP").add(measure.getPrcp());
-                    //System.out.println("AddMeasure");
+                    /*if (measures.get("PRCP").size() > weatherStationHashMap.size()){
+                        measures.get("PRCP").removeLast();
+                    }*/
                     break;
                 case "SNDP":
                     measures.get("SNDP").add(measure.getSndp());
-                    //System.out.println("AddMeasure");
+                    /*if (measures.get("SNDP").size() > weatherStationHashMap.size()){
+                        measures.get("SNDP").removeLast();
+                    }*/
                     break;
                 case "CLDC":
                     measures.get("CLDC").add(measure.getCldc());
-                    //System.out.println("AddMeasure");
+                    /*if (measures.get("CLDC").size() > weatherStationHashMap.size()){
+                        measures.get("CLDC").removeLast();
+                    }*/
                     break;
                 case "WNDDIR":
-                    measures.get("WNDDIR").add(measure.getWnddir());
-                    //System.out.println("AddMeasure");
+                    measures.get("WNDDIR").add(Double.parseDouble(""+measure.getWnddir()));
+                    /*if (measures.get("WNDDIR").size() > weatherStationHashMap.size()){
+                        measures.get("DNDDIR").removeLast();
+                    }*/
                     break;
                 case "FRSHTT":
-                    measures.get("FRSHTT").add(measure.getFrshtt());
-                    //System.out.println("AddMeasure");
+                    measures.get("FRSHTT").add(Double.parseDouble(""+measure.getFrshtt()));
+                    /*if (measures.get("FRSHTT").size() > weatherStationHashMap.size()){
+                        measures.get("FRSHTT").removeLast();
+                    }*/
                     break;
                 default:
-                    measures.get("UNKNOWN").add(measure.getStn());
-                    //System.out.println("AddMeasure");
+                    measures.get("UNKNOWN").add(Double.parseDouble("" + measure.getStn()));
+                    /*if (measures.get("UNKNOWN").size() > weatherStationHashMap.size()){
+                        measures.get("UNKNOWN").removeLast();
+                    }*/
                     break;
             }
         }
-
+        count++;
         if(count>=weatherStationHashMap.size()){
-            count=0;
+
             sendData();
 
         }
@@ -118,105 +139,26 @@ public class FilterCountry {
 
     private void sendData() {
         Double total,average;
-        System.out.println(dataHashMap.size()+"Size of Hashmap");
         String returned = "{\"COUNTRY\":\""+country+"\"";
-        for(int i = 0;i<dataHashMap.size();i++){
-            switch (dataHashMap.get(i)) {
-                case "TEMP":
-                    total=0.00;
-                    for(int j = 0; j<weatherStationHashMap.size();j++){
-                        total = (Double) measures.get("TEMP").get(j);
-                    }
-                    average = total/weatherStationHashMap.size();
-                    returned  +=   ",\"TEMP\":\""+average+"\"";
-                    break;
-                case "DEWP":
-                    total=0.00;
-                    for(int j = 0; j<weatherStationHashMap.size();j++){
-                        total = (Double) measures.get("DEWP").get(j);
-                    }
-                    average = total/weatherStationHashMap.size();
-                    returned += ",\"DEWP\":\""+average+"\"";
-                    break;
-                case "STP":
-                    total=0.00;
-                    for(int j = 0; j<weatherStationHashMap.size();j++){
-                        total = (Double) measures.get("STP").get(j);
-                    }
-                    average = total/weatherStationHashMap.size();
-                    returned += ",\"STP\":\""+average+"\"";
-                    break;
-                case "SLP":
-                    total=0.00;
-                    for(int j = 0; j<weatherStationHashMap.size();j++){
-                        total = (Double) measures.get("SLP").get(j);
-                    }
-                    average = total/weatherStationHashMap.size();
-                    returned += ",\"SLP\":\""+average+"\"";
-                    break;
-                case "VISIB":
-                    total=0.00;
-                    for(int j = 0; j<weatherStationHashMap.size();j++){
-                        total = (Double) measures.get("VISIB").get(j);
-                    }
-                    average = total/weatherStationHashMap.size();
-                    returned += ",\"VISIB\":\""+average+"\"";
-                    break;
-                case "WDSP":
-                    total=0.00;
-                    for(int j = 0; j<weatherStationHashMap.size();j++){
-                        total = (Double) measures.get("WDSP").get(j);
-                    }
-                    average = total/weatherStationHashMap.size();
-                    returned += ",\"WDSP\":\""+average+"\"";
-                    break;
-                case "PRCP":
-                    total=0.00;
-                    for(int j = 0; j<weatherStationHashMap.size();j++){
-                        total = (Double) measures.get("PRCP").get(j);
-                    }
-                    average = total/weatherStationHashMap.size();
-                    returned += ",\"PRCP\":\""+average+"\"";
-                    break;
-                case "SNDP":
-                    total=0.00;
-                    for(int j = 0; j<weatherStationHashMap.size();j++){
-                        total = (Double) measures.get("SNDP").get(j);
-                    }
-                    average = total/weatherStationHashMap.size();
-                    returned += ",\"SNDP\":\""+average+"\"";
-                    break;
-                case "CLDC":
-                    total=0.00;
-                    for(int j = 0; j<weatherStationHashMap.size();j++){
-                        total = (Double) measures.get("CLDC").get(j);
-                    }
-                    average = total/weatherStationHashMap.size();
-                    returned += ",\"CLDC\":\""+average+"\"";
-                    break;
-                case "WNDDIR":
-                    total=0.00;
-                    for(int j = 0; j<weatherStationHashMap.size();j++){
-                        total = (Double) measures.get("WNDDIR").get(j);
-                    }
-                    average = total/weatherStationHashMap.size();
-                    returned += ",\"WNDDIR\":\""+average+"\"";
-                    break;
-                case "FRSHTT":
-                    total=0.00;
-                    for(int j = 0; j<weatherStationHashMap.size();j++){
-                        total = (Double) measures.get("FRSHTT").get(j);
-                    }
-                    average = total/weatherStationHashMap.size();
-                    returned += ",\"FRSHTT\":\""+average+"\"";
-                    break;
-                default:
-                    break;
+        returned +=",\"TYPE\":\""+methods+"\"";
+        try {
+            for (int i = 0; i < dataHashMap.size(); i++) {
+                total = 0.00;
+                LinkedList<Double> list = measures.get(dataHashMap.get(i));
+                for (int j = 0; j < measures.get(dataHashMap.get(i)).size(); j++) {
+                    Double value = list.pop();
+                    total += value;
+                }
+                average = total / measures.get(dataHashMap.get(i)).size();
+                returned += ",\"" + dataHashMap.get(i) + "\":\"" + average + "\"";
             }
+            returned += "}";
+            sessionHashMap.getRemote().sendStringByFuture(returned);
         }
-        returned += "}";
-        sessionHashMap.getRemote().sendStringByFuture(returned);
-
+        catch (IndexOutOfBoundsException e){
+            System.err.println("not Enouth measures");
+        }
+        this.count=0;
     }
 
     public void setCountry(String country) {

@@ -29,7 +29,7 @@ import java.util.Objects;
  *
  * Changelog:
  * 1.0: SQL outfit
- * 2.0: Deprecated SQL transfer() method, implementig MongoDB support
+ * 2.0: Deprecated SQL transfer() method, implemented MongoDB support
  */
 public class Transfer {
     // Measurement object

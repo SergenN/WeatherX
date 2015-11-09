@@ -27,6 +27,10 @@ tmp/
 *.bak
 *.swp
 *~.nib
+/databaseRain.properties
+/databaseTemp.properties
+/databaseWind.properties
+/default.properties
 local.properties
 .settings/
 .loadpath

@@ -97,6 +97,7 @@ public class Filter {
             }
             System.out.print("Cleared empty links");
         }
+
         catch(IOException e){
             System.err.println(e);
         }

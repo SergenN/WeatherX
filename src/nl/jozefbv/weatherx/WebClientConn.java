@@ -43,6 +43,10 @@ public class WebClientConn {
                     System.out.println(line);
                     Filter.sendCountry(session,args);
                     break;
+                case "GET_RAD":
+                    System.out.print(line);
+                    Filter.sendRadius(session,args);
+                    break;
                 case "STOP":
                     for(String a: args){
                         line+=a+ "|";

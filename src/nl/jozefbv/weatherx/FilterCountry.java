@@ -166,4 +166,8 @@ public class FilterCountry {
     }
     public Session getSessionHashMap(){return sessionHashMap;}
     public ArrayList<Long> getWeatherStationHashMap(){return weatherStationHashMap;}
+
+    public void setMethod(String method) {
+        this.methods+=","+method;
+    }
 }

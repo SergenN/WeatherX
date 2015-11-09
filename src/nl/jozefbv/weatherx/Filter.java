@@ -27,10 +27,6 @@ public class Filter {
         filteredStation = new HashMap<Long,FilterObject>();
         filteredCountries = new HashMap<UUID,FilterCountry>();
     }
-    public void GetWeatherStation(Session session, String weatherStationId,int delay){
-        //filteredStation.put(Long.valueOf(weatherStationId,10), session);
-    }
-
 
     public static void sendData(Session session, String[] args) {
         //while(args[1]!="Stop"){
@@ -80,7 +76,6 @@ public class Filter {
                         FilterObject filterObject = filteredStation.get(stnId);
                         ArrayList<UUID> uuids = filterObject.getCountryHashMap();
                         uuids.remove(countries.get(i));
-
                     }
                 }
                 sessionCountryList.remove(session);
@@ -106,7 +101,7 @@ public class Filter {
     public static void checkData(Measurements measure) {
         if(filteredStation.containsKey(measure.getStn())){
             FilterObject filterObject;
-            filterObject = (FilterObject) filteredStation.get(measure.getStn());
+            filterObject = filteredStation.get(measure.getStn());
             filterObject.setMeasure(measure);
             HashMap<Session,String[]> sessionStationHashMap = filterObject.getSessionHashMap();
             ArrayList<UUID> countrylist = filterObject.getCountryHashMap();
@@ -125,26 +120,20 @@ public class Filter {
     }
 
     private static void sendData(HashMap<Session,String[]> sessionHashMap,Measurements measure){
-        for(Session session : sessionHashMap.keySet()){
-            //try {
-                String line = "{" +
-                        "\"TYPE\":\"STN\"," +
-                        "\"STN\":\""+measure.getStn()+"\"," +
-                        "\"TIME\":\""+measure.getTime()+"\"";
-                String[] args = sessionHashMap.get(session);
-                line = getData(measure,args,line);
-                line += "}";
-                try {
-                    //session.getRemote().sendString(line);
-                    session.getRemote().sendStringByFuture(line);
-                }
-                catch (WebSocketException w){
-                    System.err.println("socket has closed: bye bye.");
-                    Filter.stopData(session);
-                }
-            //} catch (IOException e) {
-            //    e.printStackTrace();
-            //}
+        for(Session session : sessionHashMap.keySet()) {
+            String line = "{" +
+                    "\"TYPE\":\"STN\"," +
+                    "\"STN\":\"" + measure.getStn() + "\"," +
+                    "\"TIME\":\"" + measure.getTime() + "\"";
+            String[] args = sessionHashMap.get(session);
+            line = getData(measure, args, line);
+            line += "}";
+            try {
+                session.getRemote().sendStringByFuture(line);
+            } catch (WebSocketException w) {
+                System.err.println("socket has closed: bye bye.");
+                Filter.stopData(session);
+            }
         }
     }
 
@@ -313,5 +302,71 @@ public class Filter {
         }
         arrayUUID.add(uuid);
         filteredCountries.put(uuid, filterCountry);
+    }
+
+    public static void sendRadius(Session session, String[] args) {
+        Double longitude,latidude,range;
+        String[] latlong=args[1].split(",");
+        latidude=Double.parseDouble(latlong[0]);
+        longitude=Double.parseDouble(latlong[1]);
+        range = Double.parseDouble(latlong[2]);
+        ArrayList<Long> stns =calculateLong(latidude,longitude,range);
+        if(args[2].equalsIgnoreCase("RAW")){
+            //For GET_RAD <Lat,Lon,Rad> RAW
+            sendCountryRAWOnly(stns, session);
+        }else{
+            if(args[3].equalsIgnoreCase("RAW")){
+                //For GET_RAD <Lat,Lon,Rad> <arguments> RAW
+                sendCountryRAW(stns, session, args);
+            }else{
+                String[] values = args[2].split(",");
+                UUID uuid = UUID.randomUUID();
+                FilterCountry filterCountry= new FilterCountry(session,uuid);
+                //For GET_RAD <Lat,Lon,Rad> <arguments> AVG
+                filterCountry.setMethod("Radius");
+                sendCountryAVG(filterCountry,args,values,stns,uuid,session);
+            }
+        }
+    }
+
+    private static ArrayList<Long> calculateLong(Double latidude, Double longitude, Double range) {
+        String query = "SELECT stn, " +
+                "           country, " +
+                "           ( 6371 * acos ( cos ( radians(" + latidude + ") ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(" + longitude + ") ) " +
+                "           + sin ( radians(" + latidude + ") ) * sin( radians( latitude ) ) ) ) " +
+                "           AS distance " +
+                "        FROM stations  " +
+                "HAVING distance < "+range+"";
+        ArrayList<Long> stns = new ArrayList<Long>();
+        try {
+            Statement statement = Main.SQLConn.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            System.out.println("query has executed");
+
+            while (result.next()) {
+                stns.add(Long.parseLong(result.getString("stn"),10));
+            }
+        } catch (SQLException sqle) {
+            System.err.println(sqle);
+        }
+        return stns;
+    }
+    private static void sendRadiusRawOnly(ArrayList<Long>stns,Session session){
+        String[] arg = new String[2];
+        arg[0]="GET";
+        boolean first = true;
+        String stnids="";
+        int k =0;
+        while (stns.size()>k) {
+            if(first) {
+                stnids = ""+stns.get(k);
+                first=false;
+            }else{
+                stnids += ","+stns.get(k);
+            }
+            k++;
+        }
+        arg[1]=stnids;
+        sendData(session, arg);
     }
 }

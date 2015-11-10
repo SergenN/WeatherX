@@ -1,11 +1,11 @@
 package nl.jozefbv.weatherx;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Properties;
 
 /**
@@ -153,6 +153,7 @@ public class Initial {
             try{
                 while((line=coastFile.readLine())!=null) {
                     Filter.setFilter(Integer.parseInt(line),"PRCP",60);
+                    Filter.setCoastLine(Long.valueOf(line));
                 }
             }
             catch (IOException e){
@@ -178,7 +179,7 @@ public class Initial {
             System.err.println(sqle);
         }
         for(String country:countries){
-            System.out.println(country);
+            //System.out.println(country);
             String query2 = "SELECT `stn` FROM `stations` WHERE `country`LIKE '"+country+"'";
             ArrayList<Long>stns = null;
             try{
@@ -197,7 +198,7 @@ public class Initial {
 
     }
     private static void createNewCSV() {
-         String stringArray =  "25105, 466860, 466890, 466920, 466940, 466950, 599970, " +
+         String stringArray =    "25105, 466860, 466890, 466920, 466940, 466950, 599970, " +
                 "466960, 466970, 466990, 467060, 467080, 467300, 467340, 467350, 467360, 467400, 467410, 467425, " +
                 "467430, 467440, 467450, 467460, 467480, 467490, 467500, 467510, 467520, 467530, 467540, 467550, " +
                 "467560, 467570, 467580, 467590, 467600, 467610, 467620, 467630, 467640, 467650, 467660, 467690, " +

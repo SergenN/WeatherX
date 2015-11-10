@@ -122,7 +122,7 @@ public class FilterCountry {
                     }*/
                     break;
                 default:
-                    measures.get("UNKNOWN").add(Double.parseDouble("" + measure.getStn()));
+                    //measures.get("UNKNOWN").add(Double.parseDouble("" + measure.getStn()));
                     /*if (measures.get("UNKNOWN").size() > weatherStationHashMap.size()){
                         measures.get("UNKNOWN").removeLast();
                     }*/

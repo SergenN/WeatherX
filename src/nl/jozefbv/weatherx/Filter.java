@@ -184,12 +184,17 @@ public class Filter {
         return line;
     }
 
-    public static void setTempFilter(int stn) {
-        System.out.println("Initializing " + stn);
-        FilterObject filterObject = new FilterObject(Long.valueOf(stn));
-        filterObject.setDatabase("TEMP",1);
-        filteredStation.put(Long.valueOf(stn), filterObject);
+    public static void setFilter(int stn,String value,int delay) {
+        FilterObject filterObject = null;
+        if(filteredStation.containsKey(stn)){
+            filterObject = filteredStation.get(stn);
+        }else{
+            filterObject = new FilterObject(Long.valueOf(stn));
+            filteredStation.put(Long.valueOf(stn),filterObject);
+        }
+        filterObject.setDatabase(value,delay);
     }
+
 
     public static FilterObject checkDatabase(Long stn) {
         FilterObject filterObject;
@@ -324,7 +329,7 @@ public class Filter {
                 FilterCountry filterCountry= new FilterCountry(session,uuid);
                 //For GET_RAD <Lat,Lon,Rad> <arguments> AVG
                 filterCountry.setMethod("Radius");
-                sendCountryAVG(filterCountry,args,values,stns,uuid,session);
+                sendCountryAVG(filterCountry, args, values, stns, uuid, session);
             }
         }
     }

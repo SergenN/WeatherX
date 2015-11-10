@@ -3,6 +3,8 @@ package nl.jozefbv.weatherx;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.bson.Document;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -35,6 +37,13 @@ public class Transfer {
     // Measurement object
     private Measurements measurement;
 
+    // Delimiter used in CSV file
+    private static final String COMMA_DELIMITER = ",";
+    private static final String NEW_LINE_SEPARATOR = "\n";
+
+    // CSV file header
+    private static final String FILE_HEADER = "stn,date,time,temp,dewp,stp,slp,visib,wdsp,prcp,sndp,frshtt,cldc,wnddir";
+
     // table name
     private static final String MEASUREMENT = "measurements";
 
@@ -51,9 +60,9 @@ public class Transfer {
     }
 
     /**
-     * transfer
      * Method to transfer the data from the Measurement object into the database
      */
+    @Deprecated
     public void transferSQL() {
         if (Main.SQLConn == null){
             System.out.println("SQL error! on nl.jozefbv.weatherx.Transfer()");
@@ -71,6 +80,65 @@ public class Transfer {
         }catch (java.sql.SQLException e){
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Method for inserting data in a CSV file
+     */
+    public void transferCSV() {
+        FileWriter fileWriter = null;
+        String fileName = measurement.getStn() + "_" + measurement.getDate() + "_" + measurement.getTime();
+        try {
+            fileWriter = new FileWriter(fileName);
+            //Write the CSV file header
+            fileWriter.append(FILE_HEADER);
+
+            //Add a new line separator after the header
+            fileWriter.append(NEW_LINE_SEPARATOR);
+
+            //Write a new student object list to the CSV file
+            fileWriter.append(String.valueOf(measurement.getStn()));
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(String.valueOf(measurement.getDate()));
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(String.valueOf(measurement.getTime()));
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(String.valueOf(measurement.getTemp()));
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(String.valueOf(measurement.getDewp()));
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(String.valueOf(measurement.getStp()));
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(String.valueOf(measurement.getSlp()));
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(String.valueOf(measurement.getVisib()));
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(String.valueOf(measurement.getWdsp()));
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(String.valueOf(measurement.getPrcp()));
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(String.valueOf(measurement.getSndp()));
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(String.valueOf(measurement.getFrshtt()));
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(String.valueOf(measurement.getCldc()));
+            fileWriter.append(COMMA_DELIMITER);
+            fileWriter.append(String.valueOf(measurement.getWnddir()));
+            fileWriter.append(COMMA_DELIMITER);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fileWriter.flush();
+                fileWriter.close();
+            } catch (IOException e) {
+                System.out.println("Error while flushing/closing fileWriter !!!");
+                e.printStackTrace();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     /**

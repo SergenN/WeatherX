@@ -3,13 +3,16 @@ package nl.jozefbv.weatherx;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketException;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Properties;
 import java.util.UUID;
 
 /**
@@ -20,12 +23,14 @@ public class Filter {
     private static HashMap<Session,ArrayList<Long>> sessionStationList;    //Session+ ID's
     private static HashMap<Session,ArrayList<UUID>> sessionCountryList;                      //Session+CountriesID's
     private static HashMap<UUID,FilterCountry> filteredCountries;                       //CountriesID + filteredCountry
+    private static ArrayList<Long> coastLine;
 
     public Filter() {
         sessionStationList = new HashMap<Session,ArrayList<Long>>();
         sessionCountryList = new HashMap<Session,ArrayList<UUID>>();
         filteredStation = new HashMap<Long,FilterObject>();
         filteredCountries = new HashMap<UUID,FilterCountry>();
+        coastLine = new ArrayList<>();
     }
 
     public static void sendData(Session session, String[] args) {
@@ -184,16 +189,21 @@ public class Filter {
         return line;
     }
 
-    public static void setTempFilter(int stn) {
-        System.out.println("Initializing " + stn);
-        FilterObject filterObject = new FilterObject(Long.valueOf(stn));
-        filterObject.setDatabase("TEMP",1);
-        filteredStation.put(Long.valueOf(stn), filterObject);
+    public static void setFilter(int stn,String value,int delay) {
+        FilterObject filterObject = null;
+        if(filteredStation.containsKey(stn)){
+            filterObject = filteredStation.get(stn);
+        }else{
+            filterObject = new FilterObject(Long.valueOf(stn));
+            filteredStation.put(Long.valueOf(stn),filterObject);
+        }
+        filterObject.setDatabase(value,delay);
     }
+
 
     public static FilterObject checkDatabase(Long stn) {
         FilterObject filterObject;
-        filterObject = (FilterObject) filteredStation.get(stn);
+        filterObject = filteredStation.get(stn);
         return filterObject;
 
     }
@@ -324,7 +334,7 @@ public class Filter {
                 FilterCountry filterCountry= new FilterCountry(session,uuid);
                 //For GET_RAD <Lat,Lon,Rad> <arguments> AVG
                 filterCountry.setMethod("Radius");
-                sendCountryAVG(filterCountry,args,values,stns,uuid,session);
+                sendCountryAVG(filterCountry, args, values, stns, uuid, session);
             }
         }
     }
@@ -351,22 +361,44 @@ public class Filter {
         }
         return stns;
     }
-    private static void sendRadiusRawOnly(ArrayList<Long>stns,Session session){
-        String[] arg = new String[2];
-        arg[0]="GET";
-        boolean first = true;
-        String stnids="";
-        int k =0;
-        while (stns.size()>k) {
-            if(first) {
-                stnids = ""+stns.get(k);
-                first=false;
-            }else{
-                stnids += ","+stns.get(k);
-            }
-            k++;
-        }
-        arg[1]=stnids;
-        sendData(session, arg);
+
+    public static void setCoastLine(Long stn){
+        coastLine.add(stn);
     }
+
+    public static void sendCoast(Session session, String[] args) {
+        if(args[1].equalsIgnoreCase("RAW")){
+            //For GET_COAST RAW
+            for(Long stn:coastLine){
+                args[1]=""+stn;
+                sendData(session,args);
+            }
+        }else{
+            if(args[2].equalsIgnoreCase("RAW")){
+                //For GET_COAST <DATA> RAW
+
+                sendCountryRAW(coastLine,session,args);
+            }else{
+                //For GET_COAST <DATA> AVG
+                String[] values = args[1].split(",");
+                UUID uuid=UUID.randomUUID();
+                FilterCountry filterCountry = new FilterCountry(session,uuid);
+                //filterCountry.setFilter(values,"AVG");
+                filterCountry.setMethod("COAST");
+                filterCountry.setCountry("COASTLINE");
+                String[] newArgs=new String[4];
+                newArgs[0]="GET";
+                newArgs[1]="COAST";
+                newArgs[2]=args[1];
+                newArgs[3]=args[2];
+                if(coastLine==null){
+                    System.out.println("No Coast");
+                }else{
+                    System.out.println("There is a Coast "+coastLine.size());
+                }
+                sendCountryAVG(filterCountry, newArgs, values, coastLine, uuid, session);
+            }
+        }
+    }
+
 }

@@ -17,6 +17,7 @@ hs_err_pid*
 *.iml
 out
 
+/coastline_pacific.csv
 gen### Eclipse template
 *.pydevproject
 .metadata

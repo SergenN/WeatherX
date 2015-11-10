@@ -44,8 +44,18 @@ public class WebClientConn {
                     Filter.sendCountry(session,args);
                     break;
                 case "GET_RAD":
+                    for(String a: args){
+                        line+=a+ "|";
+                    }
                     System.out.print(line);
                     Filter.sendRadius(session,args);
+                    break;
+                case "GET_COAST":
+                    for(String a: args){
+                        line+=a+ "|";
+                    }
+                    System.out.println(line);
+                    Filter.sendCoast(session,args);
                     break;
                 case "STOP":
                     for(String a: args){

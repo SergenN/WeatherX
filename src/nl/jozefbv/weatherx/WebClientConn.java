@@ -40,6 +40,7 @@ public class WebClientConn {
                     for(String a: args){
                         line+=a+ "|";
                     }
+                    args[1].replaceAll("_"," ");
                     System.out.println(line);
                     Filter.sendCountry(session,args);
                     break;

@@ -2,6 +2,7 @@ package nl.jozefbv.weatherx;
 
 import java.io.*;
 import java.lang.reflect.Array;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -178,12 +179,19 @@ public class Initial {
         catch (SQLException sqle) {
             System.err.println(sqle);
         }
+        PreparedStatement preparedStatement=null;
+        try {
+            preparedStatement = Main.connectSQL().prepareStatement("SELECT `stn` FROM `stations` WHERE `country` LIKE ?");
+        }
+        catch (SQLException e){System.err.println("Prepared statement could nog be set. \n"+e);}
         for(String country:countries){
             //System.out.println(country);
             String query2 = "SELECT `stn` FROM `stations` WHERE `country`LIKE '"+country+"'";
             ArrayList<Long>stns = null;
             try{
+                preparedStatement = Main.connectSQL().prepareStatement("SELECT `stn` FROM `stations` WHERE `country` LIKE ?");
                 Statement statement = Main.SQLConn.createStatement();
+                preparedStatement.setString(1,country);
                 ResultSet resultSet = statement.executeQuery(query2);
                 while (resultSet.next()){
                     Filter.setFilter(resultSet.getInt("stn"),"WNDDIR",600);

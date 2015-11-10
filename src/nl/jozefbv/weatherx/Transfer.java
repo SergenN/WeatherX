@@ -225,7 +225,7 @@ public class Transfer {
                     }
                 }
                 if (toDatabase) {
-                    Main.MDBConn.getCollection("measurements").insertOne(bsonDoc);
+                    //Main.MDBConn.getCollection("measurements").insertOne(bsonDoc);
                     //System.out.println("mongo.");
                 }
             }

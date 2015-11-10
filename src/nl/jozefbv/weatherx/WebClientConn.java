@@ -58,6 +58,13 @@ public class WebClientConn {
                     System.out.println(line);
                     Filter.sendCoast(session,args);
                     break;
+                case "GET_WORLD":
+                    for(String a: args){
+                        line+=a+ "|";
+                    }
+                    System.out.println(line);
+                    Filter.sendWorld(session,args);
+                    break;
                 case "STOP":
                     for(String a: args){
                         line+=a+ "|";

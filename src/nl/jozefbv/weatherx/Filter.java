@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -24,6 +25,7 @@ public class Filter {
     private static HashMap<Session,ArrayList<UUID>> sessionCountryList;                      //Session+CountriesID's
     private static HashMap<UUID,FilterCountry> filteredCountries;                       //CountriesID + filteredCountry
     private static ArrayList<Long> coastLine;
+    private static ArrayList<String> countryList;
 
     public Filter() {
         sessionStationList = new HashMap<Session,ArrayList<Long>>();
@@ -31,6 +33,7 @@ public class Filter {
         filteredStation = new HashMap<Long,FilterObject>();
         filteredCountries = new HashMap<UUID,FilterCountry>();
         coastLine = new ArrayList<>();
+        countryList = new ArrayList<>();
     }
 
     public static void sendData(Session session, String[] args) {
@@ -223,11 +226,14 @@ public class Filter {
                 String countryArraySQL="("+countryArray;
                 FilterCountry filterCountry = new FilterCountry(session, uuid);
                 ArrayList<Long> stns = new ArrayList<Long>();
+                String sql = "SELECT `stn` FROM `stations` WHERE `country` IN (?)";
+                PreparedStatement prep = Main.connectSQL().prepareStatement(sql);
+                prep.setString(1,countryArraySQL);
                 String query = "SELECT `stn` FROM `stations` WHERE `country` IN " + countryArraySQL + ")";
                 filterCountry.setCountry(countryArray);
-                System.out.println(query);
-                Statement statement = Main.SQLConn.createStatement();
-                ResultSet resultSet = statement.executeQuery(query);
+                //System.out.println(query);
+                //Statement statement = Main.SQLConn.createStatement();
+                ResultSet resultSet = prep.executeQuery();
                 while (resultSet.next()) {
                     stns.add(resultSet.getLong("stn"));
                 }
@@ -247,7 +253,7 @@ public class Filter {
             }
         }
         catch (SQLException e){
-            System.err.println();
+            System.err.println(e);
         }
     }
 
@@ -365,6 +371,9 @@ public class Filter {
     public static void setCoastLine(Long stn){
         coastLine.add(stn);
     }
+    public static void addCountry(String country) {
+        countryList.add(country);
+    }
 
     public static void sendCoast(Session session, String[] args) {
         if(args[1].equalsIgnoreCase("RAW")){
@@ -400,5 +409,29 @@ public class Filter {
             }
         }
     }
+
+    public static void sendWorld(Session session, String[] args) {
+        boolean first = true;
+        String countries="";
+        for(String country:countryList){
+            if(first){
+                countries=country;
+                first=false;
+            }else {
+                countries+=","+country;
+            }
+        }
+        String[]newArg=new String[4];
+        newArg[0]="GET_COUNTRY";
+        newArg[1]=countries;
+        newArg[2]=args[1];
+        newArg[3]="AVG";
+        if(!args[2].equalsIgnoreCase("RAW")){
+            newArg[1].replaceAll(",", "&");
+        }
+        System.out.println(newArg[0]+"\n"+newArg[1]+"\n"+newArg[2]+"\n"+newArg[3]+"\n");
+        sendCountry(session, newArg);
+    }
+
 
 }

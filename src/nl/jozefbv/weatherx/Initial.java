@@ -174,6 +174,7 @@ public class Initial {
             System.out.println("Fetching Countries List");
             while (result.next()) {
                 countries.add(result.getString("country"));
+                Filter.addCountry(result.getString("country"));
             }
         }
         catch (SQLException sqle) {
@@ -181,18 +182,17 @@ public class Initial {
         }
         PreparedStatement preparedStatement=null;
         try {
-            preparedStatement = Main.connectSQL().prepareStatement("SELECT `stn` FROM `stations` WHERE `country` LIKE ?");
+            preparedStatement = Main.connectSQL().prepareStatement("SELECT `stn` FROM `stations` WHERE `country` LIKE (?)");
         }
         catch (SQLException e){System.err.println("Prepared statement could nog be set. \n"+e);}
         for(String country:countries){
             //System.out.println(country);
-            String query2 = "SELECT `stn` FROM `stations` WHERE `country`LIKE '"+country+"'";
+            String query2 = "SELECT `stn` FROM `stations` WHERE `country`LIKE ('"+country+"')";
             ArrayList<Long>stns = null;
             try{
-                preparedStatement = Main.connectSQL().prepareStatement("SELECT `stn` FROM `stations` WHERE `country` LIKE ?");
-                Statement statement = Main.SQLConn.createStatement();
+                preparedStatement = Main.connectSQL().prepareStatement("SELECT `stn` FROM `stations` WHERE `country` LIKE (?)");
                 preparedStatement.setString(1,country);
-                ResultSet resultSet = statement.executeQuery(query2);
+                ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()){
                     Filter.setFilter(resultSet.getInt("stn"),"WNDDIR",600);
                 }

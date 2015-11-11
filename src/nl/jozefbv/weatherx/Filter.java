@@ -279,7 +279,6 @@ public class Filter {
                         sendCountryAVG(filterCountry, args, values, stns, uuid, session);
                     }
                 }
-                Main.SQLConn.close();
             }
         }
         catch (SQLException e){

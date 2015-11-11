@@ -5,6 +5,7 @@ import org.bson.Document;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -59,6 +60,12 @@ public class Transfer {
         //new Transfer(measurement).transferMongo();
     }
 
+    private static void folderCheck(Measurements measurement){
+        Path path =this.getProtectionDomain().getCodeSource().getLocation();
+        //if()
+    }
+
+
     /**
      * Method to transfer the data from the Measurement object into the database
      */
@@ -85,6 +92,7 @@ public class Transfer {
     /**
      * Method for inserting data in a CSV file
      */
+    @Deprecated
     public void transferCSV() {
         FileWriter fileWriter = null;
         String fileName = measurement.getStn() + "_" + measurement.getDate() + "_" + measurement.getTime();
@@ -144,6 +152,7 @@ public class Transfer {
     /**
      * Method for inserting data in a Mongo database
      */
+    @Deprecated
     public void transferMongo() {
         if (Main.MDBConn == null){
             System.out.println("Could not establish database connection.");
@@ -234,6 +243,7 @@ public class Transfer {
     /**
      * SQL query which displays the average windspeed in the Netherlands
      */
+    @Deprecated
     public static void getAverageWindspeed() {
         if (Main.SQLConn == null){
             System.out.println("SQL error! on nl.jozefbv.weatherx.Transfer() getAverageWindspeed()!");

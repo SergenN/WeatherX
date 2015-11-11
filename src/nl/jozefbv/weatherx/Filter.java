@@ -133,8 +133,11 @@ public class Filter {
         for(Session session : sessionHashMap.keySet()) {
             String line = "{" +
                     "\"TYPE\":\"STN\"," +
-                    "\"STN\":\"" + measure.getStn() + "\"," +
-                    "\"TIME\":\"" + measure.getTime() + "\"";
+                    "\"STN\":\""  + measure.getStn()  + "\"," +
+                    "\"TIME\":\"" + measure.getTime() + "\","+
+                    "\"COUNTRY\"" + filteredStation.get(measure.getStn()).getCountry() + "\"," +
+                    "\"NAME\""    + filteredStation.get(measure.getStn()).getStationName()+"\""
+                    ;
             String[] args = sessionHashMap.get(session);
             line = getData(measure, args, line);
             line += "}";

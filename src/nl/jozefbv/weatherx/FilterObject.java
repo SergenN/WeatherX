@@ -16,7 +16,7 @@ public class FilterObject {
     private HashMap<String, Integer> databaseHashMap;   //HashMap for measures with delay to database
     private HashMap<Session, String[]> sessionHashMap;  //HashMap for Session getting value.
     private ArrayList<UUID> countryHashMap;
-    String country;
+    String country,stationName;
 
     private Measurements measure;
     public int counter = 0;
@@ -32,11 +32,12 @@ public class FilterObject {
 
     private void init(Long stn){
         try {
-            String query = "SELECT `country` FROM `stations` WHERE `stn`='"+stn.toString()+"'";
+            String query = "SELECT `country`,`name` FROM `stations` WHERE `stn`='"+stn.toString()+"'";
             Statement statement = Main.SQLConn.createStatement();
             ResultSet result = statement.executeQuery(query);
             while(result.next()){
                 setCountry(result.getString("country"));
+                setStationName(result.getString("name"));
             }
         }
         catch (java.sql.SQLException e){
@@ -65,5 +66,7 @@ public class FilterObject {
         this.measure = measure;
     }
     public void setCountry(String country){this.country=country;}
+    public void setStationName(String stationName){this.stationName=stationName;}
     public String getCountry(){return country;}
+    public String getStationName(){return stationName;}
 }

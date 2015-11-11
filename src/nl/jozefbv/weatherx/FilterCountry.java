@@ -139,26 +139,27 @@ public class FilterCountry {
         }
     }
 
-    private void sendData() {
+    private synchronized void sendData() {
         Double total,average;
         String returned = "{\"COUNTRY\":\""+country+"\"";
         returned +=",\"TYPE\":\""+methods+"\"";
         try {
             for (int i = 0; i < dataHashMap.size(); i++) {
                 total = 0.00;
+                int counted =  measures.get(dataHashMap.get(i)).size();
                 LinkedList<Double> list = measures.get(dataHashMap.get(i));
-                for (int j = 0; j < measures.get(dataHashMap.get(i)).size(); j++) {
+                for (int j = 0; j <counted; j++) {
                     Double value = list.pop();
                     total += value;
                 }
 
                 DecimalFormat f = new DecimalFormat("#.##");
                 try {
-                    average = Double.parseDouble(f.format(total / measures.get(dataHashMap.get(i)).size()).replace(",", "."));
+                    average = Double.parseDouble(f.format(total / counted).replace(",", "."));
                 }
                 catch (NumberFormatException e){
-                    System.err.println(e+"\n Continued");
-                    average=total;//measures.get(dataHashMap.get(i)).size()+1;
+                    System.err.println(e+"\n Continued\n"+counted);
+                    average=total/counted;
                 }
                 returned += ",\"" + dataHashMap.get(i) + "\":\"" + average + "\"";
             }
@@ -166,7 +167,7 @@ public class FilterCountry {
             sessionHashMap.getRemote().sendStringByFuture(returned);
         }
         catch (IndexOutOfBoundsException e){
-            System.err.println("not Enouth measures");
+            System.err.println("not Enough measures");
         }
         this.count=0;
     }

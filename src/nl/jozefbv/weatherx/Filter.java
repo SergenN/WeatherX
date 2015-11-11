@@ -213,7 +213,7 @@ public class Filter {
 
     public static void sendCountry(Session session, String[] args) {
         try {
-            args[1].replaceAll("_"," ");
+            args[1]=args[1].replaceAll("_"," ");
             String[] countries = args[1].split(",");
             for(int a = 0;a<countries.length;a++) {
                 String prepared = "(?";

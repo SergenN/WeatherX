@@ -213,29 +213,41 @@ public class Filter {
 
     public static void sendCountry(Session session, String[] args) {
         try {
+            args[1].replaceAll("_"," ");
             String[] countries = args[1].split(",");
             for(int a = 0;a<countries.length;a++) {
+                String prepared = "(?";
                 UUID uuid = UUID.randomUUID();
                 String[] country = countries[a].split("&");
-                String countryArray = "'"+country[0]+"'";
+                String countryArray = ""+country[0]+"";
                 if(country.length>1){
                     for (int i = 1; i < country.length; i++) {
-                        countryArray += ",'"+country[i]+"'";
+                        countryArray += ","+country[i]+"";
+                        prepared += ",?";
                     }
                 }
-                String countryArraySQL="("+countryArray;
+                prepared+=")";
+                System.out.println(countryArray);
                 FilterCountry filterCountry = new FilterCountry(session, uuid);
                 ArrayList<Long> stns = new ArrayList<Long>();
-                String sql = "SELECT `stn` FROM `stations` WHERE `country` IN (?)";
-                PreparedStatement prep = Main.connectSQL().prepareStatement(sql);
-                prep.setString(1,countryArraySQL);
-                String query = "SELECT `stn` FROM `stations` WHERE `country` IN " + countryArraySQL + ")";
                 filterCountry.setCountry(countryArray);
+                String selectmysql = "SELECT stn FROM stations WHERE country IN "+prepared;
+                PreparedStatement prep = Main.connectSQL().prepareStatement(selectmysql);
+                for(int i =0;i<country.length;i++){
+                    prep.setString(i+1,country[i]);
+                }
+
+                //prep.setArray(1,country[0]);
+                //String query = "SELECT `stn` FROM `stations` WHERE `country` IN " + countryArraySQL + ")";
                 //System.out.println(query);
                 //Statement statement = Main.SQLConn.createStatement();
                 ResultSet resultSet = prep.executeQuery();
                 while (resultSet.next()) {
+                    //System.out.println("Queryloop");
                     stns.add(resultSet.getLong("stn"));
+                }
+                if(stns.size()==0){
+                    System.out.println("Empty");
                 }
                 if (args[2].equalsIgnoreCase("RAW")) {
                     // for GET_COUNTRY <COUNTRYNAME> RAW
@@ -250,6 +262,7 @@ public class Filter {
                         sendCountryAVG(filterCountry, args, values, stns, uuid, session);
                     }
                 }
+                Main.SQLConn.close();
             }
         }
         catch (SQLException e){
@@ -273,6 +286,7 @@ public class Filter {
             k++;
         }
         arg[1]=stnids;
+        System.out.println(arg[0]+"|"+arg[1]);
         sendData(session, arg);
     }
     private static void sendCountryRAW(ArrayList<Long>stns,Session session,String[] args){
@@ -394,7 +408,7 @@ public class Filter {
                 FilterCountry filterCountry = new FilterCountry(session,uuid);
                 //filterCountry.setFilter(values,"AVG");
                 filterCountry.setMethod("COAST");
-                filterCountry.setCountry("COASTLINE");
+                filterCountry.setCountry("Pacific Area");
                 String[] newArgs=new String[4];
                 newArgs[0]="GET";
                 newArgs[1]="COAST";
@@ -414,11 +428,12 @@ public class Filter {
         boolean first = true;
         String countries="";
         for(String country:countryList){
+            country = country.replaceAll(" ","_");
             if(first){
-                countries=country;
+                countries=""+country+"";
                 first=false;
             }else {
-                countries+=","+country;
+                countries+=","+country+"";
             }
         }
         String[]newArg=new String[4];
@@ -427,7 +442,7 @@ public class Filter {
         newArg[2]=args[1];
         newArg[3]="AVG";
         if(!args[2].equalsIgnoreCase("RAW")){
-            newArg[1].replaceAll(",", "&");
+            newArg[1]=newArg[1].replaceAll(",","&");
         }
         System.out.println(newArg[0]+"\n"+newArg[1]+"\n"+newArg[2]+"\n"+newArg[3]+"\n");
         sendCountry(session, newArg);

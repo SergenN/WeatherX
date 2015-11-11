@@ -171,7 +171,7 @@ public class Initial {
         try {
             Statement statement = Main.SQLConn.createStatement();
             ResultSet result = statement.executeQuery(query);
-            System.out.println("Fetching Countries List");
+            System.out.println("Fetched Countries List");
             while (result.next()) {
                 countries.add(result.getString("country"));
                 Filter.addCountry(result.getString("country"));
@@ -187,10 +187,10 @@ public class Initial {
         catch (SQLException e){System.err.println("Prepared statement could nog be set. \n"+e);}
         for(String country:countries){
             //System.out.println(country);
-            String query2 = "SELECT `stn` FROM `stations` WHERE `country`LIKE ('"+country+"')";
-            ArrayList<Long>stns = null;
+            //String query2 = "SELECT `stn` FROM `stations` WHERE `country`LIKE ('"+country+"')";
+            //ArrayList<Long>stns = null;
             try{
-                preparedStatement = Main.connectSQL().prepareStatement("SELECT `stn` FROM `stations` WHERE `country` LIKE (?)");
+                preparedStatement = Main.connectSQL().prepareStatement("SELECT stn FROM stations WHERE country LIKE (?)");
                 preparedStatement.setString(1,country);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()){

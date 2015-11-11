@@ -49,27 +49,21 @@ public class FilterObject {
     public void setSession(Session session, String[] args){
         sessionHashMap.put(session,args);
     }
-
     public void setDatabase(String key,Integer delay){
                          databaseHashMap.put(key,delay);
     }
-
     public void setCountryDatabase(UUID uuid){
                 countryHashMap.add(uuid);
     }
-
     public HashMap<String, Integer> getDatabaseHashMap(){
         return databaseHashMap;
     }
     public ArrayList<UUID> getCountryHashMap(){return countryHashMap;}
-    public HashMap<Session,String[]> getSessionHashMap(){
-        return sessionHashMap;
-    }
+    public HashMap<Session,String[]> getSessionHashMap(){return sessionHashMap;}
     public Measurements getMeasure(){return measure;}
     public void setMeasure(Measurements measure){
         this.measure = measure;
     }
     public void setCountry(String country){this.country=country;}
     public String getCountry(){return country;}
-
 }

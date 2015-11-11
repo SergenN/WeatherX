@@ -266,9 +266,7 @@ public class Filter {
                 if(stns.size()==0){
                     System.out.println("Empty");
                 }
-                if(args[0].equalsIgnoreCase("GET_WORLD")){
-                    args[1]="WORLD";
-                }
+
                 if (args[2].equalsIgnoreCase("RAW")) {
                     // for GET_COUNTRY <COUNTRYNAME> RAW
                     sendCountryRAWOnly(stns, session);
@@ -332,11 +330,14 @@ public class Filter {
                                        UUID uuid,
                                        Session session){
         filterCountry.setFilter(values, args[3]);
+        if(args[0].equalsIgnoreCase("GET_WORLD")){
+            args[1]="null";
+        }
         int k = 0;
         while (stns.size() > k) {
             if (filteredStation.containsKey(stns.get(k))) {
                 filterCountry.addWeatherstation(stns.get(k));
-                FilterObject filterObject = (FilterObject) filteredStation.get(stns.get(k));
+                FilterObject filterObject = filteredStation.get(stns.get(k));
                 filterObject.setCountryDatabase(uuid);
                 k++;
             }

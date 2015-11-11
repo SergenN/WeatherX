@@ -72,7 +72,7 @@ public class Transfer {
             System.out.println("Creating Database Directory in: "+path);
             file.mkdir();
         }
-        Date date = new Date();
+        //DateTime date = new Date();
         String[] datearray = measurement.getDate().split("-");
         //date.setTime();
 

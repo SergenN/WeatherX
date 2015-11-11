@@ -2,6 +2,7 @@ package nl.jozefbv.weatherx;
 
 import java.io.*;
 import java.lang.reflect.Array;
+import java.nio.file.Path;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,13 +19,14 @@ public class Initial {
     public static void Initial(){
         Properties properties = new Properties();
         InputStream inputStream = null;
-        String databaseTempLocation=null,databaseRainLocation=null,databaseWindLocation=null;
+        String databaseTempLocation=null,databaseRainLocation=null,databaseWindLocation=null,databaseFolderLocation = null;
         try{
             inputStream = new FileInputStream("default.properties");
             properties.load(inputStream);
-            databaseTempLocation = properties.getProperty("DefaultDatabaseTemp");
-            databaseRainLocation = properties.getProperty("DefaultDatabaseRain");
-            databaseWindLocation = properties.getProperty("DefaultDatabaseWind");
+            databaseTempLocation    = properties.getProperty("DefaultDatabaseTemp");
+            databaseRainLocation    = properties.getProperty("DefaultDatabaseRain");
+            databaseWindLocation    = properties.getProperty("DefaultDatabaseWind");
+            Transfer.databaseRoot=properties.getProperty("databaseFolder");
             //if(properties.get("databaseTemp")!=null){databaseTempLocation=properties.getProperty("databaseTemp");System.out.println("Costume DatabaseTemp found.");}
             //if(properties.get("databaseRain")!=null){databaseRainLocation=properties.getProperty("databaseRain");System.out.println("Costume DatabaseRain found.");}
             //if(properties.get("databaseWind")!=null){databaseWindLocation=properties.getProperty("databaseWind");System.out.println("Costume DatabaseWind found.");}
@@ -65,6 +67,7 @@ public class Initial {
         properties.setProperty("databaseTemp","");
         properties.setProperty("databaseRain","");
         properties.setProperty("databaseWind","");
+        properties.setProperty("databaseFolder",System.getProperty("user.dir"));
         properties.store(outputStream,null);
     }
 

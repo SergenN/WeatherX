@@ -39,6 +39,7 @@ public class Main {
      * @param args, arguments given to the main method
      */
     public static void main(String[] args) {
+        System.out.println(System.getProperty("user.dir"));
         //System.out.println(System.currentTimeMillis()"");
         Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
         mongoLogger.setLevel(Level.SEVERE);

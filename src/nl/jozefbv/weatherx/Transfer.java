@@ -3,13 +3,16 @@ package nl.jozefbv.weatherx;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.bson.Document;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -41,6 +44,7 @@ public class Transfer {
     // Delimiter used in CSV file
     private static final String COMMA_DELIMITER = ",";
     private static final String NEW_LINE_SEPARATOR = "\n";
+    public static String databaseRoot = System.getProperty("user.dir");
 
     // CSV file header
     private static final String FILE_HEADER = "stn,date,time,temp,dewp,stp,slp,visib,wdsp,prcp,sndp,frshtt,cldc,wnddir";
@@ -61,7 +65,17 @@ public class Transfer {
     }
 
     private static void folderCheck(Measurements measurement){
-        //Path path =this.getProtectionDomain().getCodeSource().getLocation();
+        String path = databaseRoot+"/database";
+        File file = new File(path);
+
+        if(!file.exists()){
+            System.out.println("Creating Database Directory in: "+path);
+            file.mkdir();
+        }
+        Date date = new Date();
+        String[] datearray = measurement.getDate().split("-");
+        //date.setTime();
+
         //if()
     }
 

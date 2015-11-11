@@ -266,6 +266,9 @@ public class Filter {
                 if(stns.size()==0){
                     System.out.println("Empty");
                 }
+                if(args[0].equalsIgnoreCase("GET_WORLD")){
+                    args[1]="WORLD";
+                }
                 if (args[2].equalsIgnoreCase("RAW")) {
                     // for GET_COUNTRY <COUNTRYNAME> RAW
                     sendCountryRAWOnly(stns, session);
@@ -457,7 +460,7 @@ public class Filter {
             }
         }
         String[]newArg=new String[4];
-        newArg[0]="GET_COUNTRY";
+        newArg[0]="GET_WORLD";
         newArg[1]=countries;
         newArg[2]=args[1];
         newArg[3]="AVG";

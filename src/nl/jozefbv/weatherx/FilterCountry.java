@@ -153,7 +153,13 @@ public class FilterCountry {
                 }
 
                 DecimalFormat f = new DecimalFormat("#.##");
-                average = Double.parseDouble(f.format(total / measures.get(dataHashMap.get(i)).size()).replace(",","."));
+                try {
+                    average = Double.parseDouble(f.format(total / measures.get(dataHashMap.get(i)).size()).replace(",", "."));
+                }
+                catch (NumberFormatException e){
+                    System.err.println(e+"\n Continued");
+                    average=total;//measures.get(dataHashMap.get(i)).size()+1;
+                }
                 returned += ",\"" + dataHashMap.get(i) + "\":\"" + average + "\"";
             }
             returned += "}";

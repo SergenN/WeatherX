@@ -415,7 +415,7 @@ public class Filter {
         }else{
             if(args[2].equalsIgnoreCase("RAW")){
                 //For GET_COAST <DATA> RAW
-                String[] newArgs = new String[3];
+                String[] newArgs = new String[4];
                 newArgs[0]="GET_COUNTRY";
                 newArgs[1]="COASTLINE";
                 newArgs[2]=args[1];

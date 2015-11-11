@@ -61,7 +61,7 @@ public class Transfer {
     }
 
     private static void folderCheck(Measurements measurement){
-        Path path =this.getProtectionDomain().getCodeSource().getLocation();
+        //Path path =this.getProtectionDomain().getCodeSource().getLocation();
         //if()
     }
 

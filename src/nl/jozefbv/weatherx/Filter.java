@@ -416,8 +416,12 @@ public class Filter {
         }else{
             if(args[2].equalsIgnoreCase("RAW")){
                 //For GET_COAST <DATA> RAW
-
-                sendCountryRAW(coastLine,session,args);
+                String[] newArgs = new String[3];
+                newArgs[0]="GET_COUNTRY";
+                newArgs[1]="COASTLINE";
+                newArgs[2]=args[1];
+                newArgs[3]=args[2];
+                sendCountryRAW(coastLine,session,newArgs);
             }else{
                 //For GET_COAST <DATA> AVG
                 String[] values = args[1].split(",");

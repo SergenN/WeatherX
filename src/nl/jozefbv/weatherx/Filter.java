@@ -1,5 +1,7 @@
 package nl.jozefbv.weatherx;
 
+//import com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketException;
 
@@ -227,12 +229,24 @@ public class Filter {
                     }
                 }
                 prepared+=")";
-                System.out.println(countryArray);
+                //System.out.println(countryArray);
                 FilterCountry filterCountry = new FilterCountry(session, uuid);
                 ArrayList<Long> stns = new ArrayList<Long>();
                 filterCountry.setCountry(countryArray);
                 String selectmysql = "SELECT stn FROM stations WHERE country IN "+prepared;
-                PreparedStatement prep = Main.connectSQL().prepareStatement(selectmysql);
+                PreparedStatement prep = null;
+                try {
+                    prep = Main.connectSQL().prepareStatement(selectmysql);
+                }
+                catch (com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException e){
+                    System.err.println(e);
+                    try{
+                        prep = Main.connectSQL().prepareStatement(selectmysql);
+                    }
+                    catch (com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException ee){
+                        System.err.println("SECOND TIME: "+ee);
+                    }
+                }
                 for(int i =0;i<country.length;i++){
                     prep.setString(i+1,country[i]);
                 }
@@ -444,7 +458,9 @@ public class Filter {
         if(!args[2].equalsIgnoreCase("RAW")){
             newArg[1]=newArg[1].replaceAll(",","&");
         }
-        System.out.println(newArg[0]+"\n"+newArg[1]+"\n"+newArg[2]+"\n"+newArg[3]+"\n");
+        //System.out.println(newArg[0]+" | "+newArg[1]+" | "+newArg[2]+" | "+newArg[3]+" ");
+
         sendCountry(session, newArg);
+
     }
 }

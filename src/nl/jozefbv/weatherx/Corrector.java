@@ -129,7 +129,7 @@ public class Corrector {
         double extrapolation = extrapolate(previousSTP);
         double average = calculateMargin(extrapolation);
 
-        if(STP>extrapolation+average || STP<extrapolation-average){
+        if(STP>extrapolation+average || STP<extrapolation-average) {
             measurement.setStp(extrapolation);
         }
     }
@@ -171,7 +171,7 @@ public class Corrector {
         double extrapolation = extrapolate(previousVisibility);
         double average = calculateMargin(extrapolation);
 
-        if(visibility>extrapolation+average || visibility<extrapolation-average){
+        if(visibility>extrapolation+average || visibility<extrapolation-average) {
             measurement.setVisib(extrapolation);
         }
     }
@@ -204,16 +204,19 @@ public class Corrector {
      */
     private void correctPRCP(Measurements measurement, History history){
         double PRCP = measurement.getPrcp();
+        if(PRCP < 0) {
+            PRCP = 0;
+        }
         ArrayList<Double> previousPRCP = new ArrayList<>();
 
-        for(int i = 0; i<history.getSize()-1;i++){
+        for(int i = 0; i < history.getSize()-1; i++){
             previousPRCP.add(history.getMeasurement(i).getPrcp());
         }
 
         double extrapolation = extrapolate(previousPRCP);
         double average = calculateMargin(extrapolation);
 
-        if(PRCP>extrapolation+average || PRCP<extrapolation-average){
+        if(PRCP>extrapolation+average || PRCP<extrapolation - average){
             measurement.setPrcp(extrapolation);
         }
     }
@@ -225,6 +228,9 @@ public class Corrector {
      */
     private void correctSNDP(Measurements measurement, History history){
         double SNDP = measurement.getSndp();
+        if(SNDP < 0) {
+            SNDP = 0;
+        }
         ArrayList<Double> previousSNDP = new ArrayList<>();
 
         for(int i = 0; i<history.getSize()-1;i++){
@@ -266,7 +272,7 @@ public class Corrector {
         double extrapolation = extrapolate(previousCLDC);
         double average = calculateMargin(extrapolation);
 
-        if(CLDC>extrapolation+average || CLDC<extrapolation-average){
+        if(CLDC>extrapolation+average || CLDC<extrapolation-average) {
             measurement.setCldc(Math.round(extrapolation));
         }
     }
@@ -287,7 +293,7 @@ public class Corrector {
         double extrapolation = extrapolate(previousWNDDIR);
         double average = calculateMargin(extrapolation);
 
-        if(WNDDIR>extrapolation+average || WNDDIR<extrapolation-average){
+        if(WNDDIR>extrapolation+average || WNDDIR<extrapolation-average) {
             measurement.setWnddir((int)Math.round(extrapolation));
         }
     }
@@ -321,5 +327,4 @@ public class Corrector {
     private double calculateMargin(double value) {
         return (value/100) * 40;
     }
-
 }

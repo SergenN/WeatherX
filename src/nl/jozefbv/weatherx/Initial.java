@@ -196,7 +196,6 @@ public class Initial {
                 while (resultSet.next()){
                     Filter.setFilter(resultSet.getInt("stn"),"WNDDIR",600);
                 }
-
             }
             catch (SQLException e){
                 System.err.println(e);

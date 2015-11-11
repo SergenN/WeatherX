@@ -432,6 +432,4 @@ public class Filter {
         System.out.println(newArg[0]+"\n"+newArg[1]+"\n"+newArg[2]+"\n"+newArg[3]+"\n");
         sendCountry(session, newArg);
     }
-
-
 }

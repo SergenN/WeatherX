@@ -114,10 +114,16 @@ public class Measurements {
     }
 
     public void setPrcp(double prcp) {
+        if(prcp < 0) {
+            prcp = 0;
+        }
         this.prcp = prcp;
     }
 
     public void setSndp(double sndp) {
+        if(sndp < 0) {
+            sndp = 0;
+        }
         this.sndp = sndp;
     }
 

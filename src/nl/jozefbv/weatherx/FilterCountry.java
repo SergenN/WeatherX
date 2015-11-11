@@ -5,6 +5,7 @@ import org.eclipse.jetty.websocket.api.Session;
 import javax.lang.model.type.ArrayType;
 import java.io.IOException;
 import java.security.PrivateKey;
+import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -149,7 +150,9 @@ public class FilterCountry {
                     Double value = list.pop();
                     total += value;
                 }
-                average = total / measures.get(dataHashMap.get(i)).size();
+
+                DecimalFormat f = new DecimalFormat("#.##");
+                average = Double.parseDouble(f.format(total / measures.get(dataHashMap.get(i)).size()).replace(",","."));
                 returned += ",\"" + dataHashMap.get(i) + "\":\"" + average + "\"";
             }
             returned += "}";

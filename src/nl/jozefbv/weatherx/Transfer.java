@@ -56,7 +56,7 @@ public class Transfer {
      * @param measurement measurement to push into the database
      */
     public static void store(Measurements measurement) {
-        new Transfer(measurement).transferMongo();
+        //new Transfer(measurement).transferMongo();
     }
 
     /**
@@ -149,7 +149,6 @@ public class Transfer {
             System.out.println("Could not establish database connection.");
             return;
         }
-
         Document bsonDoc = new Document();
         FilterObject filterObject = Filter.checkDatabase(measurement.getStn());
         Boolean toDatabase = false;

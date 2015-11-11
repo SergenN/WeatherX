@@ -54,6 +54,7 @@ public class FilterCountry {
 
 
     public synchronized void addMeasure(Measurements measure){
+        //System.out.println("measure geten");
         for(int i = 0;i<dataHashMap.size();i++){
             switch (dataHashMap.get(i)) {
                 case "TEMP":

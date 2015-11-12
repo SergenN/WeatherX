@@ -50,9 +50,7 @@ public class FilterObject {
     public void setSession(Session session, String[] args){
         sessionHashMap.put(session,args);
     }
-    public void setDatabase(String key,Integer delay){
-                         databaseHashMap.put(key,delay);
-    }
+    public void setDatabase(String key,Integer delay){databaseHashMap.put(key,delay);}
     public void setCountryDatabase(UUID uuid){
                 countryHashMap.add(uuid);
     }

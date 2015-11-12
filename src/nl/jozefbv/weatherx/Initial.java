@@ -37,13 +37,17 @@ public class Initial {
         }
         catch (FileNotFoundException e) {
             try{
-                System.err.println(e);
+                //System.err.println(e);
                 System.out.println("Creating new init files.");
                 createNewDefault();
                 setDefaultDatabaseTemp();
                 setDefaultDatabaseRain();
                 setDefaultDatabaseWind();
-                //initTemp("databaseTemp.properties");
+                inputStream = new FileInputStream("default.properties");
+                properties.load(inputStream);
+                databaseTempLocation    = properties.getProperty("DefaultDatabaseTemp");
+                databaseRainLocation    = properties.getProperty("DefaultDatabaseRain");
+                databaseWindLocation    = properties.getProperty("DefaultDatabaseWind");
                 initTemp(databaseTempLocation);
                 initCoast(databaseRainLocation);
                 initWind(databaseWindLocation);
@@ -67,7 +71,7 @@ public class Initial {
         properties.setProperty("databaseTemp","");
         properties.setProperty("databaseRain","");
         properties.setProperty("databaseWind","");
-        properties.setProperty("databaseFolder",System.getProperty("user.dir"));
+        properties.setProperty("databaseFolder", "C:/");//System.getProperty("user.dir"));
         properties.store(outputStream,null);
     }
 
@@ -92,7 +96,7 @@ public class Initial {
         properties.setProperty("Longitude","128.0000");
         properties.setProperty("Range","5000");
         properties.setProperty("Statement","-10.00");
-        properties.setProperty("Interval","60");
+        properties.setProperty("Interval","0");
         properties.setProperty("Key[0]","PRCP");
         properties.store(outputStream,null);
     }
@@ -104,7 +108,7 @@ public class Initial {
         properties.setProperty("Statement","-10.00");
         properties.setProperty("Key[0]","WNDDIR");
         properties.setProperty("Key[1]","WDSP");
-        properties.setProperty("Interval","600");
+        properties.setProperty("Interval","0");
         properties.setProperty("Type","Average");
         properties.store(outputStream,null);
     }
@@ -129,7 +133,7 @@ public class Initial {
                 ResultSet result = statement.executeQuery(query);
                 System.out.println("Init Radius Temp Query Executed");
                 while (result.next()) {
-                    Filter.setFilter(result.getInt("stn"), "TEMP", 1);
+                    Filter.setFilter(result.getInt("stn"), "TEMP", 0);
                 }
             } catch (SQLException sqle) {
                 System.err.println(sqle);
@@ -156,7 +160,7 @@ public class Initial {
             String line="";
             try{
                 while((line=coastFile.readLine())!=null) {
-                    Filter.setFilter(Integer.parseInt(line),"PRCP",60);
+                    Filter.setFilter(Integer.parseInt(line),"PRCP",0);
                     Filter.setCoastLine(Long.valueOf(line));
                 }
             }
@@ -197,7 +201,8 @@ public class Initial {
                 preparedStatement.setString(1,country);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()){
-                    Filter.setFilter(resultSet.getInt("stn"),"WNDDIR",600);
+                    Filter.setFilter(resultSet.getInt("stn"),"WNDDIR",0);
+                    Filter.setFilter(resultSet.getInt("stn"),"WDSP",0);
                 }
             }
             catch (SQLException e){

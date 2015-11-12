@@ -121,6 +121,9 @@ public class Filter {
                 filterCountry.addMeasure(measure);
             }
             sendData(sessionStationHashMap,measure);
+            HashMap<String,Integer> databashHashMap =filterObject.getDatabaseHashMap();
+            Transfer.storeData(measure,databashHashMap);
+
             filterObject.counter++;
         }else{
             System.out.println("New Station " + measure.getStn());
@@ -199,13 +202,15 @@ public class Filter {
 
     public static void setFilter(int stn,String value,int delay) {
         FilterObject filterObject = null;
-        if(filteredStation.containsKey(stn)){
-            filterObject = filteredStation.get(stn);
+        if(filteredStation.containsKey(Long.valueOf(stn))){
+            filterObject = filteredStation.get(Long.valueOf(stn));
+            filterObject.setDatabase(value,delay);
         }else{
             filterObject = new FilterObject(Long.valueOf(stn));
+            filterObject.setDatabase(value,delay);
             filteredStation.put(Long.valueOf(stn),filterObject);
         }
-        filterObject.setDatabase(value,delay);
+
     }
 
 

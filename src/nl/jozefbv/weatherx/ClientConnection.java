@@ -76,7 +76,7 @@ public class ClientConnection implements Runnable{
                     Corrector.correct(measure, clusterHistory.get(measure.getStn()));
                     clusterHistory.get(measure.getStn()).push(measure);
 
-                    Transfer.store(measure);
+                    //Transfer.store(measure, databashHashMap);
                     Filter.checkData(measure);
                     continue;
                 }

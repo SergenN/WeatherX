@@ -24,12 +24,18 @@ import java.util.ArrayList;
  * 1.1.1  Added proper documentation
  */
 public class Corrector {
-    
+    /**
+     * Initializing the Corrector Class,
+     * For Every method this class has, the corrector will send the measurements to a correcting method.
+     * In these methods the measurements will be adjusted if it is incorrect.
+     * Measures that are incorrect are: Above or Below 20% of the previouse measures or empty values.
+     * @param measurements
+     * @param history
+     */
     public Corrector(Measurements measurements, History history){
         correctTemperature(measurements, history);
         correctDewpoint(measurements, history);
         correctSTP(measurements, history);
-
         correctSLP(measurements, history);
         correctVisibility(measurements, history);
         correctWDSP(measurements, history);
@@ -41,7 +47,9 @@ public class Corrector {
     }
 
     /**
-     * Correct the data from a measurement
+     * This Method would receive data from the ClientConnection.java Class.
+     * If the history size is equal or longer than 30 measures.
+     * Then start the correction. By creating a new Corrector.
      * @param measurements
      * @param history
      */

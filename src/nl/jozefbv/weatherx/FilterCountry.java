@@ -9,18 +9,40 @@ import java.text.DecimalFormat;
 import java.util.*;
 
 /**
- * Created by pjvan on 6-11-2015.
+ * Created by Michaël van der Veen
+ * Date of creation 6-11-2015
+ *
+ * Authors: Michaël van der Veen,
+ *
+ * Version: 2
+ * Package: default
+ * Class: nl.jozefbv.weatherx.FilterCountry
+ * Description:
+ * This class stores stata from a list of Stations that can be send when a specific amount of measures are set
+ *
+ * Commando's reveived from WebClientConn will be executed here.
+ *
+ *
+ * Changelog:
+ * 2 completion of Filter Class Added documentation
+ *
+ *
  */
 public class FilterCountry {
     private Session sessionHashMap;                             //HashMap for Session getting value.
     private ArrayList<String> dataHashMap;                      //Hashmap for Measures + method.
-    private String methods;
+    private String methods;                                     //Method
     private ArrayList<Long> weatherStationHashMap;              //HashMap for Weatherstations
     private HashMap<String,LinkedList<Double>> measures;        //ArrayList with Measures.
     private int count;                                          //Counted values;
-    private String country;
-    public UUID uuid;
+    private String country;                                     //Country name
+    public UUID uuid;                                           //Unique Id
 
+    /**
+     * Initializing FilterCountry
+     * @param session session of request
+     * @param uuid unique ID
+     */
     public FilterCountry(Session session,UUID uuid){
         sessionHashMap = session;
         this.uuid = uuid;
@@ -30,19 +52,21 @@ public class FilterCountry {
         count=0;
     }
 
+    /**
+     * Add weatherstations to list.
+     * @param stn station ID
+     */
     public void addWeatherstation(Long stn){
         weatherStationHashMap.add(stn);
-        //checkSended();
     }
 
-    private void checkSended() {
-        if(weatherStationHashMap.size()==measures.size()){
 
-        }
-    }
-
+    /**
+     * set Filter parameters and Method
+     * @param arg parameters
+     * @param method method of handling
+     */
     public void setFilter(String[] arg,String method) {
-
         if(arg.length>0){
             for (int i = 0; i < arg.length; i++) {
                 dataHashMap.add(arg[i]);
@@ -52,93 +76,62 @@ public class FilterCountry {
         }
     }
 
-
+    /**
+     * measures added,
+     * When the counter reached the same amount of stations,
+     * then send data and reset counter.
+     * @param measure incoming measure.
+     */
     public synchronized void addMeasure(Measurements measure){
-        //System.out.println("measure geten");
         for(int i = 0;i<dataHashMap.size();i++){
             switch (dataHashMap.get(i)) {
                 case "TEMP":
                     measures.get("TEMP").add(measure.getTemp());
-                    /*if (measures.get("TEMP").size() > weatherStationHashMap.size()){
-                        measures.get("TEMP").removeLast();
-                    }*/
                     break;
                 case "DEWP":
                     measures.get("DEWP").add(measure.getDewp());
-                    /*if (measures.get("DEWP").size() > weatherStationHashMap.size()){
-                        measures.get("DEWP").removeLast();
-                    }*/
                     break;
                 case "STP":
                     measures.get("STP").add(measure.getStp());
-                    /*if (measures.get("STP").size() > weatherStationHashMap.size()){
-                        measures.get("STP").removeLast();
-                    }*/
                     break;
                 case "SLP":
                     measures.get("SLP").add(measure.getSlp());
-                    /*if (measures.get("SLP").size() > weatherStationHashMap.size()){
-                        measures.get("SLP").removeLast();
-                    }*/
                     break;
                 case "VISIB":
                     measures.get("VISIB").add(measure.getVisib());
-                    /*if (measures.get("VISIB").size() > weatherStationHashMap.size()){
-                        measures.get("VISIB").removeLast();
-                    }*/
                     break;
                 case "WDSP":
                     measures.get("WDSP").add(measure.getWdsp());
-                    /*if (measures.get("WDSP").size() > weatherStationHashMap.size()){
-                        measures.get("WDSP").removeLast();
-                    }*/
                     break;
                 case "PRCP":
                     measures.get("PRCP").add(measure.getPrcp());
-                    /*if (measures.get("PRCP").size() > weatherStationHashMap.size()){
-                        measures.get("PRCP").removeLast();
-                    }*/
                     break;
                 case "SNDP":
                     measures.get("SNDP").add(measure.getSndp());
-                    /*if (measures.get("SNDP").size() > weatherStationHashMap.size()){
-                        measures.get("SNDP").removeLast();
-                    }*/
                     break;
                 case "CLDC":
                     measures.get("CLDC").add(measure.getCldc());
-                    /*if (measures.get("CLDC").size() > weatherStationHashMap.size()){
-                        measures.get("CLDC").removeLast();
-                    }*/
                     break;
                 case "WNDDIR":
                     measures.get("WNDDIR").add(Double.parseDouble(""+measure.getWnddir()));
-                    /*if (measures.get("WNDDIR").size() > weatherStationHashMap.size()){
-                        measures.get("DNDDIR").removeLast();
-                    }*/
                     break;
                 case "FRSHTT":
                     measures.get("FRSHTT").add(Double.parseDouble(""+measure.getFrshtt()));
-                    /*if (measures.get("FRSHTT").size() > weatherStationHashMap.size()){
-                        measures.get("FRSHTT").removeLast();
-                    }*/
                     break;
                 default:
-                    //measures.get("UNKNOWN").add(Double.parseDouble("" + measure.getStn()));
-                    /*if (measures.get("UNKNOWN").size() > weatherStationHashMap.size()){
-                        measures.get("UNKNOWN").removeLast();
-                    }*/
                     break;
             }
         }
         count++;
         if(count>=weatherStationHashMap.size()){
-
             sendData();
-
         }
     }
 
+    /**
+     * Sending Data to the session with the combined value in JSON format.
+     * Making a average of the data that has been send.
+     */
     private synchronized void sendData() {
         Double total,average;
         String returned = "{\"COUNTRY\":\""+country+"\"";
@@ -172,12 +165,24 @@ public class FilterCountry {
         this.count=0;
     }
 
+    /**
+     * set Country name
+     * @param country country name
+     */
     public void setCountry(String country) {
         this.country=country;
     }
-    public Session getSessionHashMap(){return sessionHashMap;}
+
+    /**
+     *
+     * @return hashmap of weatherstation IDs
+     */
     public ArrayList<Long> getWeatherStationHashMap(){return weatherStationHashMap;}
 
+    /**
+     * add new methods name.
+     * @param method method name
+     */
     public void setMethod(String method) {
         this.methods+=","+method;
     }

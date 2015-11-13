@@ -6,11 +6,32 @@ import org.eclipse.jetty.websocket.api.annotations.*;
 import java.io.IOException;
 
 /**
- * Created by Michael van der Veen on 28-10-2015.
+ * Created by Michaël van der Veen
+ * Date of creation 28-10-2015
+ *
+ * Authors: Michaël van der Veen,
+ *
+ * Version: 2
+ * Package: default
+ * Class: nl.jozefbv.weatherx.WebClientCOnn
+ * Description:
+ * This is the initial class that Handles the sessions.
+ *
+ *
+ * Changelog:
+ * 2 completion of Filter Class Added documentation
+ *
+ *
  */
 @WebSocket
 public class WebClientConn {
 
+    /**
+     * Handling a closed connection
+     * @param session session of request
+     * @param statusCode status code
+     * @param reason closing reason
+     */
     @OnWebSocketClose
     public void onClose(Session session,int statusCode, String reason){
         System.out.println("Session closed id:"+session.getLocalAddress());
@@ -23,6 +44,11 @@ public class WebClientConn {
 
     }
 
+    /**
+     * Handling the command given by Session
+     * @param session session with request
+     * @param command command of request
+     */
     @OnWebSocketMessage
     public void onMessage(Session session, String command){
         String[] args = command.split(" ");

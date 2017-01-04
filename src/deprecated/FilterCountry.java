@@ -1,5 +1,7 @@
-package nl.jozefbv.weatherx;
+/*
+package deprecated;
 
+import deprecated.Measurements;
 import org.eclipse.jetty.websocket.api.Session;
 
 import javax.lang.model.type.ArrayType;
@@ -8,15 +10,16 @@ import java.security.PrivateKey;
 import java.text.DecimalFormat;
 import java.util.*;
 
+*/
 /**
- * Created by Michaël van der Veen
+ * Created by Michaï¿½l van der Veen
  * Date of creation 6-11-2015
  *
- * Authors: Michaël van der Veen,
+ * Authors: Michaï¿½l van der Veen,
  *
  * Version: 2
  * Package: default
- * Class: nl.jozefbv.weatherx.FilterCountry
+ * Class: deprecated.FilterCountry
  * Description:
  * This class stores stata from a list of Stations that can be send when a specific amount of measures are set
  *
@@ -27,7 +30,8 @@ import java.util.*;
  * 2 completion of Filter Class Added documentation
  *
  *
- */
+ *//*
+
 public class FilterCountry {
     private Session sessionHashMap;                             //HashMap for Session getting value.
     private ArrayList<String> dataHashMap;                      //Hashmap for Measures + method.
@@ -38,11 +42,13 @@ public class FilterCountry {
     private String country;                                     //Country name
     public UUID uuid;                                           //Unique Id
 
-    /**
+    */
+/**
      * Initializing FilterCountry
      * @param session session of request
      * @param uuid unique ID
-     */
+     *//*
+
     public FilterCountry(Session session,UUID uuid){
         sessionHashMap = session;
         this.uuid = uuid;
@@ -52,20 +58,24 @@ public class FilterCountry {
         count=0;
     }
 
-    /**
+    */
+/**
      * Add weatherstations to list.
      * @param stn station ID
-     */
+     *//*
+
     public void addWeatherstation(Long stn){
         weatherStationHashMap.add(stn);
     }
 
 
-    /**
+    */
+/**
      * set Filter parameters and Method
      * @param arg parameters
      * @param method method of handling
-     */
+     *//*
+
     public void setFilter(String[] arg,String method) {
         if(arg.length>0){
             for (int i = 0; i < arg.length; i++) {
@@ -76,12 +86,14 @@ public class FilterCountry {
         }
     }
 
-    /**
+    */
+/**
      * measures added,
      * When the counter reached the same amount of stations,
      * then send data and reset counter.
      * @param measure incoming measure.
-     */
+     *//*
+
     public synchronized void addMeasure(Measurements measure){
         for(int i = 0;i<dataHashMap.size();i++){
             switch (dataHashMap.get(i)) {
@@ -128,10 +140,12 @@ public class FilterCountry {
         }
     }
 
-    /**
+    */
+/**
      * Sending Data to the session with the combined value in JSON format.
      * Making a average of the data that has been send.
-     */
+     *//*
+
     private synchronized void sendData() {
         Double total,average;
         String returned = "{\"COUNTRY\":\""+country+"\"";
@@ -165,25 +179,32 @@ public class FilterCountry {
         this.count=0;
     }
 
-    /**
+    */
+/**
      * set Country name
      * @param country country name
-     */
+     *//*
+
     public void setCountry(String country) {
         this.country=country;
     }
 
-    /**
+    */
+/**
      *
      * @return hashmap of weatherstation IDs
-     */
+     *//*
+
     public ArrayList<Long> getWeatherStationHashMap(){return weatherStationHashMap;}
 
-    /**
+    */
+/**
      * add new methods name.
      * @param method method name
-     */
+     *//*
+
     public void setMethod(String method) {
         this.methods+=","+method;
     }
 }
+*/

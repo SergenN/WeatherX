@@ -19,7 +19,7 @@ import java.util.LinkedList;
  */
 public class History {
     private static final int HISTORY_SIZE = 30;
-    private LinkedList<Measurements> history;
+    private LinkedList<Measurement> history;
 
     /**
      * Constructor
@@ -35,7 +35,7 @@ public class History {
      * by default push a new measurement into the linkedlist
      * @param measurement measurement to insert
      */
-    public void push(Measurements measurement){
+    public void push(Measurement measurement){
         if (history.size() >= HISTORY_SIZE){
             history.removeLast();
         }
@@ -48,7 +48,7 @@ public class History {
      * @param index index from corresponding measurement
      * @return measurement from given index, null if index number is bigger than the linkedlist
      */
-    public Measurements getMeasurement(int index){
+    public Measurement getMeasurement(int index){
         if (history.size() > index) {
             return history.get(index);
         }
@@ -61,7 +61,7 @@ public class History {
      * @return first measurement or null if empty
      */
     @SuppressWarnings("unused")
-    public Measurements getMeasurement(){
+    public Measurement getMeasurement(){
         if (!history.isEmpty()) {
             return history.getFirst();
         }

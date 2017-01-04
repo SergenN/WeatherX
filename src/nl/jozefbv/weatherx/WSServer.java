@@ -22,13 +22,14 @@ import java.net.Socket;
 public class WSServer implements Runnable{
 
     ServerSocket socket;
-
+    Main main;
     /**
      * Constructor nl.jozefbv.weatherx.WSServer
      * the constructor will open a socket on port 25566
      */
-    public WSServer(){
+    public WSServer(Main main){
         try {
+            this.main = main;
             socket = new ServerSocket(25566);
         } catch(IOException e){
             e.printStackTrace();
@@ -42,13 +43,11 @@ public class WSServer implements Runnable{
      */
     public void run(){
         try{
-            System.out.println("WSServer running");//DEBUG print to show its running
-
+            System.out.println("WSServer running");
             while (true){
                 Socket client = socket.accept();
-                new Thread(new ClientConnection(client)).start();
+                new Thread(new ClientConnection(client, main)).start();
             }
-
         }catch (IOException e){
             e.printStackTrace();
         }

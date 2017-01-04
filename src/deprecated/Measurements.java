@@ -1,7 +1,9 @@
-package nl.jozefbv.weatherx;
+/*
+package deprecated;
 
 import java.util.Map;
 
+*/
 /**
  * Created by Sergen Nurel
  * Date of creation 25-9-2015, 14:21
@@ -10,13 +12,14 @@ import java.util.Map;
  *
  * Version: 1.0
  * Package: default
- * Class: nl.jozefbv.weatherx.Measurements
+ * Class: deprecated.Measurements
  * Description:
  * This server class will convert all incoming data and save it.
  *
  * Changelog:
  * 1.0: this class will convert a given HashMap with 14 values into the right data types and save them.
- */
+ *//*
+
 public class Measurements {
 
     private int wnddir;
@@ -199,3 +202,4 @@ public class Measurements {
         return frshtt;
     }
 }
+*/

@@ -4,11 +4,11 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
- * Created by Michaël van der Veen
+ * Created by Michaï¿½l van der Veen
  * Fixed by Leon Wetzel and Sergen Nurel - Man man man!
  * Date of creation 25-9-2015, 12:54
  *
- * Authors: Michaël van der Veen, Leon Wetzel
+ * Authors: Michaï¿½l van der Veen, Leon Wetzel
  *
  * Version: 1.0.2
  * Package: default
@@ -29,34 +29,34 @@ public class Corrector {
      * For Every method this class has, the corrector will send the measurements to a correcting method.
      * In these methods the measurements will be adjusted if it is incorrect.
      * Measures that are incorrect are: Above or Below 20% of the previouse measures or empty values.
-     * @param measurements
+     * @param measurement
      * @param history
      */
-    public Corrector(Measurements measurements, History history){
-        correctTemperature(measurements, history);
-        correctDewpoint(measurements, history);
-        correctSTP(measurements, history);
-        correctSLP(measurements, history);
-        correctVisibility(measurements, history);
-        correctWDSP(measurements, history);
-        correctPRCP(measurements, history);
-        correctSNDP(measurements, history);
-        correctFRSHTT(measurements, history);
-        correctCLDC(measurements, history);
-        correctWNDDIR(measurements, history);
+    public Corrector(Measurement measurement, History history){
+        correctTemperature(measurement, history);
+        correctDewpoint(measurement, history);
+        correctSTP(measurement, history);
+        correctSLP(measurement, history);
+        correctVisibility(measurement, history);
+        correctWDSP(measurement, history);
+        correctPRCP(measurement, history);
+        correctSNDP(measurement, history);
+        correctFRSHTT(measurement, history);
+        correctCLDC(measurement, history);
+        correctWNDDIR(measurement, history);
     }
 
     /**
      * This Method would receive data from the ClientConnection.java Class.
      * If the history size is equal or longer than 30 measures.
      * Then start the correction. By creating a new Corrector.
-     * @param measurements
+     * @param measurement
      * @param history
      */
-    public static void correct(Measurements measurements, History history){
+    public static void correct(Measurement measurement, History history){
         //if it isn't the first time then use the correct
         if(history.getSize() >= 29) {
-            new Corrector(measurements, history);
+            new Corrector(measurement, history);
         }
     }
 
@@ -65,7 +65,7 @@ public class Corrector {
      * @param measurement
      * @param history
      */
-    private void correctTemperature(Measurements measurement, History history){
+    private void correctTemperature(Measurement measurement, History history){
         double temperature = measurement.getTemp();
         ArrayList<Double> previousTemperatures = new ArrayList<>();
 
@@ -95,7 +95,7 @@ public class Corrector {
      * @param measurement
      * @param history
      */
-    private void correctDewpoint(Measurements measurement, History history){
+    private void correctDewpoint(Measurement measurement, History history){
         double dewpoint = measurement.getDewp();
         ArrayList<Double> previousDewpoints = new ArrayList<>();
 
@@ -126,7 +126,7 @@ public class Corrector {
      * @param measurement
      * @param history
      */
-    private void correctSTP(Measurements measurement, History history){
+    private void correctSTP(Measurement measurement, History history){
         double STP = measurement.getStp();
         ArrayList<Double> previousSTP = new ArrayList<>();
 
@@ -147,7 +147,7 @@ public class Corrector {
      * @param measurement
      * @param history
      */
-    private void correctSLP(Measurements measurement, History history){
+    private void correctSLP(Measurement measurement, History history){
         double SLP = measurement.getSlp();
         ArrayList<Double> previousSLP = new ArrayList<>();
 
@@ -168,7 +168,7 @@ public class Corrector {
      * @param measurement
      * @param history
      */
-    private void correctVisibility(Measurements measurement, History history){
+    private void correctVisibility(Measurement measurement, History history){
         double visibility = measurement.getVisib();
         ArrayList<Double> previousVisibility = new ArrayList<>();
 
@@ -189,7 +189,7 @@ public class Corrector {
      * @param measurement
      * @param history
      */
-    private void correctWDSP(Measurements measurement, History history){
+    private void correctWDSP(Measurement measurement, History history){
         double WDSP = measurement.getWdsp();
         ArrayList<Double> previousWDSP = new ArrayList<>();
 
@@ -210,7 +210,7 @@ public class Corrector {
      * @param measurement
      * @param history
      */
-    private void correctPRCP(Measurements measurement, History history){
+    private void correctPRCP(Measurement measurement, History history){
         double PRCP = measurement.getPrcp();
         if(PRCP < 0) {
             PRCP = 0;
@@ -234,7 +234,7 @@ public class Corrector {
      * @param measurement
      * @param history
      */
-    private void correctSNDP(Measurements measurement, History history){
+    private void correctSNDP(Measurement measurement, History history){
         double SNDP = measurement.getSndp();
         if(SNDP < 0) {
             SNDP = 0;
@@ -258,7 +258,7 @@ public class Corrector {
      * @param measurements
      * @param history
      */
-    private void correctFRSHTT(Measurements measurements, History history){
+    private void correctFRSHTT(Measurement measurements, History history){
         if(measurements.getFrshtt() == null || measurements.getFrshtt() == ""){
             measurements.setFrshtt(history.getMeasurement(history.getSize() - 1).getFrshtt());
         }
@@ -269,7 +269,7 @@ public class Corrector {
      * @param measurement
      * @param history
      */
-    private void correctCLDC(Measurements measurement, History history){
+    private void correctCLDC(Measurement measurement, History history){
         double CLDC = measurement.getCldc();
         ArrayList<Double> previousCLDC = new ArrayList<>();
 
@@ -290,7 +290,7 @@ public class Corrector {
      * @param measurement
      * @param history
      */
-    private void correctWNDDIR(Measurements measurement, History history){
+    private void correctWNDDIR(Measurement measurement, History history){
         double WNDDIR = measurement.getWnddir();
         ArrayList<Double> previousWNDDIR = new ArrayList<>();
 

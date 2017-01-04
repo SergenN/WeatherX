@@ -1,8 +1,12 @@
 package nl.jozefbv.weatherx;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.Socket;
 import java.util.HashMap;
 
@@ -23,21 +27,24 @@ import java.util.HashMap;
  * Then send that line to an XML converter which will convert it to a HashMap.
  * Once the conversion is done the HashMap will be converted into an object and sent to the correction processor.
  */
-public class ClientConnection implements Runnable{
+public class ClientConnection implements Runnable {
 
     private BufferedReader in;
     private HashMap<Long, History> clusterHistory;
+    private Main main;
 
     /**
      * nl.jozefbv.weatherx.ClientConnection constructor
      * This constructor will create a buffered reader.
+     *
      * @param client the client that made connection
      */
-    public ClientConnection(Socket client){
+    public ClientConnection(Socket client, Main main) {
         clusterHistory = new HashMap<>();
+        this.main = main;
         try {
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-        }catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -49,54 +56,48 @@ public class ClientConnection implements Runnable{
      * which will convert it to a HashMap
      * then the HashMap will go to the measurements class and convert into an object
      */
-    public void run(){
+    public void run() {
         try {
-            HashMap<String, String> data = new HashMap<>();
+            StringBuilder data = new StringBuilder();
 
             String line;
             while ((line = in.readLine()) != null) {
 
                 if (line.contains("<MEASUREMENT>")) {
-                    data.clear();
+                    data.setLength(0);
+                    data.append(line);
                     continue;
                 }
+
+                data.append(line);
 
                 if (line.contains("</MEASUREMENT>")) {
 
-                    Measurements measure = new Measurements(data);
+                    System.out.println(data.toString());
 
-                    if (measure.getStn() == -1){
+                    JAXBContext jaxbContext = JAXBContext.newInstance(Measurement.class);
+                    Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
+                    StringReader reader = new StringReader(data.toString());
+                    Measurement measurement = (Measurement) unmarshaller.unmarshal(reader);
+
+                    if (measurement.getStn() == -1) {
                         continue;
                     }
 
-                    if (!clusterHistory.containsKey(measure.getStn())){
-                        clusterHistory.put(measure.getStn(), new History());
+                    if (!clusterHistory.containsKey(measurement.getStn())) {
+                        clusterHistory.put(measurement.getStn(), new History());
                     }
 
-                    Corrector.correct(measure, clusterHistory.get(measure.getStn()));
-                    clusterHistory.get(measure.getStn()).push(measure);
+                    Corrector.correct(measurement, clusterHistory.get(measurement.getStn()));
+                    clusterHistory.get(measurement.getStn()).push(measurement);
 
-                    //Transfer.store(measure, databashHashMap);
-                    Filter.checkData(measure);
-                    continue;
-                }
-
-                String test = line;
-                test = test.replaceAll("<[^>]+>", "");
-
-                if (!test.equals("")){
-                    String newline = line.substring(1, line.length() - 1);
-                    newline = newline.replace("<", ",");
-                    newline = newline.replace(">", ",");
-                    String[] words = newline.split(",");
-
-                    data.put(words[1], words[2]);
+                    main.getStorageHandler().store(measurement);
                 }
             }
-                in.close();
-                Thread.currentThread().interrupt();
-
-        } catch(IOException e){
+            in.close();
+            Thread.currentThread().interrupt();
+        } catch (IOException | JAXBException e) {
             e.printStackTrace();
         }
     }

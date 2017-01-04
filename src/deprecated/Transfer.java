@@ -1,48 +1,44 @@
-package nl.jozefbv.weatherx;
+/*
+package deprecated;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import org.bson.Document;
+import nl.jozefbv.weatherx.Main;
+import nl.jozefbv.weatherx.Measurement;
 
 import java.io.*;
-import java.net.URL;
-import java.nio.file.Path;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormatSymbols;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Objects;
 
+*/
 /**
  * Created by Leon on 25-9-2015.
  * Class for transferring data from the Hashmap to the database
- */
+ *//*
 
+
+*/
 /**
  * Created by Leon Wetzel
  * Date of creation 25-9-2015, 12:05
  *
- * Authors: Sergen Nurel, Leon Wetzel,Michaël van der Veen
+ * Authors: Sergen Nurel, Leon Wetzel,Michaï¿½l van der Veen
  *
  * Version: 1.0
  * Package: default
- * Class: nl.jozefbv.weatherx.Transfer
+ * Class: deprecated.Transfer
  * Description:
  * This class is dedicated to tranfering processed or unprocessed data into the database
  *
  * Changelog:
  * 1.0: SQL outfit
  * 2.0: Deprecated SQL transfer() method, implemented MongoDB support
- */
+ *//*
+
 public class Transfer {
     private static int tempInterval=1,windInterval=600,rainInterval=60;
 
     // Measurement object
-    private Measurements measurement;
+    private Measurement measurement;
 
     // Delimiter used in CSV file
     private static final String COMMA_DELIMITER = ",";
@@ -55,20 +51,22 @@ public class Transfer {
     // table name
     private static final String MEASUREMENT = "measurements";
 
-    public Transfer(Measurements measurement) {
+    public Transfer(Measurement measurement) {
         this.measurement = measurement;
     }
 
-    /**
+    */
+/**
      * This application transfers data from the Measurement object into the database
      * @param measurement measurement to push into the database
-     */
-    public static void store(Measurements measurement) {
-        //new Transfer(measurement).transferMongo();
+     *//*
+
+    public void store(Measurement measurement) {
+        transferSQL(measurement);
     }
 
 
-    public static synchronized void storeData(Measurements measurement,HashMap<String,Integer> database){
+    public static synchronized void storeData(Measurement measurement,HashMap<String,Integer> database){
         //System.out.println("StoreData asked");
         for(String data:database.keySet()){
             //System.out.println(data);
@@ -103,7 +101,7 @@ public class Transfer {
         }
     }
 
-    private static void storeTemp(Measurements measurement) {
+    private static void storeTemp(Measurement measurement) {
         if(measurement.getTemp()<-10) {
             FileWriter fileWriter = null;
             String[] date = measurement.getDate().split("-");
@@ -129,7 +127,7 @@ public class Transfer {
             }
         }
     }
-    private static void storeRain(Measurements measurement){
+    private static void storeRain(Measurement measurement){
         FileWriter fileWriter = null;
         String[] date = measurement.getDate().split("-");
         String month = new DateFormatSymbols().getMonths()[Integer.parseInt(date[1])];
@@ -154,7 +152,7 @@ public class Transfer {
             System.err.println(e);
         }
     }
-    private static void storeWind(Measurements measurement){
+    private static void storeWind(Measurement measurement){
         FileWriter fileWriter = null;
         String[] date = measurement.getDate().split("-");
         String month = new DateFormatSymbols().getMonths()[Integer.parseInt(date[1])];
@@ -186,7 +184,7 @@ public class Transfer {
 
 
 
-    private static void folderCheck(Measurements measurement) {
+    private static void folderCheck(Measurement measurement) {
         String[] dateArray = measurement.getDate().split("-");
         String month = new DateFormatSymbols().getMonths()[Integer.parseInt(dateArray[1])];
         String path = databaseRoot + "/database/"+dateArray[0]+"/"+month+"/"+dateArray[2]+"/wind.csv";
@@ -290,17 +288,19 @@ public class Transfer {
         }
     }
 
-    /**
+    */
+/**
      * Method to transfer the data from the Measurement object into the database
-     */
- /*   @Deprecated
-    public void transferSQL() {
-        if (Main.SQLConn == null){
-            System.out.println("SQL error! on nl.jozefbv.weatherx.Transfer()");
+     *//*
+
+    @Deprecated
+    public void transferSQL(Measurement measurement) {
+        if (Main.sqlConnection == null){
+            System.out.println("SQL error! on deprecated.Transfer()");
             return;
         }
         try {
-            Statement statement = Main.SQLConn.createStatement();
+            Statement statement = Main.sqlConnection.createStatement();
 
             String query = "INSERT INTO " + MEASUREMENT + " VALUES ("
                     + "'" + measurement.getStn() + "'" + ",'" + measurement.getDate() + "','" + measurement.getTime() + "'," + measurement.getTemp() + ","
@@ -313,10 +313,13 @@ public class Transfer {
         }
     }
 
-    /**
+    */
+/**
      * Method for inserting data in a CSV file
-     */
- /*   @Deprecated
+     *//*
+
+*/
+/*    @Deprecated
     public void transferCSV() {
         FileWriter fileWriter = null;
         String fileName = measurement.getStn() + "_" + measurement.getDate() + "_" + measurement.getTime();
@@ -373,9 +376,12 @@ public class Transfer {
 
     }
 
-    /**
+    */
+/**
      * Method for inserting data in a Mongo database
-     */
+     *//*
+
+*/
 /*    @Deprecated
     public void transferMongo() {
         if (Main.MDBConn == null){
@@ -464,13 +470,16 @@ public class Transfer {
         }
     }
 
-    /**
+    */
+/**
      * SQL query which displays the average windspeed in the Netherlands
-     */
- /*   @Deprecated
+     *//*
+
+ */
+/*   @Deprecated
     public static void getAverageWindspeed() {
         if (Main.SQLConn == null){
-            System.out.println("SQL error! on nl.jozefbv.weatherx.Transfer() getAverageWindspeed()!");
+            System.out.println("SQL error! on deprecated.Transfer() getAverageWindspeed()!");
             return;
         }
 
@@ -485,7 +494,9 @@ public class Transfer {
         } catch (SQLException sqle) {
             System.out.println("SQL error ");
         }
-    }*/
+    }*//*
+
 
 
 }
+*/

@@ -1,8 +1,9 @@
+/*
 package nl.jozefbv.weatherx;
 
+import deprecated.Transfer;
+
 import java.io.*;
-import java.lang.reflect.Array;
-import java.nio.file.Path;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,12 +11,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Properties;
 
-
+*/
 /**
- * Created by Michaël van der Veen
+ * Created by Michaï¿½l van der Veen
  * Date of creation 4-11-2015
  *
- * Authors: Michaël van der Veen,
+ * Authors: Michaï¿½l van der Veen,
  *
  * Version: 2
  * Package: default
@@ -28,24 +29,27 @@ import java.util.Properties;
  * 2 completion of Filter Class Added documentation
  *
  *
- */
+ *//*
+
 public class Initial {
 
 
-    /**
+    */
+/**
      * initializing properties/coastline.csv and loading the weatherstations into the Filter.
-     */
+     *//*
+
     public static void Initial(){
         Properties properties = new Properties();
-        InputStream inputStream = null;
-        String databaseTempLocation=null,databaseRainLocation=null,databaseWindLocation=null;
+        InputStream inputStream;
+        String databaseTempLocation,databaseRainLocation,databaseWindLocation;
         try{
             inputStream = new FileInputStream("default.properties");
             properties.load(inputStream);
-            databaseTempLocation    = properties.getProperty("DefaultDatabaseTemp");
-            databaseRainLocation    = properties.getProperty("DefaultDatabaseRain");
-            databaseWindLocation    = properties.getProperty("DefaultDatabaseWind");
-            Transfer.databaseRoot=properties.getProperty("databaseFolder");
+            databaseTempLocation = properties.getProperty("DefaultDatabaseTemp");
+            databaseRainLocation = properties.getProperty("DefaultDatabaseRain");
+            databaseWindLocation = properties.getProperty("DefaultDatabaseWind");
+            Transfer.databaseRoot = properties.getProperty("databaseFolder");
             System.out.println(databaseTempLocation);
             initTemp(databaseTempLocation);
             initCoast(databaseRainLocation);
@@ -61,26 +65,28 @@ public class Initial {
                 setDefaultDatabaseWind();
                 inputStream = new FileInputStream("default.properties");
                 properties.load(inputStream);
-                databaseTempLocation    = properties.getProperty("DefaultDatabaseTemp");
-                databaseRainLocation    = properties.getProperty("DefaultDatabaseRain");
-                databaseWindLocation    = properties.getProperty("DefaultDatabaseWind");
+                databaseTempLocation = properties.getProperty("DefaultDatabaseTemp");
+                databaseRainLocation = properties.getProperty("DefaultDatabaseRain");
+                databaseWindLocation = properties.getProperty("DefaultDatabaseWind");
                 initTemp(databaseTempLocation);
                 initCoast(databaseRainLocation);
                 initWind(databaseWindLocation);
             }
             catch (IOException ioe){
-                System.err.println(ioe);
+                ioe.printStackTrace();
             }
         }
         catch (IOException e){
-            System.err.println(e);
+            e.printStackTrace();
         }
     }
 
-    /**
+    */
+/**
      * Creating new Default properties and load it with values
      * @throws IOException
-     */
+     *//*
+
     private static void createNewDefault()throws IOException{
         Properties properties = new Properties();
         OutputStream outputStream = null;
@@ -95,10 +101,12 @@ public class Initial {
         properties.store(outputStream,null);
     }
 
-    /**
+    */
+/**
      * creating new databaseTemp properties and load it with values
      * @throws IOException
-     */
+     *//*
+
     private static void setDefaultDatabaseTemp()throws IOException{
         Properties properties = new Properties();
         OutputStream outputStream = null;
@@ -112,10 +120,12 @@ public class Initial {
         properties.store(outputStream,null);
     }
 
-    /**
+    */
+/**
      * creating new databaseRain properties and load it with values
      * @throws IOException
-     */
+     *//*
+
     private static void setDefaultDatabaseRain()throws IOException{
         Properties properties = new Properties();
         OutputStream outputStream = null;
@@ -129,10 +139,12 @@ public class Initial {
         properties.store(outputStream,null);
     }
 
-    /**
+    */
+/**
      * creating new databaseWind properties and load it with values
      * @throws IOException
-     */
+     *//*
+
     private static void setDefaultDatabaseWind()throws IOException{
         Properties properties = new Properties();
         OutputStream outputStream = null;
@@ -145,10 +157,12 @@ public class Initial {
         properties.store(outputStream,null);
     }
 
-    /**
+    */
+/**
      * initializing temperature database filter
      * @param location location of document
-     */
+     *//*
+
     private static void initTemp(String location){
         try {
             Properties properties = new Properties();
@@ -165,7 +179,7 @@ public class Initial {
                     "        WHERE country = 'JAPAN'OR country = 'CHINA'"+
                     "HAVING distance < 5000";
             try {
-                Statement statement = Main.SQLConn.createStatement();
+                Statement statement = Main.sqlConnection.createStatement();
                 ResultSet result = statement.executeQuery(query);
                 System.out.println("Init Radius Temp Query Executed");
                 while (result.next()) {
@@ -180,10 +194,12 @@ public class Initial {
         }
     }
 
-    /**
+    */
+/**
      * initializing pacific coastline Filter to database.
      * @param location location of document
-     */
+     *//*
+
     private static void initCoast(String location){
         try {
             Properties properties = new Properties();
@@ -213,15 +229,17 @@ public class Initial {
         }
     }
 
-    /**
+    */
+/**
      * intitializing wind Database collection
      * @param location location of document
-     */
+     *//*
+
     private static void initWind(String location) {
         String query = "SELECT `country` FROM `stations` GROUP BY `country`";
         ArrayList<String> countries = new ArrayList<>();
         try {
-            Statement statement = Main.SQLConn.createStatement();
+            Statement statement = Main.sqlConnection.createStatement();
             ResultSet result = statement.executeQuery(query);
             System.out.println("Fetched Countries List");
             while (result.next()) {
@@ -235,7 +253,7 @@ public class Initial {
         PreparedStatement preparedStatement=null;
         for(String country:countries){
             try{
-                preparedStatement = Main.connectSQL().prepareStatement("SELECT stn FROM stations WHERE country LIKE (?)");
+                preparedStatement = Main.sqlConnection.prepareStatement("SELECT stn FROM stations WHERE country LIKE (?)");
                 preparedStatement.setString(1,country);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()){
@@ -249,9 +267,11 @@ public class Initial {
         }
     }
 
-    /**
+    */
+/**
      * Creating new Coastline File.
-     */
+     *//*
+
     private static void createNewCSV() {
          String stringArray =    "25105, 466860, 466890, 466920, 466940, 466950, 599970, " +
                 "466960, 466970, 466990, 467060, 467080, 467300, 467340, 467350, 467360, 467400, 467410, 467425, " +
@@ -332,3 +352,4 @@ public class Initial {
         }
     }
 }
+*/

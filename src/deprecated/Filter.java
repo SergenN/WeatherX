@@ -1,5 +1,10 @@
-package nl.jozefbv.weatherx;
+/*
+package deprecated;
 
+import deprecated.FilterObject;
+import nl.jozefbv.weatherx.Main;
+import deprecated.Measurements;
+import deprecated.Transfer;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketException;
 
@@ -12,11 +17,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+*/
 /**
- * Created by Michaël van der Veen
+ * Created by Michaï¿½l van der Veen
  * Date of creation 29-10-2015
  *
- * Authors: Michaël van der Veen,
+ * Authors: Michaï¿½l van der Veen,
  *
  * Version: 2
  * Package: default
@@ -32,7 +38,8 @@ import java.util.UUID;
  * 2 completion of Filter Class Added documentation
  *
  *
- */
+ *//*
+
 
 public class Filter {
     private static HashMap<Long,FilterObject> filteredStation;              //ID + FilterObject
@@ -42,10 +49,12 @@ public class Filter {
     private static ArrayList<Long> coastLine;                               //Pacific coastline stations
     private static ArrayList<String> countryList;                           //List of countries in the world, that has a weatherstation.
 
-    /**
+    */
+/**
      * Initializing Filter by creating new HashMaps and ArrayLists.
      * These are necessary to be used for retreiving data, and updating the current sessions that request these data.
-     */
+     *//*
+
     public Filter() {
         sessionStationList = new HashMap<Session,ArrayList<Long>>();
         sessionCountryList = new HashMap<Session,ArrayList<UUID>>();
@@ -55,7 +64,8 @@ public class Filter {
         countryList = new ArrayList<>();
     }
 
-    /**
+    */
+/**
      * The Method that adds a stations number into the list, to let the future measurements be parsed through the sessions.
      * In this method individual stations can be set to a session.
      * The WebClientConn class would send a session and a array of arguments.
@@ -72,7 +82,8 @@ public class Filter {
      * Else send a weatherStation not found reply.
      * @param session session of request
      * @param args commando's send
-     */
+     *//*
+
     public static void sendData(Session session, String[] args) {
         //while(args[1]!="Stop"){
             try {
@@ -109,11 +120,13 @@ public class Filter {
             }
     }
 
-    /**
+    */
+/**
      * This method is to handle session request to stop data to be sended to the session.
      * Sessions would be searched and removed from the hashmaps, to be not participating into the future.
      * @param session session of request
-     */
+     *//*
+
     public static void stopData(Session session) {
         try{
             if(sessionCountryList.containsKey(session)){
@@ -148,13 +161,15 @@ public class Filter {
         }
     }
 
-    /**
+    */
+/**
      * The most important method in this class.
      * Checking if a incoming measure should be send and/or saved into a session/database.
      * These checks would be done by searching the hashmaps for keys and arguments.
      * The values that needs to be checked are saved into FilterObject.
      * @param measure incoming measurement
-     */
+     *//*
+
     public static void checkData(Measurements measure) {
         if(filteredStation.containsKey(measure.getStn())){
             FilterObject filterObject;
@@ -178,13 +193,15 @@ public class Filter {
         }
     }
 
-    /**
+    */
+/**
      * Sending the single station data in JSON format to the WebClient.
      * For every session in the sessionHashMap, is a new reply to there session with the measures requested.
      * The requested parameters would be handled in getData;
      * @param sessionHashMap HashMap of sessions that are listed to get data from the Measure.
      * @param measure The Measure that is received.
-     */
+     *//*
+
     private static void sendData(HashMap<Session,String[]> sessionHashMap,Measurements measure){
         for(Session session : sessionHashMap.keySet()) {
             String line = "{" +
@@ -206,13 +223,15 @@ public class Filter {
         }
     }
 
-    /**
+    */
+/**
      * Filling the JSON line with the parameters requested from the session.
      * @param measure The Measure that is received
      * @param args  The Arguments that are needed from measurement
      * @param line  the JSON line that would be updated.
      * @return String line
-     */
+     *//*
+
     private static String getData(Measurements measure,String[] args,String line) {
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
@@ -260,13 +279,15 @@ public class Filter {
         return line;
     }
 
-    /**
+    */
+/**
      * set a Database filter to save data into the database.
      * With the requested parameters and time delay for saving data.
      * @param stn station ID
      * @param value Measure that needs to be saved
      * @param delay Delay of saving measure
-     */
+     *//*
+
     public static void setFilter(int stn,String value,int delay) {
         FilterObject filterObject = null;
         if(filteredStation.containsKey(Long.valueOf(stn))){
@@ -279,7 +300,8 @@ public class Filter {
         }
     }
 
-    /**
+    */
+/**
      * Request a group of stations to send a shared or individual request of data.
      * Inside the args parameter would be countries named.
      * To receive which countries has which stations, a SQL request would be made.
@@ -299,7 +321,8 @@ public class Filter {
      * Inside the method there is a unique identifier that is the key of the FilterCountry object.
      * @param session Session of request
      * @param args parameters of measurements needed
-     */
+     *//*
+
     public static void sendCountry(Session session, String[] args) {
         try {
             args[1]=args[1].replaceAll("_"," ");
@@ -322,12 +345,12 @@ public class Filter {
                 String selectmysql = "SELECT stn FROM stations WHERE country IN "+prepared;
                 PreparedStatement prep = null;
                 try {
-                    prep = Main.connectSQL().prepareStatement(selectmysql);
+                    prep = Main.sqlConnection.prepareStatement(selectmysql);
                 }
                 catch (com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException e){
                     System.err.println(e);
                     try{
-                        prep = Main.connectSQL().prepareStatement(selectmysql);
+                        prep = Main.sqlConnection.prepareStatement(selectmysql);
                     }
                     catch (com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException ee){
                         System.err.println("SECOND TIME: "+ee);
@@ -363,7 +386,8 @@ public class Filter {
         }
     }
 
-    /**
+    */
+/**
      * Handling the RAW only data to be send by sendCountry method.
      * For this method the next command was send:
      * GET_COUNTRY  |COUNTRY_NAME(s)    |RAW
@@ -374,7 +398,8 @@ public class Filter {
      * preparing to send individual replies of every station in this list.
      * @param stns list of Station ids
      * @param session session of request
-     */
+     *//*
+
     private static void sendCountryRAWOnly(ArrayList<Long>stns,Session session){
         String[] arg = new String[2];
         arg[0]="GET";
@@ -395,7 +420,8 @@ public class Filter {
         sendData(session, arg);
     }
 
-    /**
+    */
+/**
      * Handling the RAW with ARGUMENTS data to be send by sendCountry method.
      * For this method the next command was send:
      * GET_COUNTRY  |COUNTRY_NAME(s) |ARGUMENT(S)   |RAW
@@ -407,7 +433,8 @@ public class Filter {
      * @param stns list of Station ids
      * @param session   session of request
      * @param args parameters needed
-     */
+     *//*
+
     private static void sendCountryRAW(ArrayList<Long>stns,Session session,String[] args){
         int l = 0;
         String stnids = "";
@@ -426,7 +453,8 @@ public class Filter {
         sendData(session, args);
     }
 
-    /**
+    */
+/**
      * Handling the Average data to be send.
      * putting the arguments, and values of the STATION_NUMBERS into the FilterCountry object.
      * Afterwards update the filteredCounties HashMap.
@@ -436,7 +464,8 @@ public class Filter {
      * @param stns list of station ids
      * @param uuid unique key identifier
      * @param session session of request
-     */
+     *//*
+
     private static void sendCountryAVG(FilterCountry filterCountry,
                                        String[] args,
                                        String[] values,
@@ -468,7 +497,8 @@ public class Filter {
         filteredCountries.put(uuid, filterCountry);
     }
 
-    /**
+    */
+/**
      * Request a group of stations in a radius to send a shared or individual request of data.
      * The arguments are send by the WebClientConn.
      * Arguments can be split in: (Pipelined example)
@@ -482,7 +512,8 @@ public class Filter {
      * The method would parse the data to sendCountryRAWOnly/sendCountryRAW/sendCountryAVG when completion.
      * @param session session of request
      * @param args parameters needed
-     */
+     *//*
+
     public static void sendRadius(Session session, String[] args) {
         Double longitude,latidude,range;
         String[] latlong=args[1].split(",");
@@ -508,13 +539,15 @@ public class Filter {
         }
     }
 
-    /**
+    */
+/**
      * Calculating the radius of the arguments set, returning the STNS
      * @param latidude latitude
      * @param longitude longitude
      * @param range range
      * @return arrayList
-     */
+     *//*
+
     private static ArrayList<Long> calculateLong(Double latidude, Double longitude, Double range) {
         String query = "SELECT stn, " +
                 "           country, " +
@@ -525,7 +558,7 @@ public class Filter {
                 "HAVING distance < "+range+"";
         ArrayList<Long> stns = new ArrayList<Long>();
         try {
-            Statement statement = Main.SQLConn.createStatement();
+            Statement statement = Main.sqlConnection.createStatement();
             ResultSet result = statement.executeQuery(query);
             System.out.println("query has executed");
 
@@ -538,23 +571,28 @@ public class Filter {
         return stns;
     }
 
-    /**
+    */
+/**
      * initializing the coastline by adding STATIONS
      * @param stn station id
-     */
+     *//*
+
     public static void setCoastLine(Long stn){
         coastLine.add(stn);
     }
 
-    /**
+    */
+/**
      * initializing the countries by adding COUNTRY_NAMES
      * @param country country name
-     */
+     *//*
+
     public static void addCountry(String country) {
         countryList.add(country);
     }
 
-    /**
+    */
+/**
      * Request a group of stations at the pacific coast to send a shared or individual request of data.
      * The arguments are send by the WebClientConn.
      * Arguments can be split in: (Pipelined example)
@@ -567,7 +605,8 @@ public class Filter {
      * The method would parse the data to sendCountry when completion.
      * @param session session of request
      * @param args arguments needed
-     */
+     *//*
+
     public static void sendCoast(Session session, String[] args) {
         if(args[1].equalsIgnoreCase("RAW")){
             //For GET_COAST RAW
@@ -607,7 +646,8 @@ public class Filter {
         }
     }
 
-    /**
+    */
+/**
      * Request a group of stations in the world to send a shared or grouped(average) data.
      * The arguments are send by the WebClientConn.
      * Arguments can be split in: (Pipelined example)
@@ -620,7 +660,8 @@ public class Filter {
      * The method would parse the data to sendCountry when completion.
      * @param session session of requested
      * @param args arguments needed
-     */
+     *//*
+
     public static void sendWorld(Session session, String[] args) {
         boolean first = true;
         String countries="";
@@ -644,3 +685,4 @@ public class Filter {
         sendCountry(session, newArg);
     }
 }
+*/

@@ -17,7 +17,7 @@ public class StorageHandler {
         this.csvEnabled = csvEnabled;
     }
 
-    public void store(Measurement measurement){
+    public synchronized void store(Measurement measurement){
         if(sqlEnabled) {
             storeSQL(measurement);
         }
@@ -27,11 +27,11 @@ public class StorageHandler {
     }
 
 
-    public void storeCSV(Measurement measurement){
+    public synchronized void storeCSV(Measurement measurement){
 
     }
 
-    public void storeSQL(Measurement measurement){
+    public synchronized void storeSQL(Measurement measurement){
         if (sqlConnection == null) {
             System.out.println("SQL error! on storSQL");
             return;

@@ -21,9 +21,7 @@ import java.sql.Connection;
  */
 
 public class Main {
-    private Connection sqlConnection;
     private StorageHandler storageHandler;
-    private FlatFileDb fileConnection;
 
     /**
      * the first method called by Java
@@ -37,8 +35,8 @@ public class Main {
      * In this method a sql connection is established and the server thread is started.
      */
     public Main(){
-        sqlConnection = connectSQL();
-        fileConnection = new FlatFileDb();
+        Connection sqlConnection = connectSQL();
+        FlatFileDb fileConnection = new FlatFileDb();
         storageHandler = new StorageHandler(sqlConnection, fileConnection, true, true);
         new Thread(new WSServer(this)).start();
     }

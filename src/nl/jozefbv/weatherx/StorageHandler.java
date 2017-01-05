@@ -6,9 +6,9 @@ import java.sql.Statement;
 
 public class StorageHandler {
 
-    Connection sqlConnection;
-    FlatFileDb fileConnection;
-    boolean sqlEnabled, csvEnabled;
+    private Connection sqlConnection;
+    private FlatFileDb fileConnection;
+    private boolean sqlEnabled, csvEnabled;
 
     public StorageHandler(Connection sqlConnection, FlatFileDb fileConnection, boolean sqlEnabled, boolean csvEnabled){
         this.sqlConnection = sqlConnection;
@@ -17,7 +17,7 @@ public class StorageHandler {
         this.csvEnabled = csvEnabled;
     }
 
-    public void store(Measurement measurement){
+    public synchronized void store(Measurement measurement){
         if(sqlEnabled) {
             storeSQL(measurement);
         }
@@ -26,8 +26,7 @@ public class StorageHandler {
         }
     }
 
-
-    public void storeCSV(Measurement measurement){
+    public synchronized void storeCSV(Measurement measurement){
         if (fileConnection == null) {
             System.out.println("File error! ono file connection detected!");
             return;
@@ -39,7 +38,7 @@ public class StorageHandler {
         }
     }
 
-    public void storeSQL(Measurement measurement){
+    public synchronized void storeSQL(Measurement measurement){
         if (sqlConnection == null) {
             System.out.println("SQL error! no sql connection detected!");
             return;

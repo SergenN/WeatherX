@@ -1,5 +1,6 @@
 package nl.jozefbv.weatherx;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Statement;
 
@@ -9,10 +10,12 @@ import java.sql.Statement;
 public class StorageHandler {
 
     Connection sqlConnection;
+    FlatFileDb fileConnection;
     boolean sqlEnabled, csvEnabled;
 
-    public StorageHandler(Connection sqlConnection, boolean sqlEnabled, boolean csvEnabled){
+    public StorageHandler(Connection sqlConnection, FlatFileDb fileConnection, boolean sqlEnabled, boolean csvEnabled){
         this.sqlConnection = sqlConnection;
+        this.fileConnection = fileConnection;
         this.sqlEnabled = sqlEnabled;
         this.csvEnabled = csvEnabled;
     }
@@ -28,12 +31,20 @@ public class StorageHandler {
 
 
     public void storeCSV(Measurement measurement){
-
+        if (fileConnection == null) {
+            System.out.println("File error! ono file connection detected!");
+            return;
+        }
+        try {
+            fileConnection.writeLine(measurement.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void storeSQL(Measurement measurement){
         if (sqlConnection == null) {
-            System.out.println("SQL error! on storSQL");
+            System.out.println("SQL error! no sql connection detected!");
             return;
         }
         try {

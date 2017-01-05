@@ -21,8 +21,9 @@ import java.sql.Connection;
  */
 
 public class Main {
-    public Connection sqlConnection;
-    public StorageHandler storageHandler;
+    private Connection sqlConnection;
+    private StorageHandler storageHandler;
+    private FlatFileDb fileConnection;
 
     /**
      * the first method called by Java
@@ -37,7 +38,8 @@ public class Main {
      */
     public Main(){
         sqlConnection = connectSQL();
-        storageHandler = new StorageHandler(sqlConnection, true, false);
+        fileConnection = new FlatFileDb();
+        storageHandler = new StorageHandler(sqlConnection, fileConnection, true, true);
         new Thread(new WSServer(this)).start();
     }
 

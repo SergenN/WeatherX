@@ -142,4 +142,24 @@ public class Measurement {
     public void setFrshtt(String frshtt) {
         this.frshtt = frshtt;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(getStn()+",");
+        builder.append(getDate()+",");
+        builder.append(getTime()+",");
+        builder.append(getTemp()+",");
+        builder.append(getDewp()+",");
+        builder.append(getStp()+",");
+        builder.append(getSlp()+",");
+        builder.append(getVisib()+",");
+        builder.append(getWdsp()+",");
+        builder.append(getPrcp()+",");
+        builder.append(getSndp()+",");
+        builder.append(getFrshtt()+",");
+        builder.append(getCldc()+",");
+        builder.append(getWnddir());
+        return builder.toString();
+    }
 }

@@ -1,11 +1,7 @@
 package nl.jozefbv.weatherx;
 
 import java.io.*;
-import java.nio.file.Files;
 
-/**
- * Created by serge on 5-1-2017.
- */
 public class FlatFileDb {
 
     private File file = new File("measurements.csv");

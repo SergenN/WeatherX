@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Statement;
 
-/**
- * Created by serge on 4-1-2017.
- */
 public class StorageHandler {
 
     Connection sqlConnection;

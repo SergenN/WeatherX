@@ -11,7 +11,7 @@ import java.sql.Statement;
  *
  * Version: 1.0
  * Package: nl.jozefbv.weatherx
- * Class: nl.jozefbv.weatherx.StorageHandler
+ * Class: nl.jozefbv.weatherx.WSServer
  * Description:
  * this class can handle multiple data storage methods and is basically a wrapper for store procedures.
  *

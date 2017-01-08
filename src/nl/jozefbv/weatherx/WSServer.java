@@ -18,11 +18,12 @@ import java.net.Socket;
  *
  * Changelog:
  * 1.0: this class will wait on incoming client connections and then start a new thread for the client.
+ * 1.1: updated main, adjusted the main method and added creating the sql connection.
  */
 public class WSServer implements Runnable{
 
-    ServerSocket socket;
-    Main main;
+    private ServerSocket socket;
+    private Main main;
     /**
      * Constructor nl.jozefbv.weatherx.WSServer
      * the constructor will open a socket on port 25566

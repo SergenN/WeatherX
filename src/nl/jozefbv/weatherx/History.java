@@ -9,7 +9,7 @@ import java.util.LinkedList;
  * Authors: Sergen Nurel,
  *
  * Version: 1.0
- * Package: default
+ * Package: nl.jozefbv.weatherx
  * Class: nl.jozefbv.weatherx.History
  * Description:
  * This class is to control and keep track of the measurement history of an antenna

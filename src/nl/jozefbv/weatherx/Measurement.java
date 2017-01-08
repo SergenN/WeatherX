@@ -3,6 +3,21 @@ package nl.jozefbv.weatherx;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Created by Sergen Nurel
+ * Date of creation 25-9-2015, 12:38
+ *
+ * Authors: Sergen Nurel,
+ *
+ * Version: 1.0
+ * Package: nl.jozefbv.weatherx
+ * Class: nl.jozefbv.weatherx.Measurement
+ * Description:
+ * This class is the object of the incoming data, all data that comes in via XML will be converted and this class will be the result of that conversion.
+ *
+ * Changelog:
+ * 1.0: created the initial getters and setters
+ */
 @XmlRootElement(name = "MEASUREMENT")
 public class Measurement {
 

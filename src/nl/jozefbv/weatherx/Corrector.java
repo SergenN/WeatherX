@@ -4,11 +4,11 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
- * Created by Micha�l van der Veen
+ * Created by Michael van der Veen
  * Fixed by Leon Wetzel and Sergen Nurel - Man man man!
  * Date of creation 25-9-2015, 12:54
  *
- * Authors: Micha�l van der Veen, Leon Wetzel
+ * Authors: Michael van der Veen, Leon Wetzel
  *
  * Version: 1.0.2
  * Package: default

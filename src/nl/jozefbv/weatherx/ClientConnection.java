@@ -17,7 +17,7 @@ import java.util.HashMap;
  * Authors: Sergen Nurel,
  *
  * Version: 1.0
- * Package: default
+ * Package: nl.jozefbv.weatherx
  * Class: nl.jozefbv.weatherx.ClientConnection
  * Description:
  * This class handles the connection thread of te client
@@ -26,6 +26,7 @@ import java.util.HashMap;
  * 1.0: class created and added a reader, while reading this class will take all lines and combine them into one line.
  * Then send that line to an XML converter which will convert it to a HashMap.
  * Once the conversion is done the HashMap will be converted into an object and sent to the correction processor.
+ * 1.1: adjusted the connection to work with the new Measurement class and the storage handler.
  */
 public class ClientConnection implements Runnable {
 
@@ -73,7 +74,7 @@ public class ClientConnection implements Runnable {
 
                 if (line.contains("</MEASUREMENT>")) {
 
-                    System.out.println(data.toString());
+                    //System.out.println(data.toString());
 
                     JAXBContext jaxbContext = JAXBContext.newInstance(Measurement.class);
                     Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
@@ -91,7 +92,6 @@ public class ClientConnection implements Runnable {
 
                     Corrector.correct(measurement, clusterHistory.get(measurement.getStn()));
                     clusterHistory.get(measurement.getStn()).push(measurement);
-
                     main.getStorageHandler().store(measurement);
                 }
             }

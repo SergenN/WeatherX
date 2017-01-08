@@ -4,34 +4,51 @@ import java.sql.Connection;
 import java.sql.Statement;
 
 /**
- * Created by serge on 4-1-2017.
+ * Created by Sergen Nurel
+ * Date of creation 29-12-2016, 13:45
+ *
+ * Authors: Sergen Nurel,
+ *
+ * Version: 1.0
+ * Package: nl.jozefbv.weatherx
+ * Class: nl.jozefbv.weatherx.StorageHandler
+ * Description:
+ * this class can handle multiple data storage methods and is basically a wrapper for store procedures.
+ *
+ * Changelog:
+ * 1.0: initially created the class only to handle sql storage procedures
  */
 public class StorageHandler {
 
-    Connection sqlConnection;
-    boolean sqlEnabled, csvEnabled;
+    private Connection sqlConnection;
+    private boolean sqlEnabled;
 
-    public StorageHandler(Connection sqlConnection, boolean sqlEnabled, boolean csvEnabled){
+    /**
+     * create a storage handler
+     *
+     * @param sqlConnection the sql connection created in main.
+     * @param sqlEnabled a boolean if sql is enabled, if it is not, no data will be saved.
+     */
+    public StorageHandler(Connection sqlConnection, boolean sqlEnabled){
         this.sqlConnection = sqlConnection;
         this.sqlEnabled = sqlEnabled;
-        this.csvEnabled = csvEnabled;
     }
 
-    public synchronized void store(Measurement measurement){
+    /**
+     * store a measurement in the database
+     * @param measurement the measurement to store
+     */
+    public void store(Measurement measurement){
         if(sqlEnabled) {
             storeSQL(measurement);
         }
-        if (csvEnabled){
-            storeCSV(measurement);
-        }
     }
 
-
-    public synchronized void storeCSV(Measurement measurement){
-
-    }
-
-    public synchronized void storeSQL(Measurement measurement){
+    /**
+     * a wrapper for the store procedures from sql
+     * @param measurement measurement data to store
+     */
+    public void storeSQL(Measurement measurement){
         if (sqlConnection == null) {
             System.out.println("SQL error! on storSQL");
             return;

@@ -10,7 +10,7 @@ import java.sql.Connection;
  * Authors: Sergen Nurel,
  *
  * Version: 1.0
- * Package: default
+ * Package: nl.jozefbv.weatherx
  * Class: nl.jozefbv.weatherx.Main
  * Description:
  * This class is the main class of the project
@@ -37,7 +37,7 @@ public class Main {
      */
     public Main(){
         sqlConnection = connectSQL();
-        storageHandler = new StorageHandler(sqlConnection, true, false);
+        storageHandler = new StorageHandler(sqlConnection, true);
         new Thread(new WSServer(this)).start();
     }
 

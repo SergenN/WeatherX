@@ -23,7 +23,7 @@ import java.util.Stack;
  *
  * Changelog:
  * 1.0: class created and added thread calling
- * 2.0: changed MySQL connection with MongoDB nl.jozefbv.weatherx.ClientConnection
+ * 1.1: adjusted to class to make use of SQL pooling
  */
 
 public class Main {

@@ -1,7 +1,13 @@
 package nl.jozefbv.weatherx;
 
-import java.sql.*;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import java.beans.PropertyVetoException;
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Stack;
 
 /**
  * Created by Sergen Nurel
@@ -21,9 +27,9 @@ import java.sql.Connection;
  */
 
 public class Main {
-    public Connection sqlConnection;
-    public StorageHandler storageHandler;
-
+    private StationHistory stationHistory;
+    private JAXBContext jaxbContext;
+    private static ComboPooledDataSource comboPooledDataSource;
     /**
      * the first method called by Java
      * @param args, arguments given to the main method
@@ -36,25 +42,55 @@ public class Main {
      * In this method a sql connection is established and the server thread is started.
      */
     public Main(){
-        sqlConnection = connectSQL();
-        storageHandler = new StorageHandler(sqlConnection, true);
+        comboPooledDataSource = createComboPool();
+        System.out.println("Created Connections");
+        stationHistory = new StationHistory();
+        try {
+            jaxbContext = JAXBContext.newInstance(Measurement.class);
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
         new Thread(new WSServer(this)).start();
     }
 
     public StorageHandler getStorageHandler(){
-        return storageHandler;
+        return new StorageHandler(true);
+    }
+
+    public StationHistory getStationHistory(){
+        return stationHistory;
+    }
+
+    public JAXBContext getJaxbContext(){
+        return jaxbContext;
+    }
+
+    public static Connection getConnection(){
+        try {
+            return comboPooledDataSource.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
      * Method to connect to database
      */
-    public static Connection connectSQL() {
+    private ComboPooledDataSource createComboPool() {
         try {
-            System.out.println("Connect");
-            return DriverManager.getConnection("jdbc:mysql://localhost/weatherxweb?user=root&password=");
-        } catch (SQLException e) {
+            ComboPooledDataSource cpds = new ComboPooledDataSource();
+            cpds.setDriverClass("com.mysql.jdbc.Driver"); //loads the jdbc driver
+            cpds.setJdbcUrl( "jdbc:mysql://localhost/weatherxweb?rewriteBatchedStatements=true" );
+            cpds.setUser("root");
+            cpds.setPassword("");
+            cpds.setMinPoolSize(3);
+            cpds.setAcquireIncrement(5);
+            cpds.setMaxPoolSize(5000);
+            return cpds;
+        } catch (PropertyVetoException e) {
             e.printStackTrace();
-            return null;
         }
+        return null;
     }
 }

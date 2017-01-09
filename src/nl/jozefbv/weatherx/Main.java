@@ -1,7 +1,7 @@
 package nl.jozefbv.weatherx;
 
-import java.sql.*;
-import java.sql.Connection;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 
 /**
  * Created by Sergen Nurel
@@ -10,18 +10,21 @@ import java.sql.Connection;
  * Authors: Sergen Nurel,
  *
  * Version: 1.0
- * Package: default
+ * Package: nl.jozefbv.weatherx
  * Class: nl.jozefbv.weatherx.Main
  * Description:
  * This class is the main class of the project
  *
  * Changelog:
  * 1.0: class created and added thread calling
- * 2.0: changed MySQL connection with MongoDB nl.jozefbv.weatherx.ClientConnection
+ * 1.1: adjusted to class to make use of SQL pooling
+ * 1.2: adjusted the class to use flat file database
  */
 
 public class Main {
+    private StationHistory stationHistory;
     private StorageHandler storageHandler;
+    private JAXBContext jaxbContext;
 
     /**
      * the first method called by Java
@@ -35,9 +38,15 @@ public class Main {
      * In this method a sql connection is established and the server thread is started.
      */
     public Main(){
-        Connection sqlConnection = connectSQL();
+        stationHistory = new StationHistory();
         FlatFileDb fileConnection = new FlatFileDb();
-        storageHandler = new StorageHandler(sqlConnection, fileConnection, true, true);
+        storageHandler = new StorageHandler(fileConnection, true);
+        try {
+            jaxbContext = JAXBContext.newInstance(Measurement.class);
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+
         new Thread(new WSServer(this)).start();
     }
 
@@ -45,16 +54,11 @@ public class Main {
         return storageHandler;
     }
 
-    /**
-     * Method to connect to database
-     */
-    public static Connection connectSQL() {
-        try {
-            System.out.println("Connect");
-            return DriverManager.getConnection("jdbc:mysql://localhost/weatherxweb?user=root&password=");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+    public StationHistory getStationHistory(){
+        return stationHistory;
+    }
+
+    public JAXBContext getJaxbContext(){
+        return jaxbContext;
     }
 }

@@ -1,31 +1,52 @@
 package nl.jozefbv.weatherx;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.Statement;
 
+/**
+ * Created by Sergen Nurel
+ * Date of creation 29-12-2016, 13:45
+ *
+ * Authors: Sergen Nurel,
+ *
+ * Version: 1.0
+ * Package: nl.jozefbv.weatherx
+ * Class: nl.jozefbv.weatherx.WSServer
+ * Description:
+ * this class can handle multiple data storage methods and is basically a wrapper for store procedures.
+ *
+ * Changelog:
+ * 1.0: initially created the class only to handle sql storage procedures
+ * 1.1: made the storagehandler compatible with files
+ */
 public class StorageHandler {
 
-    private Connection sqlConnection;
     private FlatFileDb fileConnection;
-    private boolean sqlEnabled, csvEnabled;
+    private boolean csvEnabled;
 
-    public StorageHandler(Connection sqlConnection, FlatFileDb fileConnection, boolean sqlEnabled, boolean csvEnabled){
-        this.sqlConnection = sqlConnection;
+    /**
+     * create the storage handler
+     * @param fileConnection the file connection to write to
+     * @param csvEnabled boolean to write to the file
+     */
+    public StorageHandler(FlatFileDb fileConnection, boolean csvEnabled){
         this.fileConnection = fileConnection;
-        this.sqlEnabled = sqlEnabled;
         this.csvEnabled = csvEnabled;
     }
 
+    /**
+     * store a measurement in the database
+     * @param measurement the measurement to store
+     */
     public synchronized void store(Measurement measurement){
-        if(sqlEnabled) {
-            storeSQL(measurement);
-        }
         if (csvEnabled){
             storeCSV(measurement);
         }
     }
 
+    /**
+     * write to the CSV file
+     * @param measurement the measurement to write
+     */
     public synchronized void storeCSV(Measurement measurement){
         if (fileConnection == null) {
             System.out.println("File error! ono file connection detected!");
@@ -34,34 +55,6 @@ public class StorageHandler {
         try {
             fileConnection.writeLine(measurement.toString());
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public synchronized void storeSQL(Measurement measurement){
-        if (sqlConnection == null) {
-            System.out.println("SQL error! no sql connection detected!");
-            return;
-        }
-        try {
-            Statement statement = sqlConnection.createStatement();
-            String query = "INSERT INTO measurements(stn, date, time, temp, dewp, stp, slp, visib, wdsp, prcp, sndp, frshtt, cldc, wnddir) VALUES ('"
-                    + measurement.getStn() + "','"
-                    + measurement.getDate() + "','"
-                    + measurement.getTime() + "',"
-                    + measurement.getTemp() + ","
-                    + measurement.getDewp() + ","
-                    + measurement.getStp() + ","
-                    + measurement.getSlp() + ","
-                    + measurement.getVisib() + ","
-                    + measurement.getWdsp() + ","
-                    + measurement.getPrcp() + ","
-                    + measurement.getSndp() + ",'"
-                    + measurement.getFrshtt() + "',"
-                    + measurement.getCldc() + ","
-                    + measurement.getWnddir() + ")";
-            statement.executeUpdate(query);
-        } catch (java.sql.SQLException e) {
             e.printStackTrace();
         }
     }

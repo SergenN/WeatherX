@@ -37,7 +37,7 @@ public class StorageHandler {
      * store a measurement in the database
      * @param measurement the measurement to store
      */
-    public synchronized void store(Measurement measurement){
+    public void store(Measurement measurement){
         if (csvEnabled){
             storeCSV(measurement);
         }
@@ -47,7 +47,7 @@ public class StorageHandler {
      * write to the CSV file
      * @param measurement the measurement to write
      */
-    public synchronized void storeCSV(Measurement measurement){
+    public void storeCSV(Measurement measurement){
         if (fileConnection == null) {
             System.out.println("File error! ono file connection detected!");
             return;

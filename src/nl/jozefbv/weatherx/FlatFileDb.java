@@ -54,7 +54,7 @@ public class FlatFileDb {
      * @return the writer
      * @throws IOException
      */
-    private synchronized BufferedWriter getWriter() throws IOException {
+    private BufferedWriter getWriter() throws IOException {
         FileWriter fileWriter = new FileWriter(file.getAbsoluteFile(), true);
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
         return bufferedWriter;
@@ -65,7 +65,7 @@ public class FlatFileDb {
      * @return the reader
      * @throws FileNotFoundException
      */
-    private synchronized BufferedReader getReader() throws FileNotFoundException {
+    private BufferedReader getReader() throws FileNotFoundException {
         FileReader fileReader = new FileReader(file.getAbsoluteFile());
         BufferedReader bufferedReader = new BufferedReader(fileReader);
         return bufferedReader;

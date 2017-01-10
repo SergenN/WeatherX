@@ -23,7 +23,6 @@ import javax.xml.bind.JAXBException;
 
 public class Main {
     private StationHistory stationHistory;
-    private StorageHandler storageHandler;
     private JAXBContext jaxbContext;
 
     /**
@@ -39,8 +38,6 @@ public class Main {
      */
     public Main(){
         stationHistory = new StationHistory();
-        FlatFileDb fileConnection = new FlatFileDb();
-        storageHandler = new StorageHandler(fileConnection, true);
         try {
             jaxbContext = JAXBContext.newInstance(Measurement.class);
         } catch (JAXBException e) {
@@ -51,7 +48,7 @@ public class Main {
     }
 
     public StorageHandler getStorageHandler(){
-        return storageHandler;
+        return new StorageHandler(new FlatFileDb(), true);
     }
 
     public StationHistory getStationHistory(){
